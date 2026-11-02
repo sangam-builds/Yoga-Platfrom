@@ -1,0 +1,1134 @@
+// ============================================================================
+// Yoga Platform: complete database schema (PostgreSQL + Prisma)
+//
+// Conventions
+//  - IDs: cuid strings
+//  - Money: integers in the smallest unit (paise / cents), never floats
+//  - All timestamps in UTC; users' timezone is stored on User
+//  - Soft delete (deletedAt) only where history must be kept
+//
+// Section index
+//  1. Auth & users          5. Attendance        9. Notifications
+//  2. Plans & billing       6. Certificates      10. AI assistant
+//  3. Classes & schedule    7. Gamification      11. Corporate & gifts
+//  4. Bookings & credits    8. Journal & social  12. CMS, webhooks, audit
+// ============================================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ============================================================================
+// ENUMS
+// ============================================================================
+
+enum Role {
+  STUDENT
+  INSTRUCTOR
+  ADMIN
+}
+
+enum Locale {
+  en
+  hi
+  pa
+}
+
+enum ExperienceLevel {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
+enum OtpPurpose {
+  LOGIN
+  VERIFY_EMAIL
+  VERIFY_PHONE
+  RESET_PASSWORD
+}
+
+enum PlanType {
+  SUBSCRIPTION // monthly / quarterly / annual, unlimited or capped
+  CLASS_PACK // fixed number of credits
+  DROP_IN // single class
+  TRIAL
+}
+
+enum BillingInterval {
+  NONE
+  MONTH
+  QUARTER
+  YEAR
+}
+
+enum SubscriptionStatus {
+  TRIALING
+  ACTIVE
+  PAUSED
+  PAST_DUE
+  CANCELLED
+  EXPIRED
+}
+
+enum PaymentProvider {
+  RAZORPAY
+  STRIPE
+  MANUAL
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCEEDED
+  FAILED
+  REFUNDED
+  PARTIALLY_REFUNDED
+}
+
+enum RefundStatus {
+  PENDING
+  PROCESSED
+  FAILED
+}
+
+enum DiscountType {
+  PERCENT
+  FIXED
+}
+
+enum ClassStyle {
+  HATHA
+  VINYASA
+  YIN
+  ASHTANGA
+  POWER
+  PRENATAL
+  MEDITATION
+  BREATHWORK
+}
+
+enum ClassLevel {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+  ALL_LEVELS
+}
+
+enum SessionStatus {
+  SCHEDULED
+  LIVE
+  COMPLETED
+  CANCELLED
+}
+
+enum BookingStatus {
+  BOOKED
+  CANCELLED
+  NO_SHOW
+  COMPLETED
+}
+
+enum CreditReason {
+  PURCHASE
+  BOOKING
+  CANCELLATION_REFUND
+  ADMIN_ADJUSTMENT
+  REFERRAL_REWARD
+  GIFT
+  EXPIRY
+}
+
+enum AttendanceStatus {
+  ATTENDED
+  LATE
+  MISSED
+  EXCUSED
+}
+
+enum MarkedBy {
+  AUTO
+  INSTRUCTOR
+  ADMIN
+}
+
+enum ParticipantEventType {
+  JOINED
+  LEFT
+}
+
+enum RecordingStatus {
+  PROCESSING
+  READY
+  FAILED
+  EXPIRED
+}
+
+enum RecordingVisibility {
+  MEMBERS
+  ANNUAL_ONLY
+  PUBLIC
+}
+
+enum MilestoneType {
+  CLASS_COUNT
+  TOTAL_HOURS
+  STREAK_DAYS
+}
+
+enum CertificateStatus {
+  ISSUED
+  REVOKED
+}
+
+enum NotificationChannel {
+  EMAIL
+  PUSH
+  WHATSAPP
+  SMS
+  IN_APP
+}
+
+enum NotificationType {
+  BOOKING_CONFIRMED
+  WAITLIST_PROMOTED
+  CLASS_REMINDER_24H
+  CLASS_REMINDER_15M
+  CLASS_CANCELLED
+  MISSED_CLASS
+  PAYMENT_SUCCEEDED
+  PAYMENT_FAILED
+  RENEWAL_REMINDER
+  CERTIFICATE_ISSUED
+  BADGE_EARNED
+  ANNOUNCEMENT
+}
+
+enum NotificationStatus {
+  QUEUED
+  SENT
+  FAILED
+  READ
+}
+
+enum MessageRole {
+  USER
+  ASSISTANT
+}
+
+enum ReferralStatus {
+  PENDING
+  QUALIFIED
+  REWARDED
+}
+
+enum GiftStatus {
+  PURCHASED
+  REDEEMED
+  EXPIRED
+  REFUNDED
+}
+
+enum CorporateRole {
+  ADMIN
+  MEMBER
+}
+
+enum PayoutStatus {
+  PENDING
+  PAID
+  FAILED
+}
+
+enum PostStatus {
+  DRAFT
+  PUBLISHED
+}
+
+// ============================================================================
+// 1. AUTH & USERS
+// ============================================================================
+
+model User {
+  id            String    @id @default(cuid())
+  name          String
+  email         String    @unique
+  emailVerified DateTime?
+  phone         String?   @unique
+  phoneVerified DateTime?
+  passwordHash  String? // null for Google-only accounts
+  image         String?
+  role          Role      @default(STUDENT)
+  timezone      String    @default("Asia/Kolkata")
+  locale        Locale    @default(en)
+
+  // Onboarding quiz
+  experienceLevel     ExperienceLevel?
+  goals               String[] // e.g. ["flexibility","stress_relief"]
+  preferredStyles     ClassStyle[]
+  injuries            String?          @db.Text // encrypt at application level
+  onboardingCompleted Boolean          @default(false)
+
+  referralCode       String  @unique @default(cuid())
+  stripeCustomerId   String? @unique
+  razorpayCustomerId String? @unique
+
+  lastLoginAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime? // soft delete (GDPR flow anonymizes later)
+
+  // Relations
+  accounts               Account[]
+  instructorProfile      InstructorProfile?
+  subscriptions          Subscription[]
+  payments               Payment[]
+  creditLedger           CreditLedger[]
+  couponRedemptions      CouponRedemption[]
+  bookings               Booking[]
+  waitlistEntries        WaitlistEntry[]
+  attendances            Attendance[]            @relation("AttendanceUser")
+  attendanceMarked       Attendance[]            @relation("AttendanceMarkedBy")
+  certificates           Certificate[]
+  userBadges             UserBadge[]
+  streak                 UserStreak?
+  journalEntries         JournalEntry[]
+  reviews                Review[]
+  notifications          Notification[]
+  notificationPreference NotificationPreference?
+  pushTokens             PushToken[]
+  assistantConversations AssistantConversation[]
+  referralsMade          Referral[]              @relation("Referrer")
+  referralsReceived      Referral[]              @relation("Referee")
+  giftsPurchased         GiftCard[]              @relation("GiftPurchaser")
+  giftsRedeemed          GiftCard[]              @relation("GiftRedeemer")
+  corporateMemberships   CorporateMember[]
+  corporateAccountsAdmin CorporateAccount[]      @relation("CorporateOwner")
+  blogPosts              BlogPost[]
+  auditLogs              AuditLog[]
+
+  @@index([role])
+  @@index([createdAt])
+}
+
+// NextAuth (JWT session strategy, so no Session table is needed)
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// Phone / email one-time passwords (store a hash, never the raw code)
+model OtpCode {
+  id         String     @id @default(cuid())
+  identifier String // email or phone
+  codeHash   String
+  purpose    OtpPurpose
+  attempts   Int        @default(0)
+  expiresAt  DateTime
+  consumedAt DateTime?
+  createdAt  DateTime   @default(now())
+
+  @@index([identifier, purpose])
+  @@index([expiresAt])
+}
+
+model InstructorProfile {
+  id                  String       @id @default(cuid())
+  userId              String       @unique
+  bio                 String?      @db.Text
+  specialties         ClassStyle[]
+  certifications      String[]
+  yearsExperience     Int?
+  languages           Locale[]
+  ratingAvg           Decimal      @default(0) @db.Decimal(3, 2)
+  ratingCount         Int          @default(0)
+  revenueSharePercent Int          @default(50)
+  payoutDetails       Json? // encrypt sensitive fields at application level
+  isActive            Boolean      @default(true)
+  createdAt           DateTime     @default(now())
+  updatedAt           DateTime     @updatedAt
+
+  user               User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  classes            YogaClass[]        @relation("ClassInstructor")
+  substituteSessions ClassSession[]     @relation("SessionInstructor")
+  reviews            Review[]
+  payouts            InstructorPayout[]
+}
+
+model InstructorPayout {
+  id            String       @id @default(cuid())
+  instructorId  String
+  periodStart   DateTime
+  periodEnd     DateTime
+  sessionsCount Int
+  amount        Int // in smallest currency unit
+  currency      String       @default("INR")
+  status        PayoutStatus @default(PENDING)
+  paidAt        DateTime?
+  reference     String?
+  createdAt     DateTime     @default(now())
+
+  instructor InstructorProfile @relation(fields: [instructorId], references: [id], onDelete: Restrict)
+
+  @@index([instructorId, periodStart])
+}
+
+// ============================================================================
+// 2. PLANS & BILLING
+// ============================================================================
+
+model Plan {
+  id                  String          @id @default(cuid())
+  slug                String          @unique
+  name                String
+  description         String?         @db.Text
+  type                PlanType
+  interval            BillingInterval @default(NONE)
+  priceInr            Int // paise
+  priceUsd            Int? // cents
+  credits             Int? // null = unlimited (SUBSCRIPTION) ; number for CLASS_PACK
+  validityDays        Int? // pack expiry
+  trialDays           Int             @default(0)
+  recordingAccessDays Int             @default(7)
+  features            String[]
+  razorpayPlanId      String?
+  stripePriceId       String?
+  isActive            Boolean         @default(true)
+  sortOrder           Int             @default(0)
+  createdAt           DateTime        @default(now())
+  updatedAt           DateTime        @updatedAt
+
+  subscriptions Subscription[]
+  payments      Payment[]
+  coupons       Coupon[] // coupons restricted to specific plans
+  giftCards     GiftCard[]
+}
+
+model Subscription {
+  id                     String             @id @default(cuid())
+  userId                 String
+  planId                 String
+  corporateAccountId     String? // set when seat is paid by a company
+  status                 SubscriptionStatus @default(TRIALING)
+  provider               PaymentProvider?
+  providerSubscriptionId String?            @unique
+  currentPeriodStart     DateTime
+  currentPeriodEnd       DateTime
+  trialEndsAt            DateTime?
+  creditsRemaining       Int? // null = unlimited
+  cancelAtPeriodEnd      Boolean            @default(false)
+  cancelledAt            DateTime?
+  pausedFrom             DateTime?
+  pausedUntil            DateTime?
+  failedPaymentCount     Int                @default(0)
+  createdAt              DateTime           @default(now())
+  updatedAt              DateTime           @updatedAt
+
+  user             User              @relation(fields: [userId], references: [id], onDelete: Restrict)
+  plan             Plan              @relation(fields: [planId], references: [id], onDelete: Restrict)
+  corporateAccount CorporateAccount? @relation(fields: [corporateAccountId], references: [id], onDelete: SetNull)
+  payments         Payment[]
+  creditLedger     CreditLedger[]
+  bookings         Booking[]
+
+  @@index([userId, status])
+  @@index([status, currentPeriodEnd])
+  @@index([corporateAccountId])
+}
+
+model Payment {
+  id                 String          @id @default(cuid())
+  userId             String
+  subscriptionId     String?
+  planId             String?
+  couponRedemptionId String?         @unique
+  provider           PaymentProvider
+  providerPaymentId  String?         @unique
+  providerOrderId    String?
+  status             PaymentStatus   @default(PENDING)
+  amount             Int // paid amount after discounts
+  taxAmount          Int             @default(0)
+  discountAmount     Int             @default(0)
+  currency           String          @default("INR")
+  failureReason      String?
+  paidAt             DateTime?
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @updatedAt
+
+  user             User              @relation(fields: [userId], references: [id], onDelete: Restrict)
+  subscription     Subscription?     @relation(fields: [subscriptionId], references: [id], onDelete: SetNull)
+  plan             Plan?             @relation(fields: [planId], references: [id], onDelete: SetNull)
+  couponRedemption CouponRedemption? @relation(fields: [couponRedemptionId], references: [id], onDelete: SetNull)
+  invoice          Invoice?
+  refunds          Refund[]
+  giftCard         GiftCard?
+
+  @@index([userId, createdAt])
+  @@index([status])
+}
+
+model Invoice {
+  id             String   @id @default(cuid())
+  paymentId      String   @unique
+  invoiceNumber  String   @unique // e.g. INV-2026-000123
+  pdfUrl         String?
+  billingName    String?
+  billingAddress Json?
+  gstin          String?
+  issuedAt       DateTime @default(now())
+
+  payment Payment @relation(fields: [paymentId], references: [id], onDelete: Cascade)
+}
+
+model Refund {
+  id               String       @id @default(cuid())
+  paymentId        String
+  amount           Int
+  reason           String?
+  status           RefundStatus @default(PENDING)
+  providerRefundId String?      @unique
+  processedById    String? // admin user id (audit)
+  createdAt        DateTime     @default(now())
+
+  payment Payment @relation(fields: [paymentId], references: [id], onDelete: Restrict)
+
+  @@index([paymentId])
+}
+
+model Coupon {
+  id             String       @id @default(cuid())
+  code           String       @unique
+  description    String?
+  discountType   DiscountType
+  discountValue  Int // percent (1-100) or fixed paise
+  maxRedemptions Int?
+  perUserLimit   Int          @default(1)
+  minAmount      Int?
+  validFrom      DateTime     @default(now())
+  validTo        DateTime?
+  isActive       Boolean      @default(true)
+  createdAt      DateTime     @default(now())
+
+  plans       Plan[] // empty = valid for all plans
+  redemptions CouponRedemption[]
+}
+
+model CouponRedemption {
+  id         String   @id @default(cuid())
+  couponId   String
+  userId     String
+  redeemedAt DateTime @default(now())
+
+  coupon  Coupon   @relation(fields: [couponId], references: [id], onDelete: Restrict)
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  payment Payment?
+
+  @@index([couponId])
+  @@index([userId])
+}
+
+// ============================================================================
+// 3. CLASSES & SCHEDULE
+// ============================================================================
+
+// A class definition / recurring series (e.g. "Morning Vinyasa, Mon-Fri 7am")
+model YogaClass {
+  id             String     @id @default(cuid())
+  title          String
+  slug           String     @unique
+  description    String     @db.Text
+  style          ClassStyle
+  level          ClassLevel
+  durationMin    Int
+  capacity       Int
+  language       Locale     @default(en)
+  thumbnailUrl   String?
+  propsNeeded    String[] // ["mat","block","strap"]
+  benefits       String[]
+  instructorId   String
+  recurrenceRule String? // RFC 5545 RRULE, e.g. FREQ=WEEKLY;BYDAY=MO,WE,FR
+  startTimeLocal String? // "07:00" in instructor timezone
+  timezone       String     @default("Asia/Kolkata")
+  isActive       Boolean    @default(true)
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+
+  instructor InstructorProfile @relation("ClassInstructor", fields: [instructorId], references: [id], onDelete: Restrict)
+  sessions   ClassSession[]
+  poses      ClassPose[]
+
+  @@index([style, level])
+  @@index([instructorId])
+}
+
+// One scheduled occurrence of a class (this is what users book)
+model ClassSession {
+  id                     String        @id @default(cuid())
+  classId                String
+  substituteInstructorId String?
+  startsAt               DateTime
+  endsAt                 DateTime
+  capacity               Int // copied from class, overridable per session
+  bookedCount            Int           @default(0)
+  status                 SessionStatus @default(SCHEDULED)
+  videoRoomName          String?       @unique
+  videoRoomUrl           String?
+  cancelledReason        String?
+  notes                  String?       @db.Text
+  createdAt              DateTime      @default(now())
+  updatedAt              DateTime      @updatedAt
+
+  class                YogaClass          @relation(fields: [classId], references: [id], onDelete: Cascade)
+  substituteInstructor InstructorProfile? @relation("SessionInstructor", fields: [substituteInstructorId], references: [id], onDelete: SetNull)
+  bookings             Booking[]
+  waitlist             WaitlistEntry[]
+  attendances          Attendance[]
+  participantEvents    ParticipantEvent[]
+  recording            Recording?
+  reviews              Review[]
+  journalEntries       JournalEntry[]
+  notifications        Notification[]
+
+  @@unique([classId, startsAt])
+  @@index([startsAt])
+  @@index([status, startsAt])
+}
+
+model Pose {
+  id                String     @id @default(cuid())
+  slug              String     @unique
+  englishName       String
+  sanskritName      String?
+  description       String     @db.Text
+  benefits          String[]
+  contraindications String[]
+  difficulty        ClassLevel
+  imageUrl          String?
+  videoUrl          String?
+  createdAt         DateTime   @default(now())
+
+  classes ClassPose[]
+
+  @@index([difficulty])
+}
+
+// Many-to-many: poses taught in a class
+model ClassPose {
+  classId  String
+  poseId   String
+  position Int    @default(0)
+
+  class YogaClass @relation(fields: [classId], references: [id], onDelete: Cascade)
+  pose  Pose      @relation(fields: [poseId], references: [id], onDelete: Cascade)
+
+  @@id([classId, poseId])
+}
+
+// ============================================================================
+// 4. BOOKINGS & CREDITS
+// ============================================================================
+
+model Booking {
+  id             String        @id @default(cuid())
+  userId         String
+  sessionId      String
+  subscriptionId String? // which membership paid for it
+  status         BookingStatus @default(BOOKED)
+  creditUsed     Boolean       @default(false)
+  cancelledAt    DateTime?
+  cancelReason   String?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  user         User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  session      ClassSession   @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  subscription Subscription?  @relation(fields: [subscriptionId], references: [id], onDelete: SetNull)
+  attendance   Attendance?
+  creditLedger CreditLedger[]
+
+  @@unique([userId, sessionId])
+  @@index([sessionId, status])
+  @@index([userId, status])
+}
+
+model WaitlistEntry {
+  id         String    @id @default(cuid())
+  sessionId  String
+  userId     String
+  position   Int
+  promotedAt DateTime?
+  createdAt  DateTime  @default(now())
+
+  session ClassSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  user    User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([sessionId, userId])
+  @@index([sessionId, position])
+}
+
+// Immutable log of every credit change (audit trail for class packs)
+model CreditLedger {
+  id             String       @id @default(cuid())
+  userId         String
+  subscriptionId String?
+  bookingId      String?
+  delta          Int // +10 on purchase, -1 on booking, +1 on refund
+  balanceAfter   Int
+  reason         CreditReason
+  note           String?
+  createdAt      DateTime     @default(now())
+
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subscription Subscription? @relation(fields: [subscriptionId], references: [id], onDelete: SetNull)
+  booking      Booking?      @relation(fields: [bookingId], references: [id], onDelete: SetNull)
+
+  @@index([userId, createdAt])
+}
+
+// ============================================================================
+// 5. ATTENDANCE
+// ============================================================================
+
+// Raw join/leave events from the video provider webhooks
+model ParticipantEvent {
+  id              String               @id @default(cuid())
+  sessionId       String
+  userId          String? // null if participant can't be matched
+  type            ParticipantEventType
+  providerEventId String               @unique // idempotency
+  occurredAt      DateTime
+  createdAt       DateTime             @default(now())
+
+  session ClassSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId, userId, occurredAt])
+}
+
+// Final computed attendance (one per booking)
+model Attendance {
+  id              String           @id @default(cuid())
+  bookingId       String           @unique
+  userId          String
+  sessionId       String
+  status          AttendanceStatus
+  joinedAt        DateTime?
+  leftAt          DateTime?
+  minutesAttended Int              @default(0)
+  markedBy        MarkedBy         @default(AUTO)
+  markedByUserId  String? // instructor/admin who overrode
+  overrideNote    String?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  booking      Booking      @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  user         User         @relation("AttendanceUser", fields: [userId], references: [id], onDelete: Cascade)
+  session      ClassSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  markedByUser User?        @relation("AttendanceMarkedBy", fields: [markedByUserId], references: [id], onDelete: SetNull)
+
+  @@unique([userId, sessionId])
+  @@index([userId, createdAt])
+  @@index([sessionId, status])
+}
+
+model Recording {
+  id             String              @id @default(cuid())
+  sessionId      String              @unique
+  storageKey     String
+  durationSec    Int?
+  sizeBytes      BigInt?
+  status         RecordingStatus     @default(PROCESSING)
+  visibility     RecordingVisibility @default(MEMBERS)
+  availableUntil DateTime?
+  viewCount      Int                 @default(0)
+  createdAt      DateTime            @default(now())
+
+  session ClassSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([availableUntil])
+}
+
+// ============================================================================
+// 6. CERTIFICATES
+// ============================================================================
+
+model CertificateTemplate {
+  id            String   @id @default(cuid())
+  name          String
+  layout        Json // positions, fonts, colors
+  backgroundUrl String?
+  signatureUrl  String?
+  signerName    String?
+  isDefault     Boolean  @default(false)
+  createdAt     DateTime @default(now())
+
+  milestones   Milestone[]
+  certificates Certificate[]
+}
+
+// Admin-configurable rules that trigger certificates
+model Milestone {
+  id         String        @id @default(cuid())
+  key        String        @unique // "classes_10", "hours_100"
+  name       String
+  type       MilestoneType
+  threshold  Int
+  templateId String?
+  isActive   Boolean       @default(true)
+
+  template     CertificateTemplate? @relation(fields: [templateId], references: [id], onDelete: SetNull)
+  certificates Certificate[]
+}
+
+model Certificate {
+  id            String            @id @default(cuid())
+  code          String            @unique // public verification code
+  userId        String
+  milestoneId   String?
+  templateId    String?
+  title         String
+  status        CertificateStatus @default(ISSUED)
+  issuedAt      DateTime          @default(now())
+  pdfUrl        String?
+  qrUrl         String?
+  revokedAt     DateTime?
+  revokedReason String?
+  metadata      Json? // classes completed, hours, etc. at issue time
+
+  user      User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  milestone Milestone?           @relation(fields: [milestoneId], references: [id], onDelete: SetNull)
+  template  CertificateTemplate? @relation(fields: [templateId], references: [id], onDelete: SetNull)
+
+  @@unique([userId, milestoneId]) // one certificate per milestone per user
+  @@index([userId])
+}
+
+// ============================================================================
+// 7. GAMIFICATION
+// ============================================================================
+
+model UserStreak {
+  id             String    @id @default(cuid())
+  userId         String    @unique
+  currentStreak  Int       @default(0)
+  longestStreak  Int       @default(0)
+  lastAttendedOn DateTime? @db.Date
+  totalClasses   Int       @default(0)
+  totalMinutes   Int       @default(0)
+  updatedAt      DateTime  @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Badge {
+  id          String   @id @default(cuid())
+  key         String   @unique // "first_class", "7_day_streak"
+  name        String
+  description String
+  iconUrl     String?
+  criteria    Json
+  createdAt   DateTime @default(now())
+
+  userBadges UserBadge[]
+}
+
+model UserBadge {
+  userId   String
+  badgeId  String
+  earnedAt DateTime @default(now())
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  badge Badge @relation(fields: [badgeId], references: [id], onDelete: Cascade)
+
+  @@id([userId, badgeId])
+}
+
+// ============================================================================
+// 8. JOURNAL & SOCIAL
+// ============================================================================
+
+model JournalEntry {
+  id           String   @id @default(cuid())
+  userId       String
+  sessionId    String?
+  moodBefore   Int? // 1-5
+  moodAfter    Int?
+  energyBefore Int?
+  energyAfter  Int?
+  note         String?  @db.Text
+  createdAt    DateTime @default(now())
+
+  user    User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  session ClassSession? @relation(fields: [sessionId], references: [id], onDelete: SetNull)
+
+  @@index([userId, createdAt])
+}
+
+model Review {
+  id           String   @id @default(cuid())
+  userId       String
+  sessionId    String
+  instructorId String
+  rating       Int // 1-5
+  comment      String?  @db.Text
+  isPublic     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+
+  user       User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  session    ClassSession      @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  instructor InstructorProfile @relation(fields: [instructorId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, sessionId])
+  @@index([instructorId])
+}
+
+// ============================================================================
+// 9. NOTIFICATIONS
+// ============================================================================
+
+model Notification {
+  id           String              @id @default(cuid())
+  userId       String
+  sessionId    String?
+  type         NotificationType
+  channel      NotificationChannel
+  title        String
+  body         String              @db.Text
+  payload      Json?
+  status       NotificationStatus  @default(QUEUED)
+  scheduledFor DateTime?
+  sentAt       DateTime?
+  readAt       DateTime?
+  error        String?
+  createdAt    DateTime            @default(now())
+
+  user    User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  session ClassSession? @relation(fields: [sessionId], references: [id], onDelete: SetNull)
+
+  @@index([userId, createdAt])
+  @@index([status, scheduledFor])
+}
+
+model NotificationPreference {
+  id               String  @id @default(cuid())
+  userId           String  @unique
+  emailEnabled     Boolean @default(true)
+  pushEnabled      Boolean @default(true)
+  whatsappEnabled  Boolean @default(false)
+  remindersEnabled Boolean @default(true)
+  marketingEnabled Boolean @default(false)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model PushToken {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  platform  String // web | android | ios
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+// ============================================================================
+// 10. AI ASSISTANT
+// ============================================================================
+
+model AssistantConversation {
+  id        String   @id @default(cuid())
+  userId    String
+  title     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user     User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messages AssistantMessage[]
+
+  @@index([userId, updatedAt])
+}
+
+model AssistantMessage {
+  id             String      @id @default(cuid())
+  conversationId String
+  role           MessageRole
+  content        String      @db.Text
+  inputTokens    Int?
+  outputTokens   Int?
+  createdAt      DateTime    @default(now())
+
+  conversation AssistantConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  @@index([conversationId, createdAt])
+}
+
+// ============================================================================
+// 11. REFERRALS, GIFTS, CORPORATE
+// ============================================================================
+
+model Referral {
+  id            String         @id @default(cuid())
+  referrerId    String
+  refereeId     String         @unique // a user can be referred only once
+  status        ReferralStatus @default(PENDING)
+  rewardCredits Int            @default(0)
+  createdAt     DateTime       @default(now())
+  rewardedAt    DateTime?
+
+  referrer User @relation("Referrer", fields: [referrerId], references: [id], onDelete: Cascade)
+  referee  User @relation("Referee", fields: [refereeId], references: [id], onDelete: Cascade)
+
+  @@index([referrerId])
+}
+
+model GiftCard {
+  id             String     @id @default(cuid())
+  code           String     @unique
+  planId         String
+  purchaserId    String
+  paymentId      String?    @unique
+  recipientEmail String
+  recipientName  String?
+  message        String?    @db.Text
+  status         GiftStatus @default(PURCHASED)
+  redeemedById   String?
+  redeemedAt     DateTime?
+  expiresAt      DateTime
+  createdAt      DateTime   @default(now())
+
+  plan       Plan     @relation(fields: [planId], references: [id], onDelete: Restrict)
+  purchaser  User     @relation("GiftPurchaser", fields: [purchaserId], references: [id], onDelete: Restrict)
+  redeemedBy User?    @relation("GiftRedeemer", fields: [redeemedById], references: [id], onDelete: SetNull)
+  payment    Payment? @relation(fields: [paymentId], references: [id], onDelete: SetNull)
+
+  @@index([recipientEmail])
+}
+
+model CorporateAccount {
+  id             String   @id @default(cuid())
+  name           String
+  ownerId        String // company admin user
+  seatsPurchased Int
+  seatsUsed      Int      @default(0)
+  billingEmail   String?
+  gstin          String?
+  inviteCode     String   @unique @default(cuid())
+  isActive       Boolean  @default(true)
+  createdAt      DateTime @default(now())
+
+  owner         User              @relation("CorporateOwner", fields: [ownerId], references: [id], onDelete: Restrict)
+  members       CorporateMember[]
+  subscriptions Subscription[]
+}
+
+model CorporateMember {
+  id          String        @id @default(cuid())
+  corporateId String
+  userId      String
+  role        CorporateRole @default(MEMBER)
+  joinedAt    DateTime      @default(now())
+
+  corporate CorporateAccount @relation(fields: [corporateId], references: [id], onDelete: Cascade)
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([corporateId, userId])
+}
+
+// ============================================================================
+// 12. CMS, WEBHOOKS, AUDIT
+// ============================================================================
+
+model BlogPost {
+  id          String     @id @default(cuid())
+  slug        String     @unique
+  title       String
+  excerpt     String?
+  content     String     @db.Text
+  coverUrl    String?
+  status      PostStatus @default(DRAFT)
+  authorId    String?
+  publishedAt DateTime?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  author User? @relation(fields: [authorId], references: [id], onDelete: SetNull)
+
+  @@index([status, publishedAt])
+}
+
+model Faq {
+  id        String  @id @default(cuid())
+  question  String
+  answer    String  @db.Text
+  sortOrder Int     @default(0)
+  isActive  Boolean @default(true)
+}
+
+model Testimonial {
+  id        String  @id @default(cuid())
+  name      String
+  role      String?
+  quote     String  @db.Text
+  imageUrl  String?
+  isActive  Boolean @default(true)
+  sortOrder Int     @default(0)
+}
+
+// Payment/video webhooks: store event id to guarantee idempotent handling
+model WebhookEvent {
+  id          String    @id @default(cuid())
+  provider    String // razorpay | stripe | daily
+  eventId     String
+  type        String
+  payload     Json
+  processedAt DateTime?
+  error       String?
+  createdAt   DateTime  @default(now())
+
+  @@unique([provider, eventId])
+  @@index([processedAt])
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  actorId   String?
+  action    String // "attendance.override", "refund.create", ...
+  entity    String
+  entityId  String?
+  metadata  Json?
+  ip        String?
+  createdAt DateTime @default(now())
+
+  actor User? @relation(fields: [actorId], references: [id], onDelete: SetNull)
+
+  @@index([entity, entityId])
+  @@index([actorId, createdAt])
+}
