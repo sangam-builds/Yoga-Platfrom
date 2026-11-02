@@ -202,6 +202,12 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ---
 
+## 👨‍💻 Author
+
+Developed by [Sangam Gupta](https://github.com/sangam-builds) • Built with ❤️ using modern Next.js 16, Supabase & Tailwind CSS
+
+---
+
 ## 📄 License
 
 This project is open-source under the [MIT License](LICENSE).

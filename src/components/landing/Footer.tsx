@@ -188,9 +188,25 @@ export function Footer() {
           </div>
         </div>
 
-        {/* Bottom Legal & Copyright Bar */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#F8F7F2]/60">
+        {/* Bottom Legal, Attribution & Copyright Bar */}
+        <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-[#F8F7F2]/60">
           <p>© {currentYear} ZenFlow Yoga Platform. All rights reserved.</p>
+
+          <p className="flex items-center gap-1.5 text-center flex-wrap justify-center">
+            Developed by{" "}
+            <a
+              href="https://github.com/sangam-builds"
+              target="_blank"
+              rel="noreferrer"
+              className="text-white hover:text-[#6B8F71] font-medium underline underline-offset-2 transition-colors"
+            >
+              Sangam Gupta
+            </a>
+            <span>•</span>
+            <span className="flex items-center gap-1">
+              Built with <Heart className="w-3 h-3 text-[#6B8F71] fill-current" /> using modern Next.js & Supabase
+            </span>
+          </p>
 
           <div className="flex items-center gap-6">
             <Link href="/privacy" className="hover:text-white transition-colors">
@@ -199,9 +215,6 @@ export function Footer() {
             <Link href="/terms" className="hover:text-white transition-colors">
               Terms & Conditions
             </Link>
-            <span className="flex items-center gap-1">
-              Crafted with <Heart className="w-3 h-3 text-[#6B8F71] fill-current" /> for Mindful Living
-            </span>
           </div>
         </div>
       </div>
