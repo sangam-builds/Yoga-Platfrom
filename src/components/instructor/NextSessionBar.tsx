@@ -121,3 +121,4 @@ export function NextSessionBar({ session }: NextSessionProps) {
     </div>
   );
 }
+

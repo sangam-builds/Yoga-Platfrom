@@ -173,3 +173,4 @@ export async function GET() {
     return NextResponse.json({ error: "Failed to load overview data" }, { status: 500 });
   }
 }
+

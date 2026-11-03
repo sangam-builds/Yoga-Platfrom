@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { createClient } from "@/utils/supabase/client";
@@ -10,6 +10,7 @@ import { LoginFormData, AuthFormErrors } from "./types";
 
 export function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [formData, setFormData] = useState<LoginFormData>({
     email: "",
     password: "",
@@ -63,7 +64,7 @@ export function LoginForm() {
 
     try {
       const supabase = createClient();
-      const { error } = await supabase.auth.signInWithPassword({
+      const { data, error } = await supabase.auth.signInWithPassword({
         email: formData.email,
         password: formData.password,
       });
@@ -73,11 +74,23 @@ export function LoginForm() {
         return;
       }
 
+      const role = data.user?.app_metadata?.role || data.user?.user_metadata?.role;
+      const nextParam = searchParams?.get("next");
+
+      let destination = "/dashboard";
+      if (nextParam) {
+        destination = nextParam;
+      } else if (role === "ADMIN" || formData.email.toLowerCase().includes("admin")) {
+        destination = "/admin";
+      } else if (role === "INSTRUCTOR" || formData.email.toLowerCase().includes("instructor")) {
+        destination = "/instructor";
+      }
+
       setSuccessMessage("Logged in successfully! Redirecting...");
       setTimeout(() => {
-        router.push("/dashboard");
+        router.push(destination);
         router.refresh();
-      }, 800);
+      }, 500);
     } catch {
       setServerError("An unexpected error occurred. Please try again.");
     } finally {

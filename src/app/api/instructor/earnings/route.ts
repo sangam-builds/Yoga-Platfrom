@@ -94,3 +94,4 @@ export async function GET() {
     return NextResponse.json({ error: "Failed to fetch earnings" }, { status: 500 });
   }
 }
+
