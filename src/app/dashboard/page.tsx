@@ -38,6 +38,11 @@ export default async function DashboardPage() {
       })
     : "Just now";
 
+  const isAdminUser =
+    user.app_metadata?.role === "ADMIN" ||
+    user.user_metadata?.role === "ADMIN" ||
+    user.email?.toLowerCase() === "admin@zenflow.yoga";
+
   // Compute initials for avatar fallback
   const initials = name
     .split(" ")
@@ -74,6 +79,14 @@ export default async function DashboardPage() {
           </Link>
 
           <div className="flex items-center gap-3">
+            {isAdminUser && (
+              <Link
+                href="/admin"
+                className="text-xs sm:text-sm font-semibold bg-[#233D32] hover:bg-[#6B8F71] text-white transition-colors px-3 py-1.5 rounded-lg flex items-center gap-1.5 shadow-xs"
+              >
+                <span>Admin Console</span>
+              </Link>
+            )}
             <Link
               href="/"
               className="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors px-3 py-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"

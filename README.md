@@ -198,7 +198,51 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 | `/login` | Sign-in page with Google SSO and Email/Password | Public |
 | `/signup` | Registration page with password strength indicator and Google SSO | Public |
 | `/dashboard` | User dashboard displaying member name and session controls | Protected (Authenticated only) |
+| `/admin/login` | Dedicated Staff & Administrator Login Portal | Public |
+| `/admin` | Admin Management Console & Operational Metrics | Protected (ADMIN Role only) |
+| `/admin/users` | RBAC User & Role Management (Promote/Demote Roles) | Protected (ADMIN Role only) |
+| `/admin/classes` | Classes & Schedule Management Console | Protected (ADMIN Role only) |
+| `/admin/audit` | Security & RBAC Audit Stream | Protected (ADMIN Role only) |
+| `/unauthorized` | 403 Access Denied Screen for non-admins | Public |
 | `/auth/callback` | OAuth exchange route handler | System / Auth |
+
+---
+
+## 🛡️ Role-Based Access Control (RBAC) & Admin Access
+
+ZenFlow enforces a **Defense-in-Depth** security model across Next.js Edge Middleware and Server Component layout boundaries:
+
+### 1. Default Admin Credentials
+For initial deployment or local evaluation, the default administrator can be initialized in one click at `/admin/login` or via CLI:
+
+- **Email**: `admin@zenflow.yoga`
+- **Password**: `AdminZenFlow2026!`
+- **Role**: `ADMIN`
+
+To provision an admin via CLI directly to PostgreSQL:
+```bash
+npm run db:admin
+# Or specify custom email and name:
+npx tsx scripts/create-admin.ts custom-admin@zenflow.yoga "Super Admin"
+```
+
+### 2. RBAC Permissions Matrix
+
+| Permission | `ADMIN` | `INSTRUCTOR` | `STUDENT` |
+|---|:---:|:---:|:---:|
+| `ACCESS_ADMIN` (Admin Portal) | ✅ | ❌ | ❌ |
+| `MANAGE_USERS` (View & edit user records) | ✅ | ❌ | ❌ |
+| `MANAGE_ROLES` (Promote/demote roles) | ✅ | ❌ | ❌ |
+| `MANAGE_CLASSES` (Create & alter classes) | ✅ | ❌ | ❌ |
+| `VIEW_AUDIT_LOGS` (Security audit ledger) | ✅ | ❌ | ❌ |
+| `TEACH_CLASSES` (Host sessions & mark attendance) | ✅ | ✅ | ❌ |
+| `BOOK_CLASSES` (Join & practice) | ✅ | ✅ | ✅ |
+
+### 3. Route Protection Layers
+
+- **Edge Middleware (`src/middleware.ts`)**: Intercepts `/admin/*` paths before route rendering. Unauthenticated requests are immediately routed to `/admin/login`. Authenticated non-admin users (`STUDENT`) are redirected to `/unauthorized`.
+- **Server Guard (`src/lib/rbac/server.ts` -> `requireAdmin()`)**: Executes in `src/app/admin/layout.tsx` to verify the user against the database before any admin page or data is serialized.
+- **Audit Logging**: Any administrative change (such as promoting a student to instructor or administrator) is cryptographically recorded in the `AuditLog` table.
 
 ---
 
