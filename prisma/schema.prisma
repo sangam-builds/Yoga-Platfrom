@@ -249,6 +249,33 @@ enum PostStatus {
   PUBLISHED
 }
 
+enum InstructorApproval {
+  PENDING
+  APPROVED
+  SUSPENDED
+  REJECTED
+}
+
+enum TimeOffStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CANCELLED
+}
+
+enum SubstituteStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+  CANCELLED
+}
+
+enum DisputeStatus {
+  PENDING
+  RESOLVED
+  DECLINED
+}
+
 // ============================================================================
 // 1. AUTH & USERS
 // ============================================================================
@@ -311,6 +338,11 @@ model User {
   corporateAccountsAdmin CorporateAccount[]      @relation("CorporateOwner")
   blogPosts              BlogPost[]
   auditLogs              AuditLog[]
+  timeOffApproved        InstructorTimeOff[]     @relation("TimeOffApprovedBy")
+  studentNotesReceived   StudentNote[]           @relation("StudentNotes")
+  attendanceDisputes     AttendanceDispute[]     @relation("DisputeStudent")
+  attendanceDisputesResolved AttendanceDispute[] @relation("DisputeResolvedBy")
+  sessionChatMessages    SessionChatMessage[]
 
   @@index([role])
   @@index([createdAt])
@@ -361,26 +393,182 @@ model OtpCode {
 }
 
 model InstructorProfile {
-  id                  String       @id @default(cuid())
-  userId              String       @unique
-  bio                 String?      @db.Text
+  id                  String             @id @default(cuid())
+  userId              String             @unique
+  bio                 String?            @db.Text
   specialties         ClassStyle[]
   certifications      String[]
   yearsExperience     Int?
   languages           Locale[]
-  ratingAvg           Decimal      @default(0) @db.Decimal(3, 2)
-  ratingCount         Int          @default(0)
-  revenueSharePercent Int          @default(50)
+  ratingAvg           Decimal            @default(0) @db.Decimal(3, 2)
+  ratingCount         Int                @default(0)
+  revenueSharePercent Int                @default(50)
   payoutDetails       Json? // encrypt sensitive fields at application level
-  isActive            Boolean      @default(true)
-  createdAt           DateTime     @default(now())
-  updatedAt           DateTime     @updatedAt
+  isActive            Boolean            @default(true)
+  timezone            String             @default("Asia/Kolkata")
+  photoUrl            String?
+  introVideoUrl       String?
+  socialLinks         Json?
+  isAcceptingNewClasses Boolean          @default(true)
+  approvalStatus      InstructorApproval @default(APPROVED)
+  createdAt           DateTime           @default(now())
+  updatedAt           DateTime           @updatedAt
 
-  user               User               @relation(fields: [userId], references: [id], onDelete: Cascade)
-  classes            YogaClass[]        @relation("ClassInstructor")
-  substituteSessions ClassSession[]     @relation("SessionInstructor")
-  reviews            Review[]
-  payouts            InstructorPayout[]
+  user                 User                     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  classes              YogaClass[]              @relation("ClassInstructor")
+  substituteSessions   ClassSession[]           @relation("SessionInstructor")
+  reviews              Review[]
+  payouts              InstructorPayout[]
+  availabilities       InstructorAvailability[]
+  timeOffs             InstructorTimeOff[]
+  requestedSubstitutes SubstituteRequest[]      @relation("RequestedSubstitutes")
+  assignedSubstitutes  SubstituteRequest[]      @relation("AssignedSubstitutes")
+  sessionNotes         SessionNote[]
+  studentNotes         StudentNote[]
+  reviewReplies        ReviewReply[]
+}
+
+model InstructorAvailability {
+  id           String            @id @default(cuid())
+  instructorId String
+  weekday      Int // 0 (Sun) to 6 (Sat)
+  startTime    String // "09:00"
+  endTime      String // "17:00"
+  timezone     String            @default("Asia/Kolkata")
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+
+  instructor InstructorProfile @relation(fields: [instructorId], references: [id], onDelete: Cascade)
+
+  @@index([instructorId, weekday])
+}
+
+model InstructorTimeOff {
+  id           String            @id @default(cuid())
+  instructorId String
+  startsAt     DateTime
+  endsAt       DateTime
+  reason       String?           @db.Text
+  status       TimeOffStatus     @default(PENDING)
+  approvedById String?
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+
+  instructor InstructorProfile @relation(fields: [instructorId], references: [id], onDelete: Cascade)
+  approvedBy User?             @relation("TimeOffApprovedBy", fields: [approvedById], references: [id], onDelete: SetNull)
+
+  @@index([instructorId, startsAt])
+}
+
+model SubstituteRequest {
+  id            String             @id @default(cuid())
+  sessionId     String
+  requestedById String
+  substituteId  String?
+  status        SubstituteStatus   @default(PENDING)
+  note          String?            @db.Text
+  respondedAt   DateTime?
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
+
+  session     ClassSession       @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  requestedBy InstructorProfile  @relation("RequestedSubstitutes", fields: [requestedById], references: [id], onDelete: Cascade)
+  substitute  InstructorProfile? @relation("AssignedSubstitutes", fields: [substituteId], references: [id], onDelete: SetNull)
+
+  @@index([sessionId])
+  @@index([requestedById])
+  @@index([substituteId])
+}
+
+model SessionNote {
+  id           String            @id @default(cuid())
+  sessionId    String
+  instructorId String
+  lessonPlan   String?           @db.Text
+  content      String            @db.Text
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+
+  session    ClassSession      @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  instructor InstructorProfile @relation(fields: [instructorId], references: [id], onDelete: Cascade)
+
+  @@unique([sessionId, instructorId])
+}
+
+model StudentNote {
+  id           String            @id @default(cuid())
+  instructorId String
+  studentId    String
+  content      String            @db.Text
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+
+  instructor InstructorProfile @relation(fields: [instructorId], references: [id], onDelete: Cascade)
+  student    User              @relation("StudentNotes", fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@index([instructorId, studentId])
+}
+
+model AttendanceDispute {
+  id           String        @id @default(cuid())
+  attendanceId String        @unique
+  studentId    String
+  message      String        @db.Text
+  status       DisputeStatus @default(PENDING)
+  response     String?       @db.Text
+  resolvedById String?
+  resolvedAt   DateTime?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  attendance Attendance @relation(fields: [attendanceId], references: [id], onDelete: Cascade)
+  student    User       @relation("DisputeStudent", fields: [studentId], references: [id], onDelete: Cascade)
+  resolvedBy User?      @relation("DisputeResolvedBy", fields: [resolvedById], references: [id], onDelete: SetNull)
+
+  @@index([attendanceId])
+  @@index([studentId])
+}
+
+model ReviewReply {
+  id           String            @id @default(cuid())
+  reviewId     String            @unique
+  instructorId String
+  content      String            @db.Text
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+
+  review     Review            @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  instructor InstructorProfile @relation(fields: [instructorId], references: [id], onDelete: Cascade)
+
+  @@index([instructorId])
+}
+
+model ClassResource {
+  id        String    @id @default(cuid())
+  classId   String
+  title     String
+  type      String // "pdf" | "link" | "audio" | "playlist"
+  url       String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  class YogaClass @relation(fields: [classId], references: [id], onDelete: Cascade)
+
+  @@index([classId])
+}
+
+model SessionChatMessage {
+  id        String       @id @default(cuid())
+  sessionId String
+  senderId  String
+  content   String       @db.Text
+  isPinned  Boolean      @default(false)
+  createdAt DateTime     @default(now())
+
+  session ClassSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  sender  User         @relation(fields: [senderId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId, createdAt])
 }
 
 model InstructorPayout {
@@ -584,6 +772,7 @@ model YogaClass {
   instructor InstructorProfile @relation("ClassInstructor", fields: [instructorId], references: [id], onDelete: Restrict)
   sessions   ClassSession[]
   poses      ClassPose[]
+  resources  ClassResource[]
 
   @@index([style, level])
   @@index([instructorId])
@@ -616,6 +805,9 @@ model ClassSession {
   reviews              Review[]
   journalEntries       JournalEntry[]
   notifications        Notification[]
+  substituteRequests   SubstituteRequest[]
+  sessionNotes         SessionNote[]
+  sessionChatMessages  SessionChatMessage[]
 
   @@unique([classId, startsAt])
   @@index([startsAt])
@@ -752,6 +944,7 @@ model Attendance {
   user         User         @relation("AttendanceUser", fields: [userId], references: [id], onDelete: Cascade)
   session      ClassSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
   markedByUser User?        @relation("AttendanceMarkedBy", fields: [markedByUserId], references: [id], onDelete: SetNull)
+  dispute      AttendanceDispute?
 
   @@unique([userId, sessionId])
   @@index([userId, createdAt])
@@ -904,6 +1097,7 @@ model Review {
   user       User              @relation(fields: [userId], references: [id], onDelete: Cascade)
   session    ClassSession      @relation(fields: [sessionId], references: [id], onDelete: Cascade)
   instructor InstructorProfile @relation(fields: [instructorId], references: [id], onDelete: Cascade)
+  reply      ReviewReply?
 
   @@unique([userId, sessionId])
   @@index([instructorId])

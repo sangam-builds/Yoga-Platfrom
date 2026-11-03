@@ -85,7 +85,17 @@ export const updateSession = async (request: NextRequest) => {
     }
   }
 
-  // 2. Guard /dashboard routes
+  // 2. Guard /instructor routes (except /instructor/login)
+  if (pathname.startsWith("/instructor") && pathname !== "/instructor/login") {
+    if (!user) {
+      const url = request.nextUrl.clone();
+      url.pathname = "/login";
+      url.searchParams.set("next", pathname);
+      return createRedirectWithCookies(url);
+    }
+  }
+
+  // 3. Guard /dashboard routes
   if (pathname.startsWith("/dashboard")) {
     if (!user) {
       const url = request.nextUrl.clone();
