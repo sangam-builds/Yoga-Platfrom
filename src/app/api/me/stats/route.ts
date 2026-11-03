@@ -53,3 +53,4 @@ export async function GET() {
     isPositiveChange: diffMonth >= 0,
   });
 }
+

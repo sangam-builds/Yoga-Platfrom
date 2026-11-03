@@ -63,3 +63,4 @@ export async function GET() {
     failedPayment: subscription.failedPaymentCount > 0,
   });
 }
+
