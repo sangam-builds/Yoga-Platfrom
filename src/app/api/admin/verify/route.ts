@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { ROLES } from "@/lib/rbac/roles";
+import { ROLES, isConfiguredAdminEmail } from "@/lib/rbac/roles";
 
 export async function POST(request: Request) {
   try {
@@ -10,37 +10,50 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Email is required" }, { status: 400 });
     }
 
-    // Lookup user in Prisma database
-    let dbUser = await prisma.user.findFirst({
-      where: {
-        OR: [{ supabaseId: id }, { email: email }],
-      },
-    });
+    const isPreconfigured = isConfiguredAdminEmail(email);
 
-    // If it's the official admin email and role isn't ADMIN, auto-promote it
-    if (email.toLowerCase() === "admin@zenflow.yoga") {
-      if (!dbUser) {
-        dbUser = await prisma.user.create({
-          data: {
-            supabaseId: id,
-            email: email,
-            name: "Platform Administrator",
-            role: ROLES.ADMIN,
-          },
-        });
-      } else if (dbUser.role !== ROLES.ADMIN) {
-        dbUser = await prisma.user.update({
-          where: { id: dbUser.id },
-          data: { role: ROLES.ADMIN, supabaseId: id },
-        });
+    let dbUser: { id: string; role: string } | null = null;
+
+    try {
+      // Lookup user in Prisma database
+      dbUser = await prisma.user.findFirst({
+        where: {
+          OR: [{ supabaseId: id }, { email: email }],
+        },
+        select: { id: true, role: true },
+      });
+
+      // If preconfigured admin and role is not ADMIN, auto-promote in DB
+      if (isPreconfigured) {
+        if (!dbUser) {
+          const created = await prisma.user.create({
+            data: {
+              supabaseId: id,
+              email: email,
+              name: "Platform Administrator",
+              role: ROLES.ADMIN,
+            },
+            select: { id: true, role: true },
+          });
+          dbUser = created;
+        } else if (dbUser.role !== ROLES.ADMIN) {
+          const updated = await prisma.user.update({
+            where: { id: dbUser.id },
+            data: { role: ROLES.ADMIN, supabaseId: id },
+            select: { id: true, role: true },
+          });
+          dbUser = updated;
+        }
       }
+    } catch (dbErr) {
+      console.warn("DB check in /api/admin/verify encountered an issue (using fallback):", dbErr);
     }
 
-    const isAdmin = dbUser?.role === ROLES.ADMIN;
+    const isAdmin = dbUser?.role === ROLES.ADMIN || isPreconfigured;
 
     return NextResponse.json({
       isAdmin,
-      role: dbUser?.role || ROLES.STUDENT,
+      role: isAdmin ? ROLES.ADMIN : (dbUser?.role || ROLES.STUDENT),
     });
   } catch (error) {
     console.error("Error verifying admin role:", error);
@@ -50,4 +63,3 @@ export async function POST(request: Request) {
     );
   }
 }
-

@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { createClient } from "@/utils/supabase/server";
 import { prisma } from "@/lib/prisma";
-import { UserRole, ROLES, isAdmin } from "./roles";
+import { UserRole, ROLES, isAdmin, isConfiguredAdminEmail } from "./roles";
 
 export interface AuthenticatedUserContext {
   authUser: {
@@ -17,13 +17,14 @@ export interface AuthenticatedUserContext {
     email: string;
     role: UserRole;
     supabaseId: string | null;
-  } | null;
+  };
   role: UserRole;
 }
 
 /**
  * Retrieves the current authenticated user and resolves their database role.
  * Automatically synchronizes Supabase Auth users with the Prisma User record.
+ * Resilient against temporary DB timeouts or schema migrations.
  */
 export async function getCurrentUserWithRole(): Promise<AuthenticatedUserContext | null> {
   const cookieStore = await cookies();
@@ -37,64 +38,119 @@ export async function getCurrentUserWithRole(): Promise<AuthenticatedUserContext
     return null;
   }
 
-  // Check database for user by supabaseId or email
-  let dbUser = await prisma.user.findFirst({
-    where: {
-      OR: [{ supabaseId: authUser.id }, { email: authUser.email }],
-    },
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      role: true,
-      supabaseId: true,
-    },
-  });
+  const isPreconfiguredAdmin = isConfiguredAdminEmail(authUser.email);
 
-  // If user does not exist in Prisma DB yet, auto-sync from Supabase profile
-  if (!dbUser) {
-    // Check if the user is designated as admin via Supabase metadata or env default
-    const isMetadataAdmin =
+  let dbUser: {
+    id: string;
+    name: string;
+    email: string;
+    role: UserRole;
+    supabaseId: string | null;
+  } | null = null;
+
+  try {
+    // 1. Check database for existing record
+    const foundUser = await prisma.user.findFirst({
+      where: {
+        OR: [{ supabaseId: authUser.id }, { email: authUser.email }],
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        supabaseId: true,
+      },
+    });
+
+    if (!foundUser) {
+      // Auto-provision user in Prisma
+      const isMetadataAdmin =
+        authUser.app_metadata?.role === ROLES.ADMIN ||
+        authUser.user_metadata?.role === ROLES.ADMIN ||
+        isPreconfiguredAdmin;
+
+      const assignedRole: UserRole = isMetadataAdmin ? ROLES.ADMIN : ROLES.STUDENT;
+      const name =
+        (authUser.user_metadata?.full_name as string) ||
+        (authUser.user_metadata?.name as string) ||
+        authUser.email.split("@")[0] ||
+        "ZenFlow Practitioner";
+
+      const created = await prisma.user.create({
+        data: {
+          supabaseId: authUser.id,
+          email: authUser.email,
+          name: name,
+          role: assignedRole,
+        },
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          role: true,
+          supabaseId: true,
+        },
+      });
+
+      dbUser = { ...created, role: created.role as UserRole };
+    } else {
+      // If user is designated as admin via config/email but DB role isn't ADMIN, promote them
+      if (isPreconfiguredAdmin && foundUser.role !== ROLES.ADMIN) {
+        const updated = await prisma.user.update({
+          where: { id: foundUser.id },
+          data: { role: ROLES.ADMIN, supabaseId: authUser.id },
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            role: true,
+            supabaseId: true,
+          },
+        });
+        dbUser = { ...updated, role: updated.role as UserRole };
+      } else if (!foundUser.supabaseId) {
+        const updated = await prisma.user.update({
+          where: { id: foundUser.id },
+          data: { supabaseId: authUser.id },
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            role: true,
+            supabaseId: true,
+          },
+        });
+        dbUser = { ...updated, role: updated.role as UserRole };
+      } else {
+        dbUser = { ...foundUser, role: foundUser.role as UserRole };
+      }
+    }
+  } catch (err) {
+    console.warn("Prisma query in getCurrentUserWithRole encountered an issue (falling back to auth context):", err);
+    // Non-blocking fallback for resilient access
+    const fallbackRole: UserRole =
+      isPreconfiguredAdmin ||
       authUser.app_metadata?.role === ROLES.ADMIN ||
-      authUser.user_metadata?.role === ROLES.ADMIN ||
-      authUser.email.toLowerCase() === "admin@zenflow.yoga";
+      authUser.user_metadata?.role === ROLES.ADMIN
+        ? ROLES.ADMIN
+        : ROLES.STUDENT;
 
-    const assignedRole: UserRole = isMetadataAdmin ? ROLES.ADMIN : ROLES.STUDENT;
-    const name =
-      (authUser.user_metadata?.full_name as string) ||
-      (authUser.user_metadata?.name as string) ||
-      authUser.email.split("@")[0] ||
-      "ZenFlow Practitioner";
-
-    dbUser = await prisma.user.create({
-      data: {
-        supabaseId: authUser.id,
-        email: authUser.email,
-        name: name,
-        role: assignedRole,
-      },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        role: true,
-        supabaseId: true,
-      },
-    });
-  } else if (!dbUser.supabaseId) {
-    // Link existing email record to Supabase Auth ID
-    dbUser = await prisma.user.update({
-      where: { id: dbUser.id },
-      data: { supabaseId: authUser.id },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        role: true,
-        supabaseId: true,
-      },
-    });
+    dbUser = {
+      id: authUser.id,
+      name:
+        (authUser.user_metadata?.full_name as string) ||
+        (authUser.user_metadata?.name as string) ||
+        authUser.email.split("@")[0] ||
+        "ZenFlow Practitioner",
+      email: authUser.email,
+      role: fallbackRole,
+      supabaseId: authUser.id,
+    };
   }
+
+  const effectiveRole: UserRole =
+    dbUser?.role || (isPreconfiguredAdmin ? ROLES.ADMIN : ROLES.STUDENT);
 
   return {
     authUser: {
@@ -105,9 +161,9 @@ export async function getCurrentUserWithRole(): Promise<AuthenticatedUserContext
     },
     dbUser: {
       ...dbUser,
-      role: dbUser.role as UserRole,
+      role: effectiveRole,
     },
-    role: dbUser.role as UserRole,
+    role: effectiveRole,
   };
 }
 
@@ -129,7 +185,7 @@ export async function requireAdmin(
   }
 
   return {
-    dbUser: userContext.dbUser!,
+    dbUser: userContext.dbUser,
     authUser: userContext.authUser,
   };
 }
@@ -180,4 +236,3 @@ export async function logAuditEvent(params: {
     console.error("Failed to write audit log:", err);
   }
 }
-

@@ -7,7 +7,7 @@ const supabaseKey =
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 export const updateSession = async (request: NextRequest) => {
-  // Create response
+  // Create an unmodified base response
   let supabaseResponse = NextResponse.next({
     request: {
       headers: request.headers,
@@ -33,36 +33,55 @@ export const updateSession = async (request: NextRequest) => {
     },
   });
 
-  // IMPORTANT: Do not run code between createServerClient and
-  // supabase.auth.getUser(). A simple mistake could make it very hard to debug
-  // issues with users being randomly logged out.
+  // IMPORTANT: Do not run code between createServerClient and supabase.auth.getUser()
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
   const pathname = request.nextUrl.pathname;
 
+  // Helper: Copy all refreshed cookies to any redirect response
+  const createRedirectWithCookies = (url: URL) => {
+    const redirectResponse = NextResponse.redirect(url);
+    supabaseResponse.cookies.getAll().forEach((cookie) => {
+      redirectResponse.cookies.set(cookie.name, cookie.value);
+    });
+    return redirectResponse;
+  };
+
+  const configuredAdminEmails = (
+    process.env.ADMIN_EMAILS ||
+    process.env.ADMIN_EMAIL ||
+    "admin@zenflow.yoga"
+  )
+    .split(",")
+    .map((e) => e.trim().toLowerCase())
+    .filter(Boolean);
+
+  const isUserEmailAdmin =
+    user?.email &&
+    (configuredAdminEmails.includes(user.email.toLowerCase()) ||
+      user.email.toLowerCase() === "admin@zenflow.yoga");
+
   // 1. Guard /admin routes (except /admin/login)
   if (pathname.startsWith("/admin") && pathname !== "/admin/login") {
-    // If not authenticated, redirect to admin login
+    // If not authenticated, redirect to /admin/login
     if (!user) {
       const url = request.nextUrl.clone();
       url.pathname = "/admin/login";
       url.searchParams.set("next", pathname);
-      return NextResponse.redirect(url);
+      return createRedirectWithCookies(url);
     }
 
-    // Role-based metadata quick check at the edge/middleware level
-    // (Full database verification also runs securely in Server Component layout)
+    // Edge check: If user role is explicitly known to not be ADMIN and email is not in admin list
     const role =
       (user.app_metadata?.role as string) ||
       (user.user_metadata?.role as string);
 
-    // If role is set and not ADMIN, block access immediately
-    if (role && role !== "ADMIN") {
+    if (role && role !== "ADMIN" && !isUserEmailAdmin) {
       const url = request.nextUrl.clone();
       url.pathname = "/unauthorized";
-      return NextResponse.redirect(url);
+      return createRedirectWithCookies(url);
     }
   }
 
@@ -72,20 +91,20 @@ export const updateSession = async (request: NextRequest) => {
       const url = request.nextUrl.clone();
       url.pathname = "/login";
       url.searchParams.set("next", pathname);
-      return NextResponse.redirect(url);
+      return createRedirectWithCookies(url);
     }
   }
 
-  // 3. If authenticated user visits /admin/login, redirect to /admin
+  // 3. If authenticated admin visits /admin/login, redirect to /admin
   if (pathname === "/admin/login" && user) {
     const role =
       (user.app_metadata?.role as string) ||
       (user.user_metadata?.role as string);
 
-    if (role === "ADMIN" || user.email?.toLowerCase() === "admin@zenflow.yoga") {
+    if (role === "ADMIN" || isUserEmailAdmin) {
       const url = request.nextUrl.clone();
       url.pathname = "/admin";
-      return NextResponse.redirect(url);
+      return createRedirectWithCookies(url);
     }
   }
 

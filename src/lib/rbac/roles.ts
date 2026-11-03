@@ -55,9 +55,30 @@ export function isAdmin(role: UserRole | string | null | undefined): boolean {
 }
 
 /**
+ * Check if an email is a pre-configured Platform Administrator
+ */
+export function isConfiguredAdminEmail(email?: string | null): boolean {
+  if (!email) return false;
+  const cleanEmail = email.trim().toLowerCase();
+  if (cleanEmail === "admin@zenflow.yoga") return true;
+
+  const envAdmins =
+    process.env.ADMIN_EMAILS ||
+    process.env.ADMIN_EMAIL ||
+    process.env.NEXT_PUBLIC_ADMIN_EMAILS ||
+    "";
+
+  const adminList = envAdmins
+    .split(",")
+    .map((e) => e.trim().toLowerCase())
+    .filter(Boolean);
+
+  return adminList.includes(cleanEmail);
+}
+
+/**
  * Check if a given role is an Instructor or higher
  */
 export function isStaff(role: UserRole | string | null | undefined): boolean {
   return role === ROLES.ADMIN || role === ROLES.INSTRUCTOR;
 }
-
