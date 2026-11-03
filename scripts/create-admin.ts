@@ -52,6 +52,22 @@ async function main() {
     }
   }
 
+  // 1.5 Auto-confirm email in Supabase auth.users
+  try {
+    await prisma.$executeRawUnsafe(
+      `UPDATE auth.users 
+       SET email_confirmed_at = COALESCE(email_confirmed_at, NOW()),
+           last_sign_in_at = COALESCE(last_sign_in_at, NOW()),
+           raw_app_meta_data = COALESCE(raw_app_meta_data, '{}'::jsonb) || '{"provider": "email", "providers": ["email"], "role": "ADMIN"}'::jsonb,
+           raw_user_meta_data = COALESCE(raw_user_meta_data, '{}'::jsonb) || '{"full_name": "${ADMIN_NAME}", "role": "ADMIN"}'::jsonb
+       WHERE LOWER(email) = LOWER($1)`,
+      ADMIN_EMAIL
+    );
+    console.log(`✅ Account email confirmed & activated in auth.users.`);
+  } catch (confErr) {
+    console.warn("Notice updating auth.users:", confErr);
+  }
+
   // 2. Provision / Upsert user in PostgreSQL via Prisma
   const user = await prisma.user.upsert({
     where: { email: ADMIN_EMAIL },

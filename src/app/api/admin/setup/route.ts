@@ -26,7 +26,22 @@ export async function POST() {
 
     const supabaseId = signUpData.user?.id;
 
-    // 2. Upsert in Prisma Database
+    // 2. Ensure email is marked as confirmed in auth.users
+    try {
+      await prisma.$executeRawUnsafe(
+        `UPDATE auth.users 
+         SET email_confirmed_at = COALESCE(email_confirmed_at, NOW()),
+             last_sign_in_at = COALESCE(last_sign_in_at, NOW()),
+             raw_app_meta_data = COALESCE(raw_app_meta_data, '{}'::jsonb) || '{"provider": "email", "providers": ["email"], "role": "ADMIN"}'::jsonb,
+             raw_user_meta_data = COALESCE(raw_user_meta_data, '{}'::jsonb) || '{"full_name": "Platform Administrator", "role": "ADMIN"}'::jsonb
+         WHERE LOWER(email) = LOWER($1)`,
+        DEFAULT_ADMIN_EMAIL
+      );
+    } catch (e) {
+      console.warn("Could not auto-confirm in auth.users:", e);
+    }
+
+    // 3. Upsert in Prisma Database
     const user = await prisma.user.upsert({
       where: { email: DEFAULT_ADMIN_EMAIL },
       update: {
