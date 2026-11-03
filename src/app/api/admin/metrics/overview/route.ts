@@ -100,3 +100,4 @@ export async function GET() {
     return NextResponse.json({ error: "Unauthorized or failed to calculate KPIs" }, { status: 403 });
   }
 }
+
