@@ -36,9 +36,13 @@ export default function AdminLoginPage() {
         password: password,
       });
 
-      // If user not registered yet in Supabase Auth, attempt auto-setup for admin
-      if (error && error.message.toLowerCase().includes("invalid login credentials")) {
-        setStatusMessage("Admin account not yet registered in Supabase. Auto-provisioning now...");
+      // If user not registered yet in Supabase Auth or email unconfirmed, attempt auto-setup for admin
+      if (
+        error &&
+        (error.message.toLowerCase().includes("invalid login credentials") ||
+          error.message.toLowerCase().includes("email not confirmed"))
+      ) {
+        setStatusMessage("Verifying and activating admin account...");
         const setupRes = await fetch("/api/admin/setup", { method: "POST" });
         const setupData = await setupRes.json();
 

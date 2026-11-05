@@ -1,27 +1,22 @@
 import type { Metadata } from "next";
-import { AuthCard } from "@/components/auth/AuthCard";
-import { GoogleSignInButton } from "@/components/auth/GoogleSignInButton";
-import { AuthDivider } from "@/components/auth/AuthDivider";
-import { SignupForm } from "@/components/auth/SignupForm";
+import { Suspense } from "react";
+import { YogaAuthSplitView } from "@/components/auth/YogaAuthSplitView";
 
 export const metadata: Metadata = {
-  title: "Create an Account | NexusApp",
-  description: "Create your new account with Google or email",
+  title: "Create an Account | ZenFlow Yoga Studio",
+  description: "Join our mindful community and start your practice today.",
 };
 
 export default function SignupPage() {
   return (
-    <AuthCard
-      title="Create your account"
-      subtitle="Join in seconds to get started"
-      footerText="Already have an account?"
-      footerLinkText="Sign in"
-      footerLinkHref="/login"
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-[#FAF6ED] flex items-center justify-center">
+          <div className="w-6 h-6 border-2 border-[#47664A]/30 border-t-[#47664A] rounded-full animate-spin" />
+        </div>
+      }
     >
-      <GoogleSignInButton label="Sign up with Google" />
-      <AuthDivider />
-      <SignupForm />
-    </AuthCard>
+      <YogaAuthSplitView initialTab="signup" />
+    </Suspense>
   );
 }
-

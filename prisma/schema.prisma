@@ -660,8 +660,10 @@ model Payment {
   couponRedemptionId String?         @unique
   provider           PaymentProvider
   providerPaymentId  String?         @unique
-  providerOrderId    String?
+  providerOrderId    String?         @unique
   status             PaymentStatus   @default(PENDING)
+  method             String? // card, upi, netbanking, wallet
+  rawStatus          String? // provider status for debugging
   amount             Int // paid amount after discounts
   taxAmount          Int             @default(0)
   discountAmount     Int             @default(0)

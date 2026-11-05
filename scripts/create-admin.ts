@@ -52,14 +52,24 @@ async function main() {
     }
   }
 
-  // 1.5 Auto-confirm email in Supabase auth.users
+  // 1.5 Auto-confirm email in Supabase auth.users & identities
   try {
     await prisma.$executeRawUnsafe(
       `UPDATE auth.users 
-       SET email_confirmed_at = COALESCE(email_confirmed_at, NOW()),
+       SET email_confirmed_at = NOW(),
+           confirmation_token = '',
+           recovery_token = '',
+           email_change_token_new = '',
+           email_change_token_current = '',
            last_sign_in_at = COALESCE(last_sign_in_at, NOW()),
            raw_app_meta_data = COALESCE(raw_app_meta_data, '{}'::jsonb) || '{"provider": "email", "providers": ["email"], "role": "ADMIN"}'::jsonb,
-           raw_user_meta_data = COALESCE(raw_user_meta_data, '{}'::jsonb) || '{"full_name": "${ADMIN_NAME}", "role": "ADMIN"}'::jsonb
+           raw_user_meta_data = COALESCE(raw_user_meta_data, '{}'::jsonb) || '{"full_name": "${ADMIN_NAME}", "role": "ADMIN", "email_verified": true, "phone_verified": false}'::jsonb
+       WHERE LOWER(email) = LOWER($1)`,
+      ADMIN_EMAIL
+    );
+    await prisma.$executeRawUnsafe(
+      `UPDATE auth.identities
+       SET identity_data = COALESCE(identity_data, '{}'::jsonb) || '{"email_verified": true}'::jsonb
        WHERE LOWER(email) = LOWER($1)`,
       ADMIN_EMAIL
     );

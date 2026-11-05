@@ -1,6 +1,11 @@
 @import "tailwindcss";
 
 @theme inline {
+  --font-sans: var(--font-figtree), "Figtree", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-heading: var(--font-outfit), "Outfit", sans-serif;
+  --font-outfit: var(--font-outfit), "Outfit", sans-serif;
+  --font-figtree: var(--font-figtree), "Figtree", sans-serif;
+
   --color-sage-50: #F4F7F4;
   --color-sage-100: #E6EDE7;
   --color-sage-200: #CDDCCD;
@@ -27,7 +32,17 @@ html {
 }
 
 body {
+  font-family: var(--font-figtree), "Figtree", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   background-color: var(--color-cream, #F8F7F2);
   color: var(--color-charcoal, #292D2A);
   font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+}
+
+.font-outfit,
+.font-heading {
+  font-family: var(--font-outfit), "Outfit", sans-serif;
+}
+
+.font-figtree {
+  font-family: var(--font-figtree), "Figtree", sans-serif;
 }

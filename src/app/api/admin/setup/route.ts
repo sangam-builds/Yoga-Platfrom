@@ -26,14 +26,24 @@ export async function POST() {
 
     const supabaseId = signUpData.user?.id;
 
-    // 2. Ensure email is marked as confirmed in auth.users
+    // 2. Ensure email is marked as confirmed in auth.users and auth.identities
     try {
       await prisma.$executeRawUnsafe(
         `UPDATE auth.users 
-         SET email_confirmed_at = COALESCE(email_confirmed_at, NOW()),
+         SET email_confirmed_at = NOW(),
+             confirmation_token = '',
+             recovery_token = '',
+             email_change_token_new = '',
+             email_change_token_current = '',
              last_sign_in_at = COALESCE(last_sign_in_at, NOW()),
              raw_app_meta_data = COALESCE(raw_app_meta_data, '{}'::jsonb) || '{"provider": "email", "providers": ["email"], "role": "ADMIN"}'::jsonb,
-             raw_user_meta_data = COALESCE(raw_user_meta_data, '{}'::jsonb) || '{"full_name": "Platform Administrator", "role": "ADMIN"}'::jsonb
+             raw_user_meta_data = COALESCE(raw_user_meta_data, '{}'::jsonb) || '{"full_name": "Platform Administrator", "role": "ADMIN", "email_verified": true, "phone_verified": false}'::jsonb
+         WHERE LOWER(email) = LOWER($1)`,
+        DEFAULT_ADMIN_EMAIL
+      );
+      await prisma.$executeRawUnsafe(
+        `UPDATE auth.identities
+         SET identity_data = COALESCE(identity_data, '{}'::jsonb) || '{"email_verified": true}'::jsonb
          WHERE LOWER(email) = LOWER($1)`,
         DEFAULT_ADMIN_EMAIL
       );
