@@ -64,10 +64,12 @@ export default function CertificatesPage() {
       />
 
       {/* ─── 1. Milestone Progress Trackers ───────────────────────────── */}
-      <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-xs space-y-6">
+      <div className="p-6 sm:p-8 rounded-2xl bg-white dark:bg-[#18261E] border border-[#D1DBCF] dark:border-[#283E31] shadow-xs space-y-6 font-figtree">
         <div className="flex items-center gap-2.5">
-          <Sparkles className="w-5 h-5 text-amber-500" />
-          <h3 className="font-serif font-bold text-lg text-gray-900 dark:text-white">
+          <div className="w-8 h-8 rounded-full bg-[#E1EDDD] dark:bg-[#223528] flex items-center justify-center text-[#35523E] dark:text-[#A7C7A8]">
+            <Sparkles className="w-4 h-4" />
+          </div>
+          <h3 className="font-outfit font-semibold text-lg text-[#29352F] dark:text-[#E8EFE8]">
             Upcoming Milestone Roadmap
           </h3>
         </div>
@@ -75,10 +77,10 @@ export default function CertificatesPage() {
         <div className="space-y-4">
           <div className="space-y-2">
             <div className="flex items-center justify-between text-xs font-semibold">
-              <span className="text-gray-900 dark:text-white">
+              <span className="text-[#29352F] dark:text-[#E8EFE8]">
                 {milestonesData?.nextMilestone?.name || "30-Class Mindfulness Master"}
               </span>
-              <span className="text-[#6B8F71]">
+              <span className="text-[#47664A] dark:text-[#8BB394] font-mono">
                 {milestonesData?.nextMilestone?.current ?? 6} / {milestonesData?.nextMilestone?.target ?? 10} Sessions
               </span>
             </div>
@@ -92,8 +94,8 @@ export default function CertificatesPage() {
       </div>
 
       {/* ─── 2. Certificates Gallery ─────────────────────────────────── */}
-      <div className="space-y-4">
-        <h3 className="font-serif font-bold text-lg text-gray-900 dark:text-white">
+      <div className="space-y-4 font-figtree">
+        <h3 className="font-outfit font-semibold text-lg text-[#29352F] dark:text-[#E8EFE8]">
           Earned Certificates ({certificates.length})
         </h3>
 
@@ -101,38 +103,38 @@ export default function CertificatesPage() {
           {certificates.map((cert) => (
             <div
               key={cert.id}
-              className="p-6 rounded-3xl bg-gradient-to-br from-amber-50/50 via-white to-amber-50/20 dark:from-gray-900 dark:to-gray-800/80 border border-amber-200/80 dark:border-amber-900/60 shadow-xs space-y-6 flex flex-col justify-between"
+              className="p-6 rounded-2xl bg-white dark:bg-[#18261E] border border-[#D1DBCF] dark:border-[#283E31] shadow-xs space-y-6 flex flex-col justify-between hover:border-[#47664A] transition-all"
             >
               <div className="space-y-3">
                 <div className="flex items-start justify-between gap-4">
-                  <div className="w-12 h-12 rounded-2xl bg-amber-100 dark:bg-amber-950 flex items-center justify-center text-amber-700 dark:text-amber-400 font-bold shrink-0">
+                  <div className="w-12 h-12 rounded-full bg-[#E1EDDD] dark:bg-[#223528] flex items-center justify-center text-[#35523E] dark:text-[#A7C7A8] font-bold shrink-0">
                     <Award className="w-6 h-6" />
                   </div>
-                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">
+                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold font-outfit uppercase tracking-wider bg-[#E1EDDD] text-[#35523E]">
                     {cert.status}
                   </span>
                 </div>
 
                 <div>
-                  <h4 className="font-serif text-xl font-bold text-gray-900 dark:text-white">
+                  <h4 className="font-outfit text-xl font-semibold text-[#29352F] dark:text-[#E8EFE8]">
                     {cert.title}
                   </h4>
-                  <p className="text-xs text-gray-500 mt-1">
+                  <p className="text-xs text-[#6C7B72] dark:text-[#A4B5A9] mt-1 font-figtree">
                     Issued on {formatDate(cert.issuedAt)} • Certified by {cert.signer}
                   </p>
-                  <p className="text-[11px] font-mono text-gray-400 mt-0.5">
+                  <p className="text-[11px] font-mono text-[#8C9B92] mt-0.5">
                     ID: {cert.code}
                   </p>
                 </div>
               </div>
 
               {/* Action Buttons */}
-              <div className="pt-4 border-t border-amber-100 dark:border-gray-800 flex flex-wrap items-center gap-2">
+              <div className="pt-4 border-t border-[#E5DFD4] dark:border-[#283E31] flex flex-wrap items-center gap-2">
                 <Button
                   type="button"
                   variant="outline"
                   onClick={() => setPreviewCert(cert)}
-                  className="rounded-xl px-3 py-1.5 text-xs font-semibold"
+                  className="rounded-xl px-3 py-1.5 text-xs font-semibold border-[#D1DBCF] dark:border-[#283E31] bg-[#FAF6EE] dark:bg-[#1A2A21] text-[#29352F] dark:text-[#E8EFE8] hover:bg-[#F3EFE4]"
                 >
                   View Diploma
                 </Button>
@@ -140,7 +142,7 @@ export default function CertificatesPage() {
                 <Button
                   type="button"
                   onClick={() => handleShareLinkedIn(cert)}
-                  className="rounded-xl px-3 py-1.5 text-xs font-semibold bg-[#0A66C2] hover:bg-[#004182] text-white"
+                  className="rounded-xl px-3 py-1.5 text-xs font-semibold bg-[#47664A] hover:bg-[#3B563E] text-white"
                 >
                   Add to LinkedIn
                 </Button>
@@ -160,48 +162,48 @@ export default function CertificatesPage() {
         <div
           role="dialog"
           aria-modal="true"
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xs animate-in fade-in"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xs animate-in fade-in font-figtree"
           onClick={() => setPreviewCert(null)}
         >
           <div
-            className="w-full max-w-2xl bg-[#F8F7F2] text-gray-900 rounded-3xl shadow-2xl border-8 border-amber-900/20 p-8 sm:p-12 space-y-6 text-center relative"
+            className="w-full max-w-2xl bg-[#FAF6ED] dark:bg-[#16241C] text-[#29352F] dark:text-[#E8EFE8] rounded-3xl shadow-2xl border-4 border-[#D1DBCF] dark:border-[#283E31] p-8 sm:p-12 space-y-6 text-center relative"
             onClick={(e) => e.stopPropagation()}
           >
             <button
               type="button"
               onClick={() => setPreviewCert(null)}
-              className="absolute top-4 right-4 p-2 text-gray-500 hover:text-gray-900"
+              className="absolute top-4 right-4 p-2 text-[#6C7B72] hover:text-[#29352F] dark:hover:text-white"
             >
               <X className="w-5 h-5" />
             </button>
 
             <div className="space-y-2">
-              <span className="text-xs font-serif uppercase tracking-widest text-[#6B8F71] font-bold">
-                ZenFlow Yoga Academy • Official Diploma
+              <span className="text-xs font-outfit uppercase tracking-[0.22em] text-[#607B6A] font-bold">
+                ZenFlow Yoga Sanctuary • Official Diploma
               </span>
-              <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#233D32]">
+              <h2 className="font-outfit text-3xl sm:text-4xl font-semibold text-[#29352F] dark:text-white">
                 Certificate of Completion
               </h2>
             </div>
 
-            <p className="text-sm text-gray-600 max-w-md mx-auto leading-relaxed">
+            <p className="text-sm text-[#6C7B72] dark:text-[#A4B5A9] max-w-md mx-auto leading-relaxed font-figtree">
               This certifies that the recipient has demonstrated mindful dedication and completed accredited practice milestones for:
             </p>
 
-            <h3 className="font-serif text-xl sm:text-2xl font-bold text-gray-900">
+            <h3 className="font-outfit text-xl sm:text-2xl font-semibold text-[#47664A] dark:text-[#8BB394]">
               {previewCert.title}
             </h3>
 
-            <div className="pt-6 border-t border-amber-900/10 flex items-center justify-between text-xs text-gray-600">
+            <div className="pt-6 border-t border-[#D1DBCF] dark:border-[#283E31] flex items-center justify-between text-xs text-[#6C7B72] dark:text-[#A4B5A9]">
               <div className="text-left">
-                <span className="font-serif italic block text-sm font-bold text-[#233D32]">
+                <span className="font-outfit block text-sm font-semibold text-[#29352F] dark:text-white">
                   Priya Sharma
                 </span>
                 <span>Senior Acharya</span>
               </div>
 
-              <div className="text-right">
-                <span className="font-mono block text-[11px]">{previewCert.code}</span>
+              <div className="text-right font-figtree">
+                <span className="font-mono block text-[11px] text-[#47664A] dark:text-[#8BB394] font-semibold">{previewCert.code}</span>
                 <span>Verified by ZenFlow Platform</span>
               </div>
             </div>

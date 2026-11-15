@@ -29,6 +29,7 @@ import {
   ShieldCheck,
   Globe,
   MoreHorizontal,
+  Leaf,
 } from "lucide-react";
 import { useI18n, type Locale } from "@/lib/i18n";
 import { GlobalSearchModal } from "./GlobalSearchModal";
@@ -158,20 +159,16 @@ export function AppShell({ children, user }: AppShellProps) {
   const isAdmin = user.role === "ADMIN" || user.email === "admin@zenflow.yoga";
 
   return (
-    <div className="min-h-screen bg-[#F8F7F2] dark:bg-gray-950 text-gray-900 dark:text-gray-100 flex flex-col antialiased">
+    <div className="min-h-screen bg-[#FAF6ED] dark:bg-[#121E17] text-[#29352F] dark:text-[#E8EFE8] flex flex-col antialiased font-figtree">
       {/* ─── Top Navigation Bar ─────────────────────────────────────────── */}
-      <header className="sticky top-0 z-30 h-16 bg-white/90 dark:bg-gray-900/90 backdrop-blur-md border-b border-gray-200/80 dark:border-gray-800 flex items-center justify-between px-4 sm:px-6">
+      <header className="sticky top-0 z-30 h-16 bg-[#FAF6ED]/95 dark:bg-[#16241C]/95 backdrop-blur-md border-b border-[#D1DBCF] dark:border-[#283E31] flex items-center justify-between px-4 sm:px-6">
         {/* Brand / Logo */}
         <div className="flex items-center gap-3">
           <Link href="/dashboard" className="flex items-center gap-2.5 group">
-            <div className="w-9 h-9 rounded-full bg-[#233D32] flex items-center justify-center text-[#F8F7F2] shadow-sm group-hover:bg-[#6B8F71] transition-colors">
-              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-                <path d="M12 3c-1.5 3-4 6-4 9a4 4 0 0 0 8 0c0-3-2.5-6-4-9z" />
-                <path d="M7 10c-2.5 1.5-4 4-4 6.5A4.5 4.5 0 0 0 7.5 21c3 0 4.5-2 4.5-5" />
-                <path d="M17 10c2.5 1.5 4 4 4 6.5A4.5 4.5 0 0 1 16.5 21c-3 0-4.5-2-4.5-5" />
-              </svg>
+            <div className="w-9 h-9 rounded-full bg-[#E1EDDD] text-[#35523E] flex items-center justify-center shadow-2xs group-hover:bg-[#47664A] group-hover:text-white transition-all">
+              <Leaf className="w-4 h-4" />
             </div>
-            <span className="font-serif text-xl font-bold tracking-tight text-gray-900 dark:text-white">
+            <span className="font-outfit text-xl font-bold tracking-tight text-[#29352F] dark:text-white">
               ZenFlow
             </span>
           </Link>
@@ -179,7 +176,7 @@ export function AppShell({ children, user }: AppShellProps) {
           {isAdmin && (
             <Link
               href="/admin"
-              className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-lg bg-[#233D32] text-white hover:bg-[#6B8F71] transition-colors ml-2"
+              className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-lg bg-[#47664A] text-white hover:bg-[#3B563E] transition-colors ml-2 font-outfit"
             >
               <ShieldCheck className="w-3.5 h-3.5" />
               <span>Admin Console</span>
@@ -191,11 +188,11 @@ export function AppShell({ children, user }: AppShellProps) {
         <button
           type="button"
           onClick={() => setIsSearchOpen(true)}
-          className="hidden md:flex items-center gap-3 px-3.5 py-1.5 rounded-xl bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white text-xs border border-transparent hover:border-gray-300 dark:hover:border-gray-700 transition-all max-w-sm w-full mx-6"
+          className="hidden md:flex items-center gap-3 px-3.5 py-1.5 rounded-xl bg-[#FAF6EE] dark:bg-[#1A2A21] text-[#6C7B72] dark:text-[#A4B5A9] hover:text-[#29352F] dark:hover:text-white text-xs border border-[#D1DBCF] dark:border-[#283E31] hover:border-[#47664A] transition-all max-w-sm w-full mx-6 shadow-2xs"
         >
-          <Search className="w-4 h-4 text-gray-400" />
+          <Search className="w-4 h-4 text-[#637063]" />
           <span className="flex-1 text-left truncate">{t("common.search")}</span>
-          <kbd className="px-1.5 py-0.5 text-[10px] font-mono bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-md">
+          <kbd className="px-1.5 py-0.5 text-[10px] font-mono bg-white dark:bg-[#14221A] border border-[#D1DBCF] dark:border-[#283E31] rounded-md text-[#29352F] dark:text-gray-300">
             ⌘K
           </kbd>
         </button>
@@ -206,7 +203,7 @@ export function AppShell({ children, user }: AppShellProps) {
           <button
             type="button"
             onClick={() => setIsSearchOpen(true)}
-            className="md:hidden p-2 rounded-xl text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+            className="md:hidden p-2 rounded-xl text-[#5C6B63] dark:text-[#A4B5A9] hover:bg-[#E1EDDD]/50 dark:hover:bg-[#203428]"
             aria-label="Search"
           >
             <Search className="w-5 h-5" />
@@ -216,18 +213,18 @@ export function AppShell({ children, user }: AppShellProps) {
           <div className="relative group">
             <button
               type="button"
-              className="p-2 rounded-xl text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors flex items-center gap-1 text-xs font-semibold"
+              className="p-2 rounded-xl text-[#5C6B63] dark:text-[#A4B5A9] hover:bg-[#E1EDDD]/50 dark:hover:bg-[#203428] transition-colors flex items-center gap-1 text-xs font-semibold font-outfit"
               aria-label="Change Language"
             >
-              <Globe className="w-4 h-4" />
+              <Globe className="w-4 h-4 text-[#637063]" />
               <span className="uppercase">{locale}</span>
             </button>
-            <div className="absolute right-0 top-full mt-1 w-32 bg-white dark:bg-gray-900 rounded-xl shadow-xl border border-gray-200 dark:border-gray-800 p-1 hidden group-hover:block animate-in fade-in z-50">
+            <div className="absolute right-0 top-full mt-1 w-32 bg-[#FAF6ED] dark:bg-[#16241C] rounded-xl shadow-xl border border-[#D1DBCF] dark:border-[#283E31] p-1 hidden group-hover:block animate-in fade-in z-50">
               <button
                 type="button"
                 onClick={() => setLocale("en")}
                 className={`w-full text-left px-3 py-1.5 text-xs rounded-lg ${
-                  locale === "en" ? "bg-[#6B8F71] text-white font-semibold" : "hover:bg-gray-100 dark:hover:bg-gray-800"
+                  locale === "en" ? "bg-[#47664A] text-white font-semibold" : "hover:bg-[#E1EDDD]/60 dark:hover:bg-[#203428]"
                 }`}
               >
                 English
@@ -236,7 +233,7 @@ export function AppShell({ children, user }: AppShellProps) {
                 type="button"
                 onClick={() => setLocale("hi")}
                 className={`w-full text-left px-3 py-1.5 text-xs rounded-lg ${
-                  locale === "hi" ? "bg-[#6B8F71] text-white font-semibold" : "hover:bg-gray-100 dark:hover:bg-gray-800"
+                  locale === "hi" ? "bg-[#47664A] text-white font-semibold" : "hover:bg-[#E1EDDD]/60 dark:hover:bg-[#203428]"
                 }`}
               >
                 हिन्दी (Hindi)
@@ -245,7 +242,7 @@ export function AppShell({ children, user }: AppShellProps) {
                 type="button"
                 onClick={() => setLocale("pa")}
                 className={`w-full text-left px-3 py-1.5 text-xs rounded-lg ${
-                  locale === "pa" ? "bg-[#6B8F71] text-white font-semibold" : "hover:bg-gray-100 dark:hover:bg-gray-800"
+                  locale === "pa" ? "bg-[#47664A] text-white font-semibold" : "hover:bg-[#E1EDDD]/60 dark:hover:bg-[#203428]"
                 }`}
               >
                 ਪੰਜਾਬੀ (Punjabi)
@@ -257,21 +254,21 @@ export function AppShell({ children, user }: AppShellProps) {
           <button
             type="button"
             onClick={toggleTheme}
-            className="p-2 rounded-xl text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+            className="p-2 rounded-xl text-[#5C6B63] dark:text-[#A4B5A9] hover:bg-[#E1EDDD]/50 dark:hover:bg-[#203428] transition-colors"
             aria-label="Toggle Theme"
           >
-            {isDarkMode ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-gray-600" />}
+            {isDarkMode ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-[#5C6B63]" />}
           </button>
 
           {/* Notification Bell */}
           <button
             type="button"
             onClick={() => setIsNotificationOpen(true)}
-            className="p-2 rounded-xl text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors relative"
+            className="p-2 rounded-xl text-[#5C6B63] dark:text-[#A4B5A9] hover:bg-[#E1EDDD]/50 dark:hover:bg-[#203428] transition-colors relative"
             aria-label="Open notifications"
           >
-            <Bell className="w-4 h-4" />
-            <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#6B8F71]" />
+            <Bell className="w-4 h-4 text-[#637063]" />
+            <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#47664A]" />
           </button>
 
           {/* User Avatar Menu */}
@@ -279,53 +276,53 @@ export function AppShell({ children, user }: AppShellProps) {
             <button
               type="button"
               onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-              className="flex items-center gap-2 p-1 rounded-full hover:ring-2 hover:ring-[#6B8F71] transition-all"
+              className="flex items-center gap-2 p-1 rounded-full hover:ring-2 hover:ring-[#47664A] transition-all"
               aria-label="User menu"
             >
-              <div className="w-8 h-8 rounded-full bg-[#6B8F71] text-white font-semibold text-xs flex items-center justify-center">
+              <div className="w-8 h-8 rounded-full bg-[#47664A] text-white font-semibold text-xs flex items-center justify-center font-outfit shadow-2xs">
                 {user.name.slice(0, 2).toUpperCase()}
               </div>
             </button>
 
             {isUserMenuOpen && (
               <div
-                className="absolute right-0 top-full mt-2 w-56 bg-white dark:bg-gray-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-800 p-2 z-50 animate-in fade-in"
+                className="absolute right-0 top-full mt-2 w-56 bg-[#FAF6ED] dark:bg-[#16241C] rounded-2xl shadow-2xl border border-[#D1DBCF] dark:border-[#283E31] p-2 z-50 animate-in fade-in"
                 onClick={() => setIsUserMenuOpen(false)}
               >
-                <div className="px-3 py-2 border-b border-gray-100 dark:border-gray-800">
-                  <p className="text-xs font-bold text-gray-900 dark:text-white truncate">{user.name}</p>
-                  <p className="text-[11px] text-gray-500 truncate">{user.email}</p>
+                <div className="px-3 py-2 border-b border-[#D1DBCF] dark:border-[#283E31]">
+                  <p className="text-xs font-bold text-[#29352F] dark:text-white truncate font-outfit">{user.name}</p>
+                  <p className="text-[11px] text-[#6C7B72] truncate">{user.email}</p>
                 </div>
 
                 <div className="py-1 space-y-0.5">
                   <Link
                     href="/dashboard/settings"
-                    className="flex items-center gap-2 px-3 py-2 text-xs font-medium rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+                    className="flex items-center gap-2 px-3 py-2 text-xs font-medium rounded-xl text-[#29352F] dark:text-[#E8EFE8] hover:bg-[#E1EDDD]/60 dark:hover:bg-[#203428]"
                   >
-                    <UserIcon className="w-4 h-4 text-gray-400" />
+                    <UserIcon className="w-4 h-4 text-[#637063]" />
                     <span>{t("nav.profile")}</span>
                   </Link>
                   <Link
                     href="/dashboard/membership"
-                    className="flex items-center gap-2 px-3 py-2 text-xs font-medium rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+                    className="flex items-center gap-2 px-3 py-2 text-xs font-medium rounded-xl text-[#29352F] dark:text-[#E8EFE8] hover:bg-[#E1EDDD]/60 dark:hover:bg-[#203428]"
                   >
-                    <CreditCard className="w-4 h-4 text-gray-400" />
+                    <CreditCard className="w-4 h-4 text-[#637063]" />
                     <span>{t("nav.billing")}</span>
                   </Link>
                   <Link
                     href="/dashboard/settings"
-                    className="flex items-center gap-2 px-3 py-2 text-xs font-medium rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+                    className="flex items-center gap-2 px-3 py-2 text-xs font-medium rounded-xl text-[#29352F] dark:text-[#E8EFE8] hover:bg-[#E1EDDD]/60 dark:hover:bg-[#203428]"
                   >
-                    <Settings className="w-4 h-4 text-gray-400" />
+                    <Settings className="w-4 h-4 text-[#637063]" />
                     <span>{t("nav.settings")}</span>
                   </Link>
                 </div>
 
-                <div className="pt-1 border-t border-gray-100 dark:border-gray-800">
+                <div className="pt-1 border-t border-[#D1DBCF] dark:border-[#283E31]">
                   <button
                     type="button"
                     onClick={handleSignOut}
-                    className="w-full flex items-center gap-2 px-3 py-2 text-xs font-medium rounded-xl text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40"
+                    className="w-full flex items-center gap-2 px-3 py-2 text-xs font-medium rounded-xl text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 cursor-pointer"
                   >
                     <LogOut className="w-4 h-4" />
                     <span>{t("nav.logout")}</span>
@@ -341,7 +338,7 @@ export function AppShell({ children, user }: AppShellProps) {
       <div className="flex-1 flex min-h-[calc(100vh-4rem)]">
         {/* Desktop & Tablet Sidebar */}
         <aside
-          className={`hidden md:flex flex-col border-r border-gray-200/80 dark:border-gray-800 bg-white/60 dark:bg-gray-900/60 backdrop-blur-xs transition-all duration-300 shrink-0 ${
+          className={`hidden md:flex flex-col border-r border-[#D1DBCF] dark:border-[#283E31] bg-[#FAF6ED]/80 dark:bg-[#14221A]/80 backdrop-blur-xs transition-all duration-300 shrink-0 ${
             isCollapsed ? "w-20" : "w-64"
           }`}
         >
@@ -360,13 +357,13 @@ export function AppShell({ children, user }: AppShellProps) {
                     key={item.id}
                     href="/dashboard/membership"
                     title={isCollapsed ? `${t(item.nameKey)} (Upgrade Plan)` : undefined}
-                    className="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold text-gray-400 hover:bg-amber-500/10 hover:text-amber-700 dark:hover:text-amber-400 transition-colors group"
+                    className="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold text-[#8C9B92] hover:bg-[#E1EDDD]/40 hover:text-[#29352F] transition-colors group"
                   >
                     <div className="flex items-center gap-3 min-w-0">
                       <Icon className="w-4 h-4 shrink-0 opacity-60" />
                       {!isCollapsed && <span className="truncate">{t(item.nameKey)}</span>}
                     </div>
-                    <Lock className="w-3.5 h-3.5 text-amber-500 shrink-0" />
+                    <Lock className="w-3.5 h-3.5 text-amber-600 shrink-0" />
                   </Link>
                 );
               }
@@ -376,10 +373,10 @@ export function AppShell({ children, user }: AppShellProps) {
                   key={item.id}
                   href={item.href}
                   title={isCollapsed ? t(item.nameKey) : undefined}
-                  className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${
+                  className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs transition-all ${
                     isActive
-                      ? "bg-[#233D32] text-white shadow-xs dark:bg-[#6B8F71] dark:text-gray-950 font-bold"
-                      : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900"
+                      ? "bg-[#47664A] text-white shadow-xs font-semibold"
+                      : "text-[#5C6B63] dark:text-[#A4B5A9] hover:bg-[#E1EDDD]/60 dark:hover:bg-[#203428] hover:text-[#29352F] font-medium"
                   }`}
                 >
                   <div className="flex items-center gap-3 min-w-0">
@@ -388,10 +385,10 @@ export function AppShell({ children, user }: AppShellProps) {
                   </div>
                   {item.badge !== undefined && item.badge > 0 && (
                     <span
-                      className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${
+                      className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full font-outfit ${
                         isActive
-                          ? "bg-white text-[#233D32]"
-                          : "bg-[#6B8F71] text-white"
+                          ? "bg-white text-[#47664A]"
+                          : "bg-[#E1EDDD] text-[#35523E]"
                       }`}
                     >
                       {item.badge}
@@ -403,11 +400,11 @@ export function AppShell({ children, user }: AppShellProps) {
           </nav>
 
           {/* Collapse Toggle Footer */}
-          <div className="p-3 border-t border-gray-200/80 dark:border-gray-800 flex items-center justify-end">
+          <div className="p-3 border-t border-[#D1DBCF] dark:border-[#283E31] flex items-center justify-end">
             <button
               type="button"
               onClick={toggleSidebar}
-              className="p-1.5 rounded-lg text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              className="p-1.5 rounded-lg text-[#6C7B72] hover:bg-[#E1EDDD]/50 dark:hover:bg-[#203428] transition-colors cursor-pointer"
               title={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
             >
               {isCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
@@ -428,7 +425,7 @@ export function AppShell({ children, user }: AppShellProps) {
       </div>
 
       {/* ─── Mobile Bottom Tab Bar (360px+) ─────────────────────────────── */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md border-t border-gray-200 dark:border-gray-800 flex items-center justify-around h-16 px-2 safe-area-pb">
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#FAF6ED]/95 dark:bg-[#16241C]/95 backdrop-blur-md border-t border-[#D1DBCF] dark:border-[#283E31] flex items-center justify-around h-16 px-2 safe-area-pb">
         {mobilePrimaryNav.map((item) => {
           const isActive =
             item.href === "/dashboard"
@@ -442,14 +439,14 @@ export function AppShell({ children, user }: AppShellProps) {
               href={item.href}
               className={`flex flex-col items-center justify-center w-14 h-12 rounded-xl transition-colors relative ${
                 isActive
-                  ? "text-[#233D32] dark:text-[#A7C4B5] font-bold"
-                  : "text-gray-500 dark:text-gray-400"
+                  ? "text-[#47664A] dark:text-[#A7C8B0] font-bold"
+                  : "text-[#6C7B72] dark:text-[#8FA395]"
               }`}
             >
               <Icon className="w-5 h-5" />
-              <span className="text-[10px] mt-0.5 truncate max-w-[50px]">{t(item.nameKey)}</span>
+              <span className="text-[10px] mt-0.5 truncate max-w-[50px] font-medium">{t(item.nameKey)}</span>
               {item.badge !== undefined && item.badge > 0 && (
-                <span className="absolute top-1 right-2.5 w-2 h-2 rounded-full bg-[#6B8F71]" />
+                <span className="absolute top-1 right-2.5 w-2 h-2 rounded-full bg-[#47664A]" />
               )}
             </Link>
           );
@@ -459,29 +456,29 @@ export function AppShell({ children, user }: AppShellProps) {
         <button
           type="button"
           onClick={() => setIsMobileMoreOpen(true)}
-          className={`flex flex-col items-center justify-center w-14 h-12 rounded-xl text-gray-500 dark:text-gray-400`}
+          className={`flex flex-col items-center justify-center w-14 h-12 rounded-xl text-[#6C7B72] dark:text-[#8FA395]`}
         >
           <MoreHorizontal className="w-5 h-5" />
-          <span className="text-[10px] mt-0.5">{t("nav.more")}</span>
+          <span className="text-[10px] mt-0.5 font-medium">{t("nav.more")}</span>
         </button>
       </div>
 
       {/* Mobile "More" Sheet */}
       {isMobileMoreOpen && (
         <div
-          className="md:hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex flex-col justify-end"
+          className="md:hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex flex-col justify-end animate-fadeIn"
           onClick={() => setIsMobileMoreOpen(false)}
         >
           <div
-            className="bg-white dark:bg-gray-900 rounded-t-3xl border-t border-gray-200 dark:border-gray-800 p-6 space-y-4 max-h-[80vh] overflow-y-auto"
+            className="bg-[#FAF6ED] dark:bg-[#16241C] rounded-t-3xl border-t border-[#D1DBCF] dark:border-[#283E31] p-6 space-y-4 max-h-[80vh] overflow-y-auto animate-scaleUp"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between pb-2 border-b border-gray-100 dark:border-gray-800">
-              <h3 className="font-serif font-bold text-lg text-gray-900 dark:text-white">More Options</h3>
+            <div className="flex items-center justify-between pb-2 border-b border-[#D1DBCF] dark:border-[#283E31]">
+              <h3 className="font-outfit font-semibold text-lg text-[#29352F] dark:text-white">More Options</h3>
               <button
                 type="button"
                 onClick={() => setIsMobileMoreOpen(false)}
-                className="p-1 rounded-lg text-gray-400"
+                className="p-1 rounded-lg text-[#6C7B72]"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -495,10 +492,10 @@ export function AppShell({ children, user }: AppShellProps) {
                     key={item.id}
                     href={item.href}
                     onClick={() => setIsMobileMoreOpen(false)}
-                    className="flex items-center gap-3 p-3 rounded-xl border border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800/50"
+                    className="flex items-center gap-3 p-3 rounded-xl border border-[#D1DBCF] dark:border-[#283E31] bg-[#FAF6EE] dark:bg-[#1A2A21] hover:bg-[#E1EDDD]/50 dark:hover:bg-[#203428] transition-colors"
                   >
-                    <Icon className="w-5 h-5 text-[#6B8F71]" />
-                    <span className="text-xs font-semibold text-gray-800 dark:text-gray-200">
+                    <Icon className="w-5 h-5 text-[#47664A]" />
+                    <span className="text-xs font-semibold text-[#29352F] dark:text-[#E8EFE8]">
                       {t(item.nameKey)}
                     </span>
                   </Link>

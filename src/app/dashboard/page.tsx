@@ -147,21 +147,26 @@ export default function DashboardOverviewPage() {
   return (
     <div className="space-y-8 animate-in fade-in">
       {/* ─── 1. Welcome Header ────────────────────────────────────────── */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-gray-200/60 dark:border-gray-800">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#D1DBCF] dark:border-[#283E31]">
         <div className="space-y-1">
-          <h1 className="font-serif text-2xl sm:text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
+          <div className="flex items-center gap-2">
+            <span className="font-outfit text-[11px] font-bold uppercase tracking-[0.22em] text-[#607B6A]">
+              Studio Sanctuary
+            </span>
+          </div>
+          <h1 className="font-outfit text-2xl sm:text-3xl font-semibold tracking-tight text-[#29352F] dark:text-[#E8EFE8]">
             {t(greetingKey)}, {firstName} 🙏
           </h1>
-          <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
+          <p className="font-figtree text-xs sm:text-sm text-[#6C7B72] dark:text-[#A4B5A9]">
             {formatDate(new Date(), { dateStyle: "full" })} •{" "}
             {(statsData?.currentStreak ?? 0) > 0 ? t("overview.streakActive") : t("overview.streakNone")}
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2.5">
           <Link
             href="/dashboard/schedule"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold bg-[#233D32] hover:bg-[#6B8F71] text-white shadow-xs transition-colors"
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold bg-[#47664A] hover:bg-[#3B563E] text-white shadow-xs transition-colors font-figtree"
           >
             <Calendar className="w-4 h-4" />
             <span>{t("overview.browseSchedule")}</span>
@@ -171,15 +176,17 @@ export default function DashboardOverviewPage() {
 
       {/* ─── Guided First Steps (for brand-new yogis) ─────────────────── */}
       {isBrandNewUser && (
-        <div className="p-6 rounded-2xl bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-950/30 dark:to-teal-950/30 border border-emerald-200/80 dark:border-emerald-800 space-y-4">
+        <div className="p-6 rounded-2xl bg-[#E1EDDD]/40 dark:bg-[#18261E] border border-[#D1DBCF] dark:border-[#283E31] space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">
-              <Sparkles className="w-5 h-5 text-emerald-700 dark:text-emerald-400" />
-              <h2 className="font-serif font-bold text-base sm:text-lg text-emerald-950 dark:text-emerald-200">
+              <div className="w-7 h-7 rounded-full bg-[#E1EDDD] dark:bg-[#223528] flex items-center justify-center text-[#35523E] dark:text-[#A7C7A8]">
+                <Sparkles className="w-4 h-4" />
+              </div>
+              <h2 className="font-outfit font-semibold text-base sm:text-lg text-[#29352F] dark:text-[#E8EFE8]">
                 Welcome to ZenFlow! Your First Steps Checklist
               </h2>
             </div>
-            <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-200 dark:bg-emerald-800 text-emerald-900 dark:text-emerald-100">
+            <span className="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#E1EDDD] text-[#35523E] font-outfit">
               Getting Started
             </span>
           </div>
@@ -187,40 +194,40 @@ export default function DashboardOverviewPage() {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <Link
               href="/dashboard/settings"
-              className="p-3.5 bg-white dark:bg-gray-900 rounded-xl border border-emerald-200 dark:border-emerald-800 flex items-center gap-3 hover:border-emerald-500 transition-colors"
+              className="p-3.5 bg-white dark:bg-[#15231A] rounded-xl border border-[#D1DBCF] dark:border-[#283E31] flex items-center gap-3 hover:border-[#47664A] transition-colors group"
             >
-              <div className="w-8 h-8 rounded-full bg-emerald-100 dark:bg-emerald-900 flex items-center justify-center font-bold text-xs text-emerald-700 dark:text-emerald-300">
+              <div className="w-8 h-8 rounded-full bg-[#E1EDDD] dark:bg-[#223528] flex items-center justify-center font-outfit font-bold text-xs text-[#35523E] dark:text-[#A7C7A8] shrink-0">
                 1
               </div>
               <div className="text-xs">
-                <p className="font-semibold text-gray-900 dark:text-white">Complete Profile</p>
-                <p className="text-gray-500">Goals & experience level</p>
+                <p className="font-figtree font-semibold text-[#29352F] dark:text-[#E8EFE8] group-hover:text-[#47664A]">Complete Profile</p>
+                <p className="font-figtree text-[#6C7B72] dark:text-[#A4B5A9]">Goals & experience level</p>
               </div>
             </Link>
 
             <Link
               href="/dashboard/schedule"
-              className="p-3.5 bg-white dark:bg-gray-900 rounded-xl border border-emerald-200 dark:border-emerald-800 flex items-center gap-3 hover:border-emerald-500 transition-colors"
+              className="p-3.5 bg-white dark:bg-[#15231A] rounded-xl border border-[#D1DBCF] dark:border-[#283E31] flex items-center gap-3 hover:border-[#47664A] transition-colors group"
             >
-              <div className="w-8 h-8 rounded-full bg-emerald-100 dark:bg-emerald-900 flex items-center justify-center font-bold text-xs text-emerald-700 dark:text-emerald-300">
+              <div className="w-8 h-8 rounded-full bg-[#E1EDDD] dark:bg-[#223528] flex items-center justify-center font-outfit font-bold text-xs text-[#35523E] dark:text-[#A7C7A8] shrink-0">
                 2
               </div>
               <div className="text-xs">
-                <p className="font-semibold text-gray-900 dark:text-white">Book First Class</p>
-                <p className="text-gray-500">Pick live sunrise session</p>
+                <p className="font-figtree font-semibold text-[#29352F] dark:text-[#E8EFE8] group-hover:text-[#47664A]">Book First Class</p>
+                <p className="font-figtree text-[#6C7B72] dark:text-[#A4B5A9]">Pick live sunrise session</p>
               </div>
             </Link>
 
             <Link
               href="/dashboard/poses"
-              className="p-3.5 bg-white dark:bg-gray-900 rounded-xl border border-emerald-200 dark:border-emerald-800 flex items-center gap-3 hover:border-emerald-500 transition-colors"
+              className="p-3.5 bg-white dark:bg-[#15231A] rounded-xl border border-[#D1DBCF] dark:border-[#283E31] flex items-center gap-3 hover:border-[#47664A] transition-colors group"
             >
-              <div className="w-8 h-8 rounded-full bg-emerald-100 dark:bg-emerald-900 flex items-center justify-center font-bold text-xs text-emerald-700 dark:text-emerald-300">
+              <div className="w-8 h-8 rounded-full bg-[#E1EDDD] dark:bg-[#223528] flex items-center justify-center font-outfit font-bold text-xs text-[#35523E] dark:text-[#A7C7A8] shrink-0">
                 3
               </div>
               <div className="text-xs">
-                <p className="font-semibold text-gray-900 dark:text-white">Explore Asanas</p>
-                <p className="text-gray-500">Browse pose library</p>
+                <p className="font-figtree font-semibold text-[#29352F] dark:text-[#E8EFE8] group-hover:text-[#47664A]">Explore Asanas</p>
+                <p className="font-figtree text-[#6C7B72] dark:text-[#A4B5A9]">Browse pose library</p>
               </div>
             </Link>
           </div>
@@ -230,9 +237,9 @@ export default function DashboardOverviewPage() {
       {/* ─── 2. Next Class Card & Membership Summary ──────────────────── */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Next Class Card */}
-        <div className="lg:col-span-2 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 p-6 shadow-xs flex flex-col justify-between">
-          <div className="flex items-center justify-between pb-4 border-b border-gray-100 dark:border-gray-800">
-            <span className="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+        <div className="lg:col-span-2 rounded-2xl bg-white dark:bg-[#18261E] border border-[#D1DBCF] dark:border-[#283E31] p-6 shadow-xs flex flex-col justify-between">
+          <div className="flex items-center justify-between pb-4 border-b border-[#E5DFD4] dark:border-[#283E31]">
+            <span className="font-outfit text-[11px] font-bold uppercase tracking-[0.22em] text-[#607B6A]">
               {t("overview.nextClass")}
             </span>
             {nextBooking && (
@@ -243,7 +250,7 @@ export default function DashboardOverviewPage() {
           {nextBooking ? (
             <div className="py-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
               <div className="flex items-center gap-4">
-                <div className="w-16 h-16 rounded-2xl bg-[#233D32]/10 overflow-hidden shrink-0 border border-gray-200 dark:border-gray-700">
+                <div className="w-16 h-16 rounded-2xl bg-[#E1EDDD] dark:bg-[#223528] overflow-hidden shrink-0 border border-[#D1DBCF] dark:border-[#283E31]">
                   <img
                     src={nextBooking.thumbnailUrl || nextBooking.instructor.avatarUrl || "https://images.unsplash.com/photo-1545205597-3d9d02c29597?w=300"}
                     alt={nextBooking.classTitle}
@@ -251,13 +258,13 @@ export default function DashboardOverviewPage() {
                   />
                 </div>
                 <div className="space-y-1">
-                  <h3 className="font-serif text-xl font-bold text-gray-900 dark:text-white">
+                  <h3 className="font-outfit text-xl font-semibold text-[#29352F] dark:text-[#E8EFE8]">
                     {nextBooking.classTitle}
                   </h3>
-                  <p className="text-xs text-gray-600 dark:text-gray-400">
+                  <p className="font-figtree text-xs text-[#6C7B72] dark:text-[#A4B5A9]">
                     With {nextBooking.instructor.name} • {nextBooking.durationMin} mins • {nextBooking.level}
                   </p>
-                  <p className="text-xs font-semibold text-[#6B8F71]">
+                  <p className="font-figtree text-xs font-semibold text-[#47664A] dark:text-[#8BB394]">
                     {formatDate(nextBooking.startsAt, { weekday: "short", month: "short", day: "numeric" })} at{" "}
                     {formatTime(nextBooking.startsAt)}
                   </p>
@@ -266,8 +273,8 @@ export default function DashboardOverviewPage() {
 
               {/* Countdown & Join Action */}
               <div className="flex flex-col sm:items-end gap-2 shrink-0 w-full sm:w-auto">
-                <div className="flex items-center gap-2 text-xs text-gray-500">
-                  <Clock className="w-3.5 h-3.5" />
+                <div className="flex items-center gap-2 text-xs text-[#6C7B72] dark:text-[#A4B5A9] font-figtree">
+                  <Clock className="w-3.5 h-3.5 text-[#47664A]" />
                   <Countdown targetDate={nextBooking.startsAt} />
                 </div>
 
@@ -275,7 +282,7 @@ export default function DashboardOverviewPage() {
                   {isJoinWindowOpen(nextBooking.startsAt, nextBooking.endsAt) ? (
                     <Link
                       href={nextBooking.videoRoomUrl}
-                      className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold bg-[#6B8F71] hover:bg-[#233D32] text-white animate-pulse shadow-md transition-colors"
+                      className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-xs font-semibold bg-[#47664A] hover:bg-[#3B563E] text-white shadow-xs transition-colors font-figtree"
                     >
                       <Video className="w-4 h-4" />
                       <span>{t("common.join")}</span>
@@ -284,7 +291,7 @@ export default function DashboardOverviewPage() {
                     <button
                       type="button"
                       disabled
-                      className="w-full sm:w-auto px-4 py-2.5 rounded-xl text-xs font-semibold bg-gray-100 dark:bg-gray-800 text-gray-400 cursor-not-allowed"
+                      className="w-full sm:w-auto px-4 py-2.5 rounded-xl text-xs font-medium bg-[#FAF6EE] dark:bg-[#1A2A21] border border-[#D1DBCF] dark:border-[#283E31] text-[#8C9B92] cursor-not-allowed font-figtree"
                       title="Join button activates 10 minutes prior to session"
                     >
                       Opens 10m before start
@@ -294,7 +301,7 @@ export default function DashboardOverviewPage() {
                   <button
                     type="button"
                     onClick={() => setCancelBookingId(nextBooking.id)}
-                    className="px-3 py-2.5 rounded-xl text-xs font-medium text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors"
+                    className="px-3 py-2.5 rounded-xl text-xs font-medium text-[#A63A36] hover:bg-[#FBF1F0] dark:hover:bg-[#3A1E1E] transition-colors font-figtree"
                   >
                     Cancel
                   </button>
@@ -303,11 +310,13 @@ export default function DashboardOverviewPage() {
             </div>
           ) : (
             <div className="py-8 text-center space-y-3">
-              <Calendar className="w-10 h-10 text-gray-300 dark:text-gray-700 mx-auto" />
-              <p className="text-sm font-semibold text-gray-800 dark:text-gray-200">{t("overview.noUpcoming")}</p>
+              <div className="w-12 h-12 rounded-full bg-[#E1EDDD] dark:bg-[#223528] flex items-center justify-center text-[#35523E] dark:text-[#A7C7A8] mx-auto">
+                <Calendar className="w-6 h-6" />
+              </div>
+              <p className="font-outfit text-sm font-semibold text-[#29352F] dark:text-[#E8EFE8]">{t("overview.noUpcoming")}</p>
               <Link
                 href="/dashboard/schedule"
-                className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#6B8F71] hover:underline"
+                className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#47664A] hover:underline font-figtree"
               >
                 <span>{t("overview.browseSchedule")}</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -316,28 +325,28 @@ export default function DashboardOverviewPage() {
           )}
 
           {/* Footer note */}
-          <div className="pt-3 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between text-xs text-gray-500">
+          <div className="pt-3 border-t border-[#E5DFD4] dark:border-[#283E31] flex items-center justify-between text-xs text-[#6C7B72] dark:text-[#A4B5A9] font-figtree">
             <span>Free cancellation up to 2 hours before start</span>
-            <Link href="/dashboard/bookings" className="text-[#6B8F71] hover:underline font-semibold">
+            <Link href="/dashboard/bookings" className="text-[#47664A] dark:text-[#8BB394] hover:underline font-semibold">
               View all bookings ({bookingsData?.bookings?.length || 0})
             </Link>
           </div>
         </div>
 
         {/* Membership Summary Tile */}
-        <div className="rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 p-6 shadow-xs flex flex-col justify-between space-y-4">
+        <div className="rounded-2xl bg-white dark:bg-[#18261E] border border-[#D1DBCF] dark:border-[#283E31] p-6 shadow-xs flex flex-col justify-between space-y-4">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+            <span className="font-outfit text-[11px] font-bold uppercase tracking-[0.22em] text-[#607B6A]">
               Membership
             </span>
             <StatusBadge status={subData?.status || "ACTIVE"} />
           </div>
 
           <div className="space-y-2">
-            <h3 className="font-serif text-xl font-bold text-gray-900 dark:text-white">
+            <h3 className="font-outfit text-xl font-semibold text-[#29352F] dark:text-[#E8EFE8]">
               {subData?.plan?.name || "7-Day Free Trial"}
             </h3>
-            <p className="text-xs text-gray-500">
+            <p className="font-figtree text-xs text-[#6C7B72] dark:text-[#A4B5A9]">
               Renews on {formatDate(subData?.renewalDate || new Date())}
             </p>
           </div>
@@ -349,7 +358,7 @@ export default function DashboardOverviewPage() {
               label="Credits Remaining"
               showPercentage={false}
             />
-            <p className="text-[11px] text-gray-500 text-right">
+            <p className="font-figtree text-[11px] text-[#6C7B72] dark:text-[#A4B5A9] text-right">
               {subData?.creditsRemaining ?? 4} of {subData?.totalCredits ?? 5} credits available
             </p>
           </div>
@@ -357,14 +366,14 @@ export default function DashboardOverviewPage() {
           <div className="pt-2 flex items-center justify-between">
             <Link
               href="/dashboard/membership"
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#6B8F71] hover:underline"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#47664A] dark:text-[#8BB394] hover:underline font-figtree"
             >
               <span>Manage Plan</span>
               <ChevronRight className="w-3.5 h-3.5" />
             </Link>
             <Link
               href="/dashboard/membership#credits"
-              className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 transition-colors"
+              className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#FAF6EE] dark:bg-[#1F3025] border border-[#D1DBCF] dark:border-[#283E31] text-[#29352F] dark:text-[#E8EFE8] hover:bg-[#F3EFE4] transition-colors font-figtree"
             >
               Buy Credits
             </Link>
@@ -386,21 +395,21 @@ export default function DashboardOverviewPage() {
             <StatCard
               label={t("overview.streak")}
               value={`${statsData?.currentStreak ?? 4} days`}
-              icon={<Flame className="w-4 h-4 text-amber-500" />}
+              icon={<Flame className="w-4 h-4 text-[#D97706]" />}
               subtext={`Best: ${statsData?.longestStreak ?? 14} days`}
               href="/dashboard/attendance"
             />
             <StatCard
               label={t("overview.totalClasses")}
               value={statsData?.totalClasses ?? 18}
-              icon={<CheckCircle2 className="w-4 h-4 text-emerald-600" />}
+              icon={<CheckCircle2 className="w-4 h-4 text-[#35523E] dark:text-[#A7C7A8]" />}
               subtext="Lifetime sessions"
               href="/dashboard/attendance"
             />
             <StatCard
               label={t("overview.totalHours")}
               value={`${statsData?.totalHours ?? 15}h`}
-              icon={<Clock className="w-4 h-4 text-blue-500" />}
+              icon={<Clock className="w-4 h-4 text-[#47664A] dark:text-[#8BB394]" />}
               subtext="Total mat time"
               href="/dashboard/attendance"
             />
@@ -409,7 +418,7 @@ export default function DashboardOverviewPage() {
               value={statsData?.classesThisMonth ?? 6}
               change={statsData?.monthChange}
               isPositive={statsData?.isPositiveChange}
-              icon={<Calendar className="w-4 h-4 text-purple-500" />}
+              icon={<Calendar className="w-4 h-4 text-[#35523E] dark:text-[#A7C7A8]" />}
               subtext="Current calendar month"
               href="/dashboard/attendance"
             />
@@ -420,17 +429,19 @@ export default function DashboardOverviewPage() {
       {/* ─── 4. Heatmap & Milestones Grid ─────────────────────────────── */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Attendance Mini Heatmap */}
-        <div className="lg:col-span-2 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 p-6 shadow-xs space-y-4">
+        <div className="lg:col-span-2 rounded-2xl bg-white dark:bg-[#18261E] border border-[#D1DBCF] dark:border-[#283E31] p-6 shadow-xs space-y-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-[#6B8F71]" />
-              <h3 className="font-serif font-bold text-base text-gray-900 dark:text-white">
+            <div className="flex items-center gap-2.5">
+              <div className="w-7 h-7 rounded-full bg-[#E1EDDD] dark:bg-[#223528] flex items-center justify-center text-[#35523E] dark:text-[#A7C7A8]">
+                <CheckCircle2 className="w-4 h-4" />
+              </div>
+              <h3 className="font-outfit font-semibold text-base text-[#29352F] dark:text-[#E8EFE8]">
                 {t("overview.attendanceHeatmap")}
               </h3>
             </div>
             <Link
               href="/dashboard/attendance"
-              className="text-xs font-semibold text-[#6B8F71] hover:underline inline-flex items-center gap-1"
+              className="text-xs font-semibold text-[#47664A] dark:text-[#8BB394] hover:underline inline-flex items-center gap-1 font-figtree"
             >
               <span>Full Tracker</span>
               <ChevronRight className="w-3.5 h-3.5" />
@@ -447,21 +458,21 @@ export default function DashboardOverviewPage() {
                     key={i}
                     className={`w-3.5 h-3.5 rounded-xs transition-transform hover:scale-125 cursor-pointer ${
                       isPracticed
-                        ? "bg-[#6B8F71] dark:bg-[#6B8F71]"
-                        : "bg-gray-100 dark:bg-gray-800"
+                        ? "bg-[#47664A] dark:bg-[#608665]"
+                        : "bg-[#FAF6EE] dark:bg-[#1A2A21] border border-[#E5DFD4] dark:border-[#283E31]"
                     }`}
                     title={isPracticed ? `Practiced 60 mins` : "Rest day"}
                   />
                 );
               })}
             </div>
-            <div className="flex items-center justify-between text-[11px] text-gray-400 pt-1">
+            <div className="flex items-center justify-between text-[11px] text-[#6C7B72] dark:text-[#A4B5A9] font-figtree pt-1">
               <span>12 weeks ago</span>
               <div className="flex items-center gap-1.5">
                 <span>Less</span>
-                <span className="w-2.5 h-2.5 rounded-xs bg-gray-100 dark:bg-gray-800" />
-                <span className="w-2.5 h-2.5 rounded-xs bg-[#6B8F71]/40" />
-                <span className="w-2.5 h-2.5 rounded-xs bg-[#6B8F71]" />
+                <span className="w-2.5 h-2.5 rounded-xs bg-[#FAF6EE] dark:bg-[#1A2A21] border border-[#E5DFD4] dark:border-[#283E31]" />
+                <span className="w-2.5 h-2.5 rounded-xs bg-[#47664A]/40" />
+                <span className="w-2.5 h-2.5 rounded-xs bg-[#47664A]" />
                 <span>More</span>
               </div>
               <span>Today</span>
@@ -470,15 +481,17 @@ export default function DashboardOverviewPage() {
         </div>
 
         {/* Milestone Progress Bar */}
-        <div className="rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 p-6 shadow-xs flex flex-col justify-between space-y-4">
+        <div className="rounded-2xl bg-white dark:bg-[#18261E] border border-[#D1DBCF] dark:border-[#283E31] p-6 shadow-xs flex flex-col justify-between space-y-4">
           <div className="space-y-1">
-            <div className="flex items-center gap-2 text-amber-500">
-              <Award className="w-4 h-4" />
-              <h3 className="font-serif font-bold text-base text-gray-900 dark:text-white">
+            <div className="flex items-center gap-2">
+              <div className="w-7 h-7 rounded-full bg-[#E1EDDD] dark:bg-[#223528] flex items-center justify-center text-[#35523E] dark:text-[#A7C7A8]">
+                <Award className="w-4 h-4" />
+              </div>
+              <h3 className="font-outfit font-semibold text-base text-[#29352F] dark:text-[#E8EFE8]">
                 Next Certificate
               </h3>
             </div>
-            <p className="text-xs text-gray-500">
+            <p className="font-figtree text-xs text-[#6C7B72] dark:text-[#A4B5A9]">
               {milestonesData?.nextMilestone?.name || "10-Class Foundation"}
             </p>
           </div>
@@ -489,7 +502,7 @@ export default function DashboardOverviewPage() {
               max={milestonesData?.nextMilestone?.target ?? 10}
               label={`${milestonesData?.nextMilestone?.current ?? 6} of ${milestonesData?.nextMilestone?.target ?? 10} classes`}
             />
-            <p className="text-[11px] text-gray-500">
+            <p className="font-figtree text-[11px] text-[#6C7B72] dark:text-[#A4B5A9]">
               {Math.max(
                 0,
                 (milestonesData?.nextMilestone?.target ?? 10) - (milestonesData?.nextMilestone?.current ?? 6)
@@ -500,7 +513,7 @@ export default function DashboardOverviewPage() {
 
           <Link
             href="/dashboard/certificates"
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#6B8F71] hover:underline"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#47664A] dark:text-[#8BB394] hover:underline font-figtree"
           >
             <span>View All Milestones</span>
             <ChevronRight className="w-3.5 h-3.5" />
@@ -511,12 +524,12 @@ export default function DashboardOverviewPage() {
       {/* ─── 5. Badges Strip & Quick Actions ──────────────────────────── */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Badges Strip */}
-        <div className="lg:col-span-2 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 p-6 shadow-xs space-y-4">
+        <div className="lg:col-span-2 rounded-2xl bg-white dark:bg-[#18261E] border border-[#D1DBCF] dark:border-[#283E31] p-6 shadow-xs space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="font-serif font-bold text-base text-gray-900 dark:text-white">
+            <h3 className="font-outfit font-semibold text-base text-[#29352F] dark:text-[#E8EFE8]">
               {t("overview.badgesEarned")}
             </h3>
-            <Link href="/dashboard/certificates" className="text-xs font-semibold text-[#6B8F71] hover:underline">
+            <Link href="/dashboard/certificates" className="font-figtree text-xs font-semibold text-[#47664A] dark:text-[#8BB394] hover:underline">
               View Trophy Case
             </Link>
           </div>
@@ -525,24 +538,24 @@ export default function DashboardOverviewPage() {
             {badgesData?.earned?.map((b: any) => (
               <div
                 key={b.id}
-                className="p-3.5 rounded-xl border border-amber-200/80 bg-amber-50/40 dark:bg-amber-950/20 dark:border-amber-900 flex items-center gap-3"
+                className="p-3.5 rounded-xl border border-[#D1DBCF] dark:border-[#283E31] bg-[#FAF6EE]/70 dark:bg-[#15231A] flex items-center gap-3"
               >
-                <div className="w-10 h-10 rounded-xl bg-amber-100 dark:bg-amber-900/60 flex items-center justify-center shrink-0 text-amber-700 dark:text-amber-300 font-bold">
+                <div className="w-10 h-10 rounded-full bg-[#E1EDDD] dark:bg-[#223528] flex items-center justify-center shrink-0 text-[#35523E] dark:text-[#A7C7A8] font-bold text-base">
                   🏆
                 </div>
                 <div className="min-w-0">
-                  <p className="text-xs font-bold text-gray-900 dark:text-white truncate">{b.name}</p>
-                  <p className="text-[10px] text-gray-500 truncate">{b.description}</p>
+                  <p className="font-figtree text-xs font-bold text-[#29352F] dark:text-[#E8EFE8] truncate">{b.name}</p>
+                  <p className="font-figtree text-[10px] text-[#6C7B72] dark:text-[#A4B5A9] truncate">{b.description}</p>
                 </div>
               </div>
             )) || (
-              <div className="p-3.5 rounded-xl border border-gray-200 dark:border-gray-800 flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center shrink-0">
+              <div className="p-3.5 rounded-xl border border-[#D1DBCF] dark:border-[#283E31] bg-[#FAF6EE]/70 dark:bg-[#15231A] flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-[#E1EDDD] dark:bg-[#223528] flex items-center justify-center shrink-0 text-[#35523E] dark:text-[#A7C7A8] text-base">
                   🌱
                 </div>
                 <div className="min-w-0">
-                  <p className="text-xs font-bold text-gray-900 dark:text-white truncate">First Breath</p>
-                  <p className="text-[10px] text-gray-500">Book your first class to earn</p>
+                  <p className="font-figtree text-xs font-bold text-[#29352F] dark:text-[#E8EFE8] truncate">First Breath</p>
+                  <p className="font-figtree text-[10px] text-[#6C7B72] dark:text-[#A4B5A9]">Book your first class to earn</p>
                 </div>
               </div>
             )}
@@ -550,48 +563,56 @@ export default function DashboardOverviewPage() {
         </div>
 
         {/* Quick Actions (Section 5) */}
-        <div className="rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 p-6 shadow-xs space-y-3">
-          <h3 className="font-serif font-bold text-base text-gray-900 dark:text-white">
+        <div className="rounded-2xl bg-white dark:bg-[#18261E] border border-[#D1DBCF] dark:border-[#283E31] p-6 shadow-xs space-y-3">
+          <h3 className="font-outfit font-semibold text-base text-[#29352F] dark:text-[#E8EFE8]">
             {t("overview.quickActions")}
           </h3>
 
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-2 gap-2.5">
             <Link
               href="/dashboard/schedule"
-              className="p-3 rounded-xl border border-gray-200 dark:border-gray-800 hover:border-[#6B8F71] flex flex-col items-center text-center gap-1.5 transition-colors group"
+              className="p-3.5 rounded-xl border border-[#D1DBCF] dark:border-[#283E31] hover:border-[#47664A] bg-[#FAF6EE]/60 dark:bg-[#15231A] flex flex-col items-center text-center gap-2 transition-all duration-200 group"
             >
-              <Calendar className="w-5 h-5 text-[#6B8F71]" />
-              <span className="text-xs font-semibold text-gray-800 dark:text-gray-200 group-hover:text-[#6B8F71]">
+              <div className="w-9 h-9 rounded-full bg-[#E1EDDD] dark:bg-[#223528] flex items-center justify-center text-[#35523E] dark:text-[#A7C7A8] group-hover:scale-105 transition-transform">
+                <Calendar className="w-4 h-4" />
+              </div>
+              <span className="font-figtree text-xs font-semibold text-[#29352F] dark:text-[#E8EFE8] group-hover:text-[#47664A]">
                 Book Class
               </span>
             </Link>
 
             <Link
               href="/dashboard/membership#credits"
-              className="p-3 rounded-xl border border-gray-200 dark:border-gray-800 hover:border-[#6B8F71] flex flex-col items-center text-center gap-1.5 transition-colors group"
+              className="p-3.5 rounded-xl border border-[#D1DBCF] dark:border-[#283E31] hover:border-[#47664A] bg-[#FAF6EE]/60 dark:bg-[#15231A] flex flex-col items-center text-center gap-2 transition-all duration-200 group"
             >
-              <Sparkles className="w-5 h-5 text-amber-500" />
-              <span className="text-xs font-semibold text-gray-800 dark:text-gray-200 group-hover:text-amber-600">
+              <div className="w-9 h-9 rounded-full bg-[#E1EDDD] dark:bg-[#223528] flex items-center justify-center text-[#35523E] dark:text-[#A7C7A8] group-hover:scale-105 transition-transform">
+                <Sparkles className="w-4 h-4" />
+              </div>
+              <span className="font-figtree text-xs font-semibold text-[#29352F] dark:text-[#E8EFE8] group-hover:text-[#47664A]">
                 Buy Credits
               </span>
             </Link>
 
             <Link
               href="/dashboard/settings#referrals"
-              className="p-3 rounded-xl border border-gray-200 dark:border-gray-800 hover:border-[#6B8F71] flex flex-col items-center text-center gap-1.5 transition-colors group"
+              className="p-3.5 rounded-xl border border-[#D1DBCF] dark:border-[#283E31] hover:border-[#47664A] bg-[#FAF6EE]/60 dark:bg-[#15231A] flex flex-col items-center text-center gap-2 transition-all duration-200 group"
             >
-              <UserPlus className="w-5 h-5 text-blue-500" />
-              <span className="text-xs font-semibold text-gray-800 dark:text-gray-200 group-hover:text-blue-600">
+              <div className="w-9 h-9 rounded-full bg-[#E1EDDD] dark:bg-[#223528] flex items-center justify-center text-[#35523E] dark:text-[#A7C7A8] group-hover:scale-105 transition-transform">
+                <UserPlus className="w-4 h-4" />
+              </div>
+              <span className="font-figtree text-xs font-semibold text-[#29352F] dark:text-[#E8EFE8] group-hover:text-[#47664A]">
                 Invite Friend
               </span>
             </Link>
 
             <Link
               href="/dashboard/assistant"
-              className="p-3 rounded-xl border border-gray-200 dark:border-gray-800 hover:border-[#6B8F71] flex flex-col items-center text-center gap-1.5 transition-colors group"
+              className="p-3.5 rounded-xl border border-[#D1DBCF] dark:border-[#283E31] hover:border-[#47664A] bg-[#FAF6EE]/60 dark:bg-[#15231A] flex flex-col items-center text-center gap-2 transition-all duration-200 group"
             >
-              <Bot className="w-5 h-5 text-purple-500" />
-              <span className="text-xs font-semibold text-gray-800 dark:text-gray-200 group-hover:text-purple-600">
+              <div className="w-9 h-9 rounded-full bg-[#E1EDDD] dark:bg-[#223528] flex items-center justify-center text-[#35523E] dark:text-[#A7C7A8] group-hover:scale-105 transition-transform">
+                <Bot className="w-4 h-4" />
+              </div>
+              <span className="font-figtree text-xs font-semibold text-[#29352F] dark:text-[#E8EFE8] group-hover:text-[#47664A]">
                 AI Assistant
               </span>
             </Link>

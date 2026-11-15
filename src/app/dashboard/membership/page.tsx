@@ -72,42 +72,42 @@ export default function MembershipPage() {
       />
 
       {/* ─── 1. Current Active Plan Card ──────────────────────────────── */}
-      <div className="rounded-3xl bg-gradient-to-br from-[#233D32] to-[#162720] text-white p-6 sm:p-8 shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-6">
+      <div className="rounded-2xl bg-[#47664A] dark:bg-[#1E3324] text-white p-6 sm:p-8 shadow-md flex flex-col md:flex-row md:items-center justify-between gap-6 border border-[#3B563E] font-figtree">
         <div className="space-y-2 max-w-md">
           <div className="flex items-center gap-2.5">
-            <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#6B8F71] text-white">
+            <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold font-outfit uppercase tracking-wider bg-[#E1EDDD] text-[#35523E]">
               Current Plan
             </span>
             <StatusBadge status={subData?.status || "ACTIVE"} />
           </div>
 
-          <h2 className="font-serif text-2xl sm:text-3xl font-bold tracking-tight">
+          <h2 className="font-outfit text-2xl sm:text-3xl font-semibold tracking-tight text-white">
             {subData?.plan?.name || "7-Day Free Trial"}
           </h2>
 
-          <p className="text-xs text-white/80 leading-relaxed">
+          <p className="text-xs text-white/80 leading-relaxed font-figtree">
             Renews on {formatDate(subData?.renewalDate || new Date())} • Unlimited access to interactive HD live rooms and masterclasses.
           </p>
 
-          <div className="pt-2 flex items-center gap-4 text-xs">
+          <div className="pt-2 flex items-center gap-4 text-xs font-figtree">
             <div>
-              <span className="text-white/60 block">Credits Available</span>
-              <span className="font-bold text-base">{subData?.creditsRemaining ?? 5} classes</span>
+              <span className="text-white/70 block text-[11px]">Credits Available</span>
+              <span className="font-outfit font-semibold text-base">{subData?.creditsRemaining ?? 5} classes</span>
             </div>
             <div className="w-px h-8 bg-white/20" />
             <div>
-              <span className="text-white/60 block">Billing Cycle</span>
-              <span className="font-bold text-base capitalize">{subData?.plan?.interval || "Monthly"}</span>
+              <span className="text-white/70 block text-[11px]">Billing Cycle</span>
+              <span className="font-outfit font-semibold text-base capitalize">{subData?.plan?.interval || "Monthly"}</span>
             </div>
           </div>
         </div>
 
         {/* Plan Actions */}
-        <div className="flex flex-col sm:flex-row md:flex-col gap-2 shrink-0">
+        <div className="flex flex-col sm:flex-row md:flex-col gap-2 shrink-0 font-figtree">
           <Button
             type="button"
             onClick={() => setIsPauseDialogOpen(true)}
-            className="rounded-xl px-4 py-2.5 text-xs font-semibold bg-white/10 hover:bg-white/20 text-white border border-white/20"
+            className="rounded-xl px-4 py-2.5 text-xs font-semibold bg-white/15 hover:bg-white/25 text-white border border-white/25 transition-colors"
           >
             <Pause className="w-3.5 h-3.5 mr-1.5" />
             <span>Pause Subscription</span>
@@ -116,7 +116,7 @@ export default function MembershipPage() {
           <Button
             type="button"
             onClick={() => setIsCancelDialogOpen(true)}
-            className="rounded-xl px-4 py-2.5 text-xs font-semibold bg-rose-600/20 hover:bg-rose-600/30 text-rose-200 border border-rose-500/30"
+            className="rounded-xl px-4 py-2.5 text-xs font-semibold bg-rose-950/40 hover:bg-rose-950/60 text-rose-200 border border-rose-400/30 transition-colors"
           >
             <span>Cancel Plan</span>
           </Button>
@@ -124,26 +124,26 @@ export default function MembershipPage() {
       </div>
 
       {/* ─── 2. Plan Comparison & Checkout ───────────────────────────── */}
-      <div className="space-y-6" id="plans">
+      <div className="space-y-6 font-figtree" id="plans">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h3 className="font-serif text-xl font-bold text-gray-900 dark:text-white">
+            <h3 className="font-outfit text-xl font-semibold text-[#29352F] dark:text-[#E8EFE8]">
               Choose Your Practice Commitment
             </h3>
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-[#6C7B72] dark:text-[#A4B5A9] font-figtree">
               Switch anytime. Prorated credits apply automatically to upgrades.
             </p>
           </div>
 
           {/* Billing Interval Toggle (Monthly / Annual with savings badge) */}
-          <div className="flex items-center gap-1.5 p-1 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl text-xs font-semibold self-start">
+          <div className="flex items-center gap-1.5 p-1 bg-white dark:bg-[#18261E] border border-[#D1DBCF] dark:border-[#283E31] rounded-xl text-xs font-semibold self-start">
             <button
               type="button"
               onClick={() => setBillingInterval("MONTH")}
               className={`px-3 py-1.5 rounded-lg transition-colors ${
                 billingInterval === "MONTH"
-                  ? "bg-[#233D32] text-white dark:bg-[#6B8F71] dark:text-gray-950 font-bold"
-                  : "text-gray-600 dark:text-gray-400"
+                  ? "bg-[#47664A] text-white font-bold shadow-xs"
+                  : "text-[#6C7B72] dark:text-[#A4B5A9]"
               }`}
             >
               Monthly
@@ -153,12 +153,12 @@ export default function MembershipPage() {
               onClick={() => setBillingInterval("YEAR")}
               className={`px-3 py-1.5 rounded-lg transition-colors inline-flex items-center gap-1.5 ${
                 billingInterval === "YEAR"
-                  ? "bg-[#233D32] text-white dark:bg-[#6B8F71] dark:text-gray-950 font-bold"
-                  : "text-gray-600 dark:text-gray-400"
+                  ? "bg-[#47664A] text-white font-bold shadow-xs"
+                  : "text-[#6C7B72] dark:text-[#A4B5A9]"
               }`}
             >
               <span>Annual</span>
-              <span className="px-1.5 py-0.2 rounded-md bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 text-[10px]">
+              <span className="px-1.5 py-0.2 rounded-md bg-[#E1EDDD] text-[#35523E] font-outfit text-[10px] font-bold">
                 Save 28%
               </span>
             </button>
@@ -173,13 +173,13 @@ export default function MembershipPage() {
             onChange={(e) => setCouponCode(e.target.value)}
             onBlur={handleValidateCoupon}
             placeholder="Promo code (e.g. FLOW20 for 20% off)"
-            className="flex-1 text-xs px-3.5 py-2 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 focus:outline-none focus:ring-1 focus:ring-[#6B8F71]"
+            className="flex-1 text-xs px-3.5 py-2.5 rounded-xl border border-[#D1DBCF] dark:border-[#283E31] bg-[#FAF6EE] dark:bg-[#1A2A21] text-[#29352F] dark:text-[#E8EFE8] focus:outline-none focus:ring-1 focus:ring-[#47664A] font-figtree"
           />
           <Button
             type="button"
             variant="outline"
             onClick={handleValidateCoupon}
-            className="rounded-xl px-4 py-2 text-xs font-semibold"
+            className="rounded-xl px-4 py-2 text-xs font-semibold border-[#D1DBCF] dark:border-[#283E31] bg-white dark:bg-[#18261E] text-[#29352F] dark:text-[#E8EFE8] hover:bg-[#FAF6EE] font-figtree"
           >
             Apply Code
           </Button>
@@ -201,37 +201,37 @@ export default function MembershipPage() {
             return (
               <div
                 key={plan.id}
-                className={`p-6 rounded-3xl bg-white dark:bg-gray-900 border transition-all flex flex-col justify-between space-y-6 ${
+                className={`p-6 rounded-2xl bg-white dark:bg-[#18261E] border transition-all flex flex-col justify-between space-y-6 ${
                   plan.type === "SUBSCRIPTION"
-                    ? "border-[#6B8F71] shadow-md ring-1 ring-[#6B8F71]/30"
-                    : "border-gray-200 dark:border-gray-800"
+                    ? "border-[#47664A] shadow-md ring-1 ring-[#47664A]/40"
+                    : "border-[#D1DBCF] dark:border-[#283E31]"
                 }`}
               >
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <h4 className="font-serif text-xl font-bold text-gray-900 dark:text-white">
+                    <h4 className="font-outfit text-xl font-semibold text-[#29352F] dark:text-[#E8EFE8]">
                       {plan.name}
                     </h4>
                     {plan.type === "SUBSCRIPTION" && (
-                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#E9E2D0] text-[#233D32]">
+                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold font-outfit uppercase tracking-wider bg-[#E1EDDD] text-[#35523E]">
                         Most Popular
                       </span>
                     )}
                   </div>
 
                   <div>
-                    <span className="font-serif text-3xl font-bold text-gray-900 dark:text-white">
+                    <span className="font-outfit text-3xl font-semibold text-[#29352F] dark:text-[#E8EFE8]">
                       {formatCurrency(price)}
                     </span>
-                    <span className="text-xs text-gray-500 ml-1">
+                    <span className="text-xs text-[#6C7B72] dark:text-[#A4B5A9] ml-1 font-figtree">
                       /{plan.interval === "YEAR" ? "year" : plan.interval === "MONTH" ? "month" : "one-time"}
                     </span>
                   </div>
 
-                  <ul className="space-y-2 text-xs text-gray-600 dark:text-gray-300">
+                  <ul className="space-y-2 text-xs text-[#6C7B72] dark:text-[#A4B5A9] font-figtree">
                     {plan.features?.map((f: string, i: number) => (
                       <li key={i} className="flex items-center gap-2">
-                        <Check className="w-3.5 h-3.5 text-[#6B8F71] shrink-0" />
+                        <Check className="w-3.5 h-3.5 text-[#47664A] shrink-0" />
                         <span>{f}</span>
                       </li>
                     ))}
@@ -241,7 +241,7 @@ export default function MembershipPage() {
                 <Button
                   type="button"
                   onClick={() => toast.success("Checkout Initiated", `Processing subscription for ${plan.name}...`)}
-                  className="w-full rounded-xl py-2.5 text-xs font-bold bg-[#233D32] hover:bg-[#6B8F71] text-white shadow-xs"
+                  className="w-full rounded-xl py-2.5 text-xs font-semibold bg-[#47664A] hover:bg-[#3B563E] text-white shadow-xs font-figtree"
                 >
                   {plan.priceInr === 0 ? "Start Free Trial" : "Upgrade to Plan"}
                 </Button>
@@ -252,16 +252,16 @@ export default function MembershipPage() {
       </div>
 
       {/* ─── 3. Referral Panel (Section 6.9) ─────────────────────────── */}
-      <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 space-y-4">
+      <div className="p-6 sm:p-8 rounded-2xl bg-white dark:bg-[#18261E] border border-[#D1DBCF] dark:border-[#283E31] space-y-4 font-figtree">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-emerald-100 dark:bg-emerald-950 flex items-center justify-center text-emerald-700 dark:text-emerald-400">
+          <div className="w-10 h-10 rounded-full bg-[#E1EDDD] dark:bg-[#223528] flex items-center justify-center text-[#35523E] dark:text-[#A7C7A8] shrink-0">
             <Share2 className="w-5 h-5" />
           </div>
           <div>
-            <h3 className="font-serif text-lg font-bold text-gray-900 dark:text-white">
+            <h3 className="font-outfit text-lg font-semibold text-[#29352F] dark:text-[#E8EFE8]">
               Invite a Friend, Practice Together
             </h3>
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-[#6C7B72] dark:text-[#A4B5A9] font-figtree">
               Share your invite link. When your friend joins their first class, you both receive 2 bonus class credits!
             </p>
           </div>
@@ -272,7 +272,7 @@ export default function MembershipPage() {
             type="text"
             readOnly
             value={referralLink}
-            className="w-full sm:flex-1 text-xs font-mono p-3 rounded-xl border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-800 select-all"
+            className="w-full sm:flex-1 text-xs font-mono p-3 rounded-xl border border-[#D1DBCF] dark:border-[#283E31] bg-[#FAF6EE] dark:bg-[#1A2A21] text-[#29352F] dark:text-[#E8EFE8] select-all"
           />
           <CopyButton text={referralLink} label="Copy Link" />
         </div>

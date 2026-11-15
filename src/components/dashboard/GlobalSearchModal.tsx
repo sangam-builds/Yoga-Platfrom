@@ -89,45 +89,45 @@ export function GlobalSearchModal({
       onClick={onClose}
     >
       <div
-        className="w-full max-w-2xl bg-white dark:bg-gray-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-800 overflow-hidden"
+        className="w-full max-w-2xl bg-[#FAF6ED] dark:bg-[#16241C] rounded-2xl shadow-2xl border border-[#D1DBCF] dark:border-[#283E31] overflow-hidden font-figtree"
         onClick={(e) => e.stopPropagation()}
         onKeyDown={handleKeyDown}
       >
-        <div className="flex items-center px-4 py-3.5 border-b border-gray-200 dark:border-gray-800 gap-3">
-          <Search className="w-5 h-5 text-gray-400 shrink-0" />
+        <div className="flex items-center px-4 py-3.5 border-b border-[#D1DBCF] dark:border-[#283E31] gap-3">
+          <Search className="w-5 h-5 text-[#637063] shrink-0" />
           <input
             ref={inputRef}
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search classes, instructors, poses... (e.g. Vinyasa, Priya, Surya Namaskar)"
-            className="w-full bg-transparent text-sm sm:text-base text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none"
+            className="w-full bg-transparent text-sm sm:text-base text-[#29352F] dark:text-white placeholder-[#6C7B72] focus:outline-none"
           />
           {query && (
             <button
               type="button"
               onClick={() => setQuery("")}
-              className="text-gray-400 hover:text-gray-600 p-1"
+              className="text-[#6C7B72] hover:text-[#29352F] p-1 cursor-pointer"
             >
               <X className="w-4 h-4" />
             </button>
           )}
-          <kbd className="hidden sm:inline-block px-2 py-0.5 text-[10px] font-mono text-gray-500 bg-gray-100 dark:bg-gray-800 rounded-md border border-gray-300 dark:border-gray-700">
+          <kbd className="hidden sm:inline-block px-2 py-0.5 text-[10px] font-mono text-[#6C7B72] bg-[#FAF6EE] dark:bg-[#1A2A21] rounded-md border border-[#D1DBCF] dark:border-[#283E31]">
             ESC
           </kbd>
         </div>
 
         <div className="max-h-96 overflow-y-auto p-2">
           {isLoading && (
-            <div className="py-8 text-center text-xs text-gray-500 dark:text-gray-400">
+            <div className="py-8 text-center text-xs text-[#6C7B72] dark:text-[#A4B5A9]">
               Searching yoga catalog...
             </div>
           )}
 
           {!isLoading && query && results.length === 0 && (
             <div className="py-8 text-center space-y-1">
-              <p className="text-sm font-medium text-gray-700 dark:text-gray-300">No results found</p>
-              <p className="text-xs text-gray-500">Try searching for styles like &ldquo;Hatha&rdquo; or &ldquo;Meditation&rdquo;</p>
+              <p className="font-outfit text-sm font-semibold text-[#29352F] dark:text-white">No results found</p>
+              <p className="text-xs text-[#6C7B72]">Try searching for styles like &ldquo;Hatha&rdquo; or &ldquo;Meditation&rdquo;</p>
             </div>
           )}
 
@@ -143,22 +143,22 @@ export function GlobalSearchModal({
                         router.push(item.href);
                         onClose();
                       }}
-                      className={`w-full text-left flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-colors ${
+                      className={`w-full text-left flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-colors cursor-pointer ${
                         isSelected
-                          ? "bg-[#6B8F71]/15 text-[#233D32] dark:text-[#A7C4B5]"
-                          : "hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-800 dark:text-gray-200"
+                          ? "bg-[#E1EDDD] text-[#2C4A3E]"
+                          : "hover:bg-[#E1EDDD]/50 text-[#29352F] dark:text-gray-200"
                       }`}
                     >
-                      <div className="w-8 h-8 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center shrink-0 text-gray-600 dark:text-gray-400">
+                      <div className="w-8 h-8 rounded-lg bg-[#E1EDDD] text-[#35523E] flex items-center justify-center shrink-0">
                         {item.type === "class" && <Calendar className="w-4 h-4" />}
                         {item.type === "instructor" && <User className="w-4 h-4" />}
                         {item.type === "pose" && <Sparkles className="w-4 h-4" />}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-semibold truncate">{item.title}</p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{item.subtitle}</p>
+                        <p className="text-sm font-semibold truncate font-outfit">{item.title}</p>
+                        <p className="text-xs text-[#6C7B72] dark:text-[#A4B5A9] truncate">{item.subtitle}</p>
                       </div>
-                      <span className="text-[10px] uppercase font-semibold tracking-wider text-gray-400 bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded-md">
+                      <span className="text-[10px] uppercase font-bold font-outfit tracking-wider text-[#35523E] bg-[#E1EDDD] px-2 py-0.5 rounded-md border border-[#C6DAC9]">
                         {item.type}
                       </span>
                     </button>
@@ -169,8 +169,8 @@ export function GlobalSearchModal({
           )}
 
           {!query && (
-            <div className="p-4 text-xs text-gray-500 dark:text-gray-400 space-y-2">
-              <p className="font-semibold text-gray-700 dark:text-gray-300">Popular Searches</p>
+            <div className="p-4 text-xs text-[#6C7B72] dark:text-[#A4B5A9] space-y-2">
+              <p className="font-outfit font-bold uppercase tracking-[0.2em] text-[#607B6A] text-[11px]">Popular Searches</p>
               <div className="flex flex-wrap gap-2">
                 {["Vinyasa Flow", "Morning Hatha", "Priya Sharma", "Sun Salutation", "Yin for Sleep"].map(
                   (suggestion) => (
@@ -178,7 +178,7 @@ export function GlobalSearchModal({
                       key={suggestion}
                       type="button"
                       onClick={() => setQuery(suggestion)}
-                      className="px-2.5 py-1 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-[#6B8F71]/15 text-gray-700 dark:text-gray-300 transition-colors"
+                      className="px-2.5 py-1 rounded-lg bg-[#FAF6EE] dark:bg-[#1A2A21] border border-[#D1DBCF] dark:border-[#283E31] hover:bg-[#E1EDDD]/50 text-[#29352F] dark:text-gray-200 transition-colors cursor-pointer"
                     >
                       {suggestion}
                     </button>

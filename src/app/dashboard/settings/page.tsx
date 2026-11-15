@@ -109,7 +109,7 @@ export default function SettingsPage() {
       />
 
       {/* ─── Navigation Sub-Tabs ────────────────────────────────────── */}
-      <div className="flex items-center gap-2 border-b border-gray-200 dark:border-gray-800 pb-2 overflow-x-auto text-xs font-semibold">
+      <div className="flex items-center gap-2 border-b border-[#D1DBCF] dark:border-[#283E31] pb-2 overflow-x-auto text-xs font-semibold font-figtree">
         {[
           { id: "profile", label: "Profile", icon: User },
           { id: "preferences", label: "Yoga Preferences", icon: SettingsIcon },
@@ -125,8 +125,8 @@ export default function SettingsPage() {
               onClick={() => setActiveSection(tab.id as any)}
               className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-all ${
                 activeSection === tab.id
-                  ? "bg-[#233D32] text-white dark:bg-[#6B8F71] dark:text-gray-950 font-bold shadow-xs"
-                  : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800"
+                  ? "bg-[#47664A] text-white font-bold shadow-xs"
+                  : "text-[#6C7B72] dark:text-[#A4B5A9] hover:bg-[#FAF6EE] dark:hover:bg-[#1A2A21]"
               }`}
             >
               <Icon className="w-3.5 h-3.5" />
@@ -137,45 +137,45 @@ export default function SettingsPage() {
       </div>
 
       {/* ─── Section Content ────────────────────────────────────────── */}
-      <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-xs space-y-6">
+      <div className="p-6 sm:p-8 rounded-2xl bg-white dark:bg-[#18261E] border border-[#D1DBCF] dark:border-[#283E31] shadow-xs space-y-6 font-figtree">
         {activeSection === "profile" && (
           <div className="space-y-5">
-            <h3 className="font-serif font-bold text-lg text-gray-900 dark:text-white">
+            <h3 className="font-outfit font-semibold text-lg text-[#29352F] dark:text-[#E8EFE8]">
               Personal Information
             </h3>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-gray-700 dark:text-gray-300">Full Name</label>
+              <label className="text-xs font-semibold text-[#29352F] dark:text-[#E8EFE8]">Full Name</label>
               <input
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full text-xs p-3 rounded-xl border border-gray-200 dark:border-gray-800 bg-transparent focus:outline-none focus:ring-1 focus:ring-[#6B8F71]"
+                className="w-full text-xs p-3 rounded-xl border border-[#D1DBCF] dark:border-[#283E31] bg-[#FAF6EE] dark:bg-[#1A2A21] text-[#29352F] dark:text-[#E8EFE8] focus:outline-none focus:ring-1 focus:ring-[#47664A]"
               />
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-gray-700 dark:text-gray-300">Email Address</label>
+              <label className="text-xs font-semibold text-[#29352F] dark:text-[#E8EFE8]">Email Address</label>
               <input
                 type="email"
                 disabled
                 value={email}
-                className="w-full text-xs p-3 rounded-xl border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-800 text-gray-500 cursor-not-allowed"
+                className="w-full text-xs p-3 rounded-xl border border-[#D1DBCF] dark:border-[#283E31] bg-[#FAF6EE]/60 dark:bg-[#15231A] text-[#8C9B92] cursor-not-allowed"
               />
-              <span className="text-[11px] text-gray-400">
+              <span className="text-[11px] text-[#8C9B92]">
                 To change your email address, contact platform security support.
               </span>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-gray-700 dark:text-gray-300">
+                <label className="text-xs font-semibold text-[#29352F] dark:text-[#E8EFE8]">
                   Preferred Language
                 </label>
                 <select
                   value={locale}
                   onChange={(e) => setLocale(e.target.value as any)}
-                  className="w-full text-xs p-3 rounded-xl border border-gray-200 dark:border-gray-800 bg-transparent font-medium"
+                  className="w-full text-xs p-3 rounded-xl border border-[#D1DBCF] dark:border-[#283E31] bg-[#FAF6EE] dark:bg-[#1A2A21] text-[#29352F] dark:text-[#E8EFE8] font-medium focus:ring-1 focus:ring-[#47664A]"
                 >
                   <option value="en">English</option>
                   <option value="hi">हिन्दी (Hindi)</option>
@@ -184,13 +184,13 @@ export default function SettingsPage() {
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-gray-700 dark:text-gray-300">
+                <label className="text-xs font-semibold text-[#29352F] dark:text-[#E8EFE8]">
                   Display Timezone
                 </label>
                 <select
                   value={timezone}
                   onChange={(e) => setTimezone(e.target.value)}
-                  className="w-full text-xs p-3 rounded-xl border border-gray-200 dark:border-gray-800 bg-transparent font-medium"
+                  className="w-full text-xs p-3 rounded-xl border border-[#D1DBCF] dark:border-[#283E31] bg-[#FAF6EE] dark:bg-[#1A2A21] text-[#29352F] dark:text-[#E8EFE8] font-medium focus:ring-1 focus:ring-[#47664A]"
                 >
                   <option value="Asia/Kolkata">Asia/Kolkata (IST +5:30)</option>
                   <option value="UTC">UTC (GMT +0:00)</option>
@@ -204,24 +204,24 @@ export default function SettingsPage() {
 
         {activeSection === "preferences" && (
           <div className="space-y-6">
-            <h3 className="font-serif font-bold text-lg text-gray-900 dark:text-white">
+            <h3 className="font-outfit font-semibold text-lg text-[#29352F] dark:text-[#E8EFE8]">
               Yoga Practice Profile
             </h3>
 
             <div className="space-y-2">
-              <label className="text-xs font-semibold text-gray-700 dark:text-gray-300">
+              <label className="text-xs font-semibold text-[#29352F] dark:text-[#E8EFE8]">
                 Experience Level:
               </label>
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-3 gap-3 font-outfit">
                 {["BEGINNER", "INTERMEDIATE", "ADVANCED"].map((lvl) => (
                   <button
                     key={lvl}
                     type="button"
                     onClick={() => setExperienceLevel(lvl)}
-                    className={`p-3 rounded-xl border text-xs font-semibold capitalize transition-all ${
+                    className={`p-3 rounded-xl border text-xs font-semibold uppercase tracking-wider transition-all ${
                       experienceLevel === lvl
-                        ? "border-[#6B8F71] bg-[#6B8F71]/15 text-[#233D32] dark:text-[#A7C4B5]"
-                        : "border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800"
+                        ? "border-[#47664A] bg-[#E1EDDD] text-[#35523E] dark:bg-[#223528] dark:text-[#A7C7A8]"
+                        : "border-[#D1DBCF] dark:border-[#283E31] bg-[#FAF6EE]/50 hover:bg-[#FAF6EE] dark:hover:bg-[#1A2A21] text-[#6C7B72]"
                     }`}
                   >
                     {lvl.toLowerCase()}
@@ -231,10 +231,10 @@ export default function SettingsPage() {
             </div>
 
             <div className="space-y-2">
-              <label className="text-xs font-semibold text-gray-700 dark:text-gray-300">
+              <label className="text-xs font-semibold text-[#29352F] dark:text-[#E8EFE8]">
                 Primary Mindfulness & Physical Goals:
               </label>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 font-figtree">
                 {availableGoals.map((g) => {
                   const isChecked = goals.includes(g.id);
                   return (
@@ -244,12 +244,12 @@ export default function SettingsPage() {
                       onClick={() => toggleGoal(g.id)}
                       className={`flex items-center justify-between p-3 rounded-xl border text-xs font-medium text-left transition-colors ${
                         isChecked
-                          ? "border-[#6B8F71] bg-[#6B8F71]/10 text-gray-900 dark:text-white"
-                          : "border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-400"
+                          ? "border-[#47664A] bg-[#E1EDDD]/60 text-[#29352F] dark:bg-[#223528] dark:text-[#E8EFE8]"
+                          : "border-[#D1DBCF] dark:border-[#283E31] bg-[#FAF6EE]/50 hover:bg-[#FAF6EE] dark:hover:bg-[#1A2A21] text-[#6C7B72] dark:text-[#A4B5A9]"
                       }`}
                     >
                       <span>{g.label}</span>
-                      {isChecked && <Check className="w-4 h-4 text-[#6B8F71]" />}
+                      {isChecked && <Check className="w-4 h-4 text-[#47664A]" />}
                     </button>
                   );
                 })}
@@ -260,47 +260,47 @@ export default function SettingsPage() {
 
         {activeSection === "notifications" && (
           <div className="space-y-5">
-            <h3 className="font-serif font-bold text-lg text-gray-900 dark:text-white">
+            <h3 className="font-outfit font-semibold text-lg text-[#29352F] dark:text-[#E8EFE8]">
               Notification Channels
             </h3>
 
             <div className="space-y-4">
-              <label className="flex items-center justify-between p-3.5 rounded-xl border border-gray-200 dark:border-gray-800 cursor-pointer">
+              <label className="flex items-center justify-between p-3.5 rounded-xl border border-[#D1DBCF] dark:border-[#283E31] bg-[#FAF6EE]/50 cursor-pointer">
                 <div>
-                  <p className="text-xs font-bold text-gray-900 dark:text-white">Email Confirmations</p>
-                  <p className="text-[11px] text-gray-500">Receive calendar receipts and booking confirmations</p>
+                  <p className="text-xs font-bold text-[#29352F] dark:text-[#E8EFE8]">Email Confirmations</p>
+                  <p className="text-[11px] text-[#6C7B72] dark:text-[#A4B5A9]">Receive calendar receipts and booking confirmations</p>
                 </div>
                 <input
                   type="checkbox"
                   checked={emailNotifications}
                   onChange={(e) => setEmailNotifications(e.target.checked)}
-                  className="rounded text-[#6B8F71] focus:ring-[#6B8F71]"
+                  className="rounded accent-[#47664A] text-[#47664A] focus:ring-[#47664A]"
                 />
               </label>
 
-              <label className="flex items-center justify-between p-3.5 rounded-xl border border-gray-200 dark:border-gray-800 cursor-pointer">
+              <label className="flex items-center justify-between p-3.5 rounded-xl border border-[#D1DBCF] dark:border-[#283E31] bg-[#FAF6EE]/50 cursor-pointer">
                 <div>
-                  <p className="text-xs font-bold text-gray-900 dark:text-white">Class Reminders</p>
-                  <p className="text-[11px] text-gray-500">Alert 24h and 15m before scheduled live sessions</p>
+                  <p className="text-xs font-bold text-[#29352F] dark:text-[#E8EFE8]">Class Reminders</p>
+                  <p className="text-[11px] text-[#6C7B72] dark:text-[#A4B5A9]">Alert 24h and 15m before scheduled live sessions</p>
                 </div>
                 <input
                   type="checkbox"
                   checked={classReminders}
                   onChange={(e) => setClassReminders(e.target.checked)}
-                  className="rounded text-[#6B8F71] focus:ring-[#6B8F71]"
+                  className="rounded accent-[#47664A] text-[#47664A] focus:ring-[#47664A]"
                 />
               </label>
 
-              <label className="flex items-center justify-between p-3.5 rounded-xl border border-gray-200 dark:border-gray-800 cursor-pointer">
+              <label className="flex items-center justify-between p-3.5 rounded-xl border border-[#D1DBCF] dark:border-[#283E31] bg-[#FAF6EE]/50 cursor-pointer">
                 <div>
-                  <p className="text-xs font-bold text-gray-900 dark:text-white">WhatsApp Notifications</p>
-                  <p className="text-[11px] text-gray-500">Instant join link sent to your registered phone</p>
+                  <p className="text-xs font-bold text-[#29352F] dark:text-[#E8EFE8]">WhatsApp Notifications</p>
+                  <p className="text-[11px] text-[#6C7B72] dark:text-[#A4B5A9]">Instant join link sent to your registered phone</p>
                 </div>
                 <input
                   type="checkbox"
                   checked={whatsappReminders}
                   onChange={(e) => setWhatsappReminders(e.target.checked)}
-                  className="rounded text-[#6B8F71] focus:ring-[#6B8F71]"
+                  className="rounded accent-[#47664A] text-[#47664A] focus:ring-[#47664A]"
                 />
               </label>
             </div>
@@ -309,20 +309,20 @@ export default function SettingsPage() {
 
         {activeSection === "security" && (
           <div className="space-y-5">
-            <h3 className="font-serif font-bold text-lg text-gray-900 dark:text-white">
+            <h3 className="font-outfit font-semibold text-lg text-[#29352F] dark:text-[#E8EFE8]">
               Security & Credentials
             </h3>
 
-            <div className="p-4 rounded-xl border border-gray-200 dark:border-gray-800 flex items-center justify-between">
+            <div className="p-4 rounded-xl border border-[#D1DBCF] dark:border-[#283E31] bg-[#FAF6EE]/50 flex items-center justify-between">
               <div>
-                <p className="text-xs font-bold text-gray-900 dark:text-white">Account Password</p>
-                <p className="text-[11px] text-gray-500">Managed via Supabase Secure Authentication</p>
+                <p className="text-xs font-bold text-[#29352F] dark:text-[#E8EFE8]">Account Password</p>
+                <p className="text-[11px] text-[#6C7B72] dark:text-[#A4B5A9]">Managed via Supabase Secure Authentication</p>
               </div>
               <Button
                 type="button"
                 variant="outline"
                 onClick={() => toast.info("Password Reset Sent", "Check your email inbox for instructions.")}
-                className="text-xs rounded-xl"
+                className="text-xs rounded-xl border-[#D1DBCF] dark:border-[#283E31] bg-white dark:bg-[#18261E] text-[#29352F] dark:text-[#E8EFE8] hover:bg-[#FAF6EE]"
               >
                 Send Reset Link
               </Button>
@@ -332,20 +332,20 @@ export default function SettingsPage() {
 
         {activeSection === "privacy" && (
           <div className="space-y-5">
-            <h3 className="font-serif font-bold text-lg text-gray-900 dark:text-white">
+            <h3 className="font-outfit font-semibold text-lg text-[#29352F] dark:text-[#E8EFE8]">
               Privacy, Data & GDPR
             </h3>
 
-            <label className="flex items-center justify-between p-3.5 rounded-xl border border-gray-200 dark:border-gray-800 cursor-pointer">
+            <label className="flex items-center justify-between p-3.5 rounded-xl border border-[#D1DBCF] dark:border-[#283E31] bg-[#FAF6EE]/50 cursor-pointer">
               <div>
-                <p className="text-xs font-bold text-gray-900 dark:text-white">Community Leaderboard Opt-In</p>
-                <p className="text-[11px] text-gray-500">Display your practice streak to inspire fellow yogis</p>
+                <p className="text-xs font-bold text-[#29352F] dark:text-[#E8EFE8]">Community Leaderboard Opt-In</p>
+                <p className="text-[11px] text-[#6C7B72] dark:text-[#A4B5A9]">Display your practice streak to inspire fellow yogis</p>
               </div>
               <input
                 type="checkbox"
                 checked={leaderboardOptIn}
                 onChange={(e) => setLeaderboardOptIn(e.target.checked)}
-                className="rounded text-[#6B8F71] focus:ring-[#6B8F71]"
+                className="rounded accent-[#47664A] text-[#47664A] focus:ring-[#47664A]"
               />
             </label>
 
@@ -354,9 +354,9 @@ export default function SettingsPage() {
                 type="button"
                 variant="outline"
                 onClick={() => toast.success("Data Export Queued", "Your personal archive will be emailed within 15 minutes.")}
-                className="rounded-xl text-xs font-semibold inline-flex items-center gap-1.5"
+                className="rounded-xl text-xs font-semibold inline-flex items-center gap-1.5 border-[#D1DBCF] dark:border-[#283E31] bg-white dark:bg-[#18261E] text-[#29352F] dark:text-[#E8EFE8] hover:bg-[#FAF6EE]"
               >
-                <Download className="w-3.5 h-3.5" />
+                <Download className="w-3.5 h-3.5 text-[#47664A]" />
                 <span>Download My Data (GDPR)</span>
               </Button>
             </div>
@@ -364,12 +364,12 @@ export default function SettingsPage() {
         )}
 
         {/* Save button */}
-        <div className="pt-4 border-t border-gray-100 dark:border-gray-800 flex justify-end">
+        <div className="pt-4 border-t border-[#E5DFD4] dark:border-[#283E31] flex justify-end">
           <Button
             type="button"
             onClick={() => updateMutation.mutate()}
             isLoading={updateMutation.isPending}
-            className="bg-[#233D32] hover:bg-[#6B8F71] text-white rounded-xl text-xs font-bold px-6 py-2.5 shadow-xs"
+            className="bg-[#47664A] hover:bg-[#3B563E] text-white rounded-xl text-xs font-semibold px-6 py-2.5 shadow-xs font-figtree"
           >
             Save Changes
           </Button>
