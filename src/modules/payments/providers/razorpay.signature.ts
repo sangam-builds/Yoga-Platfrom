@@ -1,69 +1,88 @@
-import crypto from "crypto";
+import crypto from "node:crypto";
 
 /**
- * Pure HMAC SHA-256 signature verification functions.
- * Does not import env or external SDKs.
- * Uses constant-time comparison (crypto.timingSafeEqual) to prevent timing attacks.
+ * Computes HMAC SHA256 signature for Razorpay Checkout verification:
+ * HMAC_SHA256(order_id + "|" + payment_id, secret)
  */
-
-export function computeHmacSha256(data: string, secret: string): string {
-  return crypto.createHmac("sha256", secret).update(data).digest("hex");
-}
-
-export function timingSafeEqualHex(a: string, b: string): boolean {
-  if (typeof a !== "string" || typeof b !== "string") {
-    return false;
+export function computeCheckoutSignature(
+  orderId: string,
+  paymentId: string,
+  secret: string
+): string {
+  if (!orderId || !paymentId || !secret) {
+    return "";
   }
-
-  const bufA = Buffer.from(a, "hex");
-  const bufB = Buffer.from(b, "hex");
-
-  if (bufA.length === 0 || bufB.length === 0 || bufA.length !== bufB.length) {
-    return false;
-  }
-
-  return crypto.timingSafeEqual(bufA, bufB);
+  const payload = `${orderId}|${paymentId}`;
+  return crypto.createHmac("sha256", secret).update(payload).digest("hex");
 }
 
 /**
- * Verifies Razorpay browser Checkout signature:
- * Expected payload is: `${orderId}|${paymentId}`
+ * Verifies Razorpay Checkout signature using constant-time comparison
+ * to eliminate timing-attack vulnerabilities.
  */
-export function verifyRazorpayCheckoutSignature(params: {
-  orderId: string;
-  paymentId: string;
-  signature: string;
-  secret: string;
-}): boolean {
-  const { orderId, paymentId, signature, secret } = params;
-
+export function verifyCheckoutSignature(
+  orderId: string,
+  paymentId: string,
+  signature: string,
+  secret: string
+): boolean {
   if (!orderId || !paymentId || !signature || !secret) {
     return false;
   }
 
-  const payload = `${orderId}|${paymentId}`;
-  const expectedSignature = computeHmacSha256(payload, secret);
+  const expected = computeCheckoutSignature(orderId, paymentId, secret);
+  if (!expected || expected.length !== signature.length) {
+    return false;
+  }
 
-  return timingSafeEqualHex(signature, expectedSignature);
+  try {
+    const expectedBuffer = Buffer.from(expected, "hex");
+    const signatureBuffer = Buffer.from(signature, "hex");
+    if (expectedBuffer.length !== signatureBuffer.length) {
+      return false;
+    }
+    return crypto.timingSafeEqual(expectedBuffer, signatureBuffer);
+  } catch {
+    return false;
+  }
 }
 
 /**
- * Verifies Razorpay Webhook signature:
- * Expected payload is the raw unprocessed HTTP request body string.
+ * Computes HMAC SHA256 signature for raw Razorpay webhook payload:
+ * HMAC_SHA256(raw_body, webhook_secret)
  */
-export function verifyRazorpayWebhookSignature(params: {
-  rawBody: string;
-  signature: string;
-  secret: string;
-}): boolean {
-  const { rawBody, signature, secret } = params;
+export function computeWebhookSignature(rawBody: string, secret: string): string {
+  if (!rawBody || !secret) {
+    return "";
+  }
+  return crypto.createHmac("sha256", secret).update(rawBody).digest("hex");
+}
 
+/**
+ * Verifies Razorpay Webhook signature using constant-time comparison.
+ */
+export function verifyWebhookSignature(
+  rawBody: string,
+  signature: string,
+  secret: string
+): boolean {
   if (!rawBody || !signature || !secret) {
     return false;
   }
 
-  const expectedSignature = computeHmacSha256(rawBody, secret);
+  const expected = computeWebhookSignature(rawBody, secret);
+  if (!expected || expected.length !== signature.length) {
+    return false;
+  }
 
-  return timingSafeEqualHex(signature, expectedSignature);
+  try {
+    const expectedBuffer = Buffer.from(expected, "hex");
+    const signatureBuffer = Buffer.from(signature, "hex");
+    if (expectedBuffer.length !== signatureBuffer.length) {
+      return false;
+    }
+    return crypto.timingSafeEqual(expectedBuffer, signatureBuffer);
+  } catch {
+    return false;
+  }
 }
-

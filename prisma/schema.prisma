@@ -343,6 +343,7 @@ model User {
   attendanceDisputes     AttendanceDispute[]     @relation("DisputeStudent")
   attendanceDisputesResolved AttendanceDispute[] @relation("DisputeResolvedBy")
   sessionChatMessages    SessionChatMessage[]
+  subscriptionEvents     SubscriptionEvent[]
 
   @@index([role])
   @@index([createdAt])
@@ -618,6 +619,8 @@ model Plan {
   payments      Payment[]
   coupons       Coupon[] // coupons restricted to specific plans
   giftCards     GiftCard[]
+  toPlanEvents   SubscriptionEvent[] @relation("ToPlanEvents")
+  fromPlanEvents SubscriptionEvent[] @relation("FromPlanEvents")
 }
 
 model Subscription {
@@ -646,6 +649,7 @@ model Subscription {
   payments         Payment[]
   creditLedger     CreditLedger[]
   bookings         Booking[]
+  events           SubscriptionEvent[]
 
   @@index([userId, status])
   @@index([status, currentPeriodEnd])
@@ -680,9 +684,31 @@ model Payment {
   invoice          Invoice?
   refunds          Refund[]
   giftCard         GiftCard?
+  subscriptionEvents SubscriptionEvent[]
 
   @@index([userId, createdAt])
   @@index([status])
+}
+
+model SubscriptionEvent {
+  id             String       @id @default(cuid())
+  subscriptionId String
+  userId         String
+  type           String // "CREATED", "UPGRADED", "RENEWED", "PAUSED", "RESUMED", "CANCELLED", "EXPIRED"
+  fromPlanId     String?
+  toPlanId       String
+  paymentId      String?
+  metadata       Json? // Proration amounts, trial days remaining, reason
+  createdAt      DateTime     @default(now())
+
+  subscription Subscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  fromPlan     Plan?        @relation("FromPlanEvents", fields: [fromPlanId], references: [id], onDelete: SetNull)
+  toPlan       Plan         @relation("ToPlanEvents", fields: [toPlanId], references: [id], onDelete: Restrict)
+  payment      Payment?     @relation(fields: [paymentId], references: [id], onDelete: SetNull)
+
+  @@index([subscriptionId, createdAt])
+  @@index([userId, createdAt])
 }
 
 model Invoice {

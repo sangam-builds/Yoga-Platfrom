@@ -55,9 +55,15 @@ export function AdminHeader({
         </h2>
 
         {/* Environment Badge */}
-        <span className="text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800">
-          Production
-        </span>
+        {process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID?.startsWith("rzp_test_") || process.env.NODE_ENV !== "production" ? (
+          <span className="text-[10px] uppercase tracking-wider px-2.5 py-0.5 rounded-full font-bold bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300 border border-amber-300 dark:border-amber-800">
+            TEST MODE
+          </span>
+        ) : (
+          <span className="text-[10px] uppercase tracking-wider px-2.5 py-0.5 rounded-full font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800">
+            PRODUCTION
+          </span>
+        )}
 
         {/* Sub-Role Pill */}
         <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#233D32] text-white font-bold">

@@ -26,8 +26,9 @@ export function MembershipCard({ subscription, className = "" }: MembershipCardP
 
   const planName = subscription?.plan?.name || "Self-Practice Pass";
   const status = (subscription?.status || "ACTIVE").toLowerCase();
-  const creditsRemaining = subscription?.creditsRemaining ?? 4;
-  const maxCredits = subscription?.plan?.credits || 10;
+  const isUnlimited = subscription?.creditsRemaining === null || subscription?.plan?.credits === null;
+  const creditsRemaining = subscription?.creditsRemaining ?? (isUnlimited ? 999 : 4);
+  const maxCredits = subscription?.plan?.credits || (isUnlimited ? 999 : 10);
   const renewalDate = subscription?.currentPeriodEnd
     ? formatDate(subscription.currentPeriodEnd)
     : "Dec 15, 2026";
@@ -48,14 +49,14 @@ export function MembershipCard({ subscription, className = "" }: MembershipCardP
         {/* Main Content: Ring + Plan Info */}
         <div className="flex items-center gap-5 my-3">
           <ProgressRing
-            value={creditsRemaining}
-            max={maxCredits}
+            value={isUnlimited ? 100 : creditsRemaining}
+            max={isUnlimited ? 100 : maxCredits}
             size={76}
             strokeWidth={7}
             color="var(--primary-sage)"
-            centerLabel={creditsRemaining}
-            centerSubtext="left"
-            ariaLabel={`${creditsRemaining} credits remaining of ${maxCredits}`}
+            centerLabel={isUnlimited ? "∞" : creditsRemaining}
+            centerSubtext={isUnlimited ? "all access" : "left"}
+            ariaLabel={isUnlimited ? "Unlimited session credits" : `${creditsRemaining} credits remaining of ${maxCredits}`}
           />
 
           <div className="min-w-0">
@@ -66,7 +67,7 @@ export function MembershipCard({ subscription, className = "" }: MembershipCardP
               Renews on <span className="font-medium text-[var(--text-primary)]">{renewalDate}</span>
             </p>
             <p className="font-figtree text-[11px] text-[var(--text-subtle)] mt-1">
-              {creditsRemaining} of {maxCredits} session credits remaining
+              {isUnlimited ? "Unlimited live classes included" : `${creditsRemaining} of ${maxCredits} session credits remaining`}
             </p>
           </div>
         </div>
