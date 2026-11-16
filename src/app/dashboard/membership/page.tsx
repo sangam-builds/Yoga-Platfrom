@@ -26,6 +26,7 @@ import { Pill } from "@/components/dashboard/ui/Pill";
 import { Button } from "@/components/ui/Button";
 import { useRazorpayScript } from "@/components/checkout/useRazorpayScript";
 import { PaymentResultModal, PaymentResultData } from "@/components/checkout/PaymentResultModal";
+import { TestPaymentSimulatorModal } from "@/components/checkout/TestPaymentSimulatorModal";
 
 export default function MembershipPage() {
   const { formatCurrency, formatDate } = useI18n();
@@ -46,6 +47,14 @@ export default function MembershipPage() {
   const [processingPlanId, setProcessingPlanId] = useState<string | null>(null);
   const [paymentResult, setPaymentResult] = useState<PaymentResultData | null>(null);
   const [isResultModalOpen, setIsResultModalOpen] = useState(false);
+  const [simulatorOrder, setSimulatorOrder] = useState<{
+    orderId: string;
+    amount: number;
+    currency: string;
+    planName: string;
+    receipt?: string;
+  } | null>(null);
+  const [isSimulatorOpen, setIsSimulatorOpen] = useState(false);
 
   // Dialogs
   const [isPauseDialogOpen, setIsPauseDialogOpen] = useState(false);
@@ -117,14 +126,66 @@ export default function MembershipPage() {
     }
   };
 
+  // Verify Payment on Backend
+  const handleVerifyPayment = async (
+    response: {
+      razorpay_order_id: string;
+      razorpay_payment_id: string;
+      razorpay_signature: string;
+    },
+    plan: any,
+    amountPaise: number,
+    receipt?: string
+  ) => {
+    setPaymentResult({
+      status: "PENDING",
+      planName: plan.name,
+      amountPaise,
+      receiptId: receipt,
+    });
+    setIsResultModalOpen(true);
+
+    try {
+      const verifyRes = await fetch("/api/checkout/verify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(response),
+      });
+
+      const verifyData = await verifyRes.json();
+      if (verifyRes.ok) {
+        setPaymentResult({
+          status: "SUCCESS",
+          planName: plan.name,
+          amountPaise,
+          receiptId: receipt,
+          paymentId: response.razorpay_payment_id,
+        });
+
+        // Invalidate caches so UI updates without reload
+        queryClient.invalidateQueries({ queryKey: ["user-subscription"] });
+        queryClient.invalidateQueries({ queryKey: ["platform-plans"] });
+        queryClient.invalidateQueries({ queryKey: ["student-billing-history"] });
+        queryClient.invalidateQueries({ queryKey: ["user-stats"] });
+      } else {
+        setPaymentResult({
+          status: "FAILED",
+          errorMessage: verifyData.error || "Payment signature verification failed.",
+        });
+      }
+    } catch (err: any) {
+      setPaymentResult({
+        status: "FAILED",
+        errorMessage: "Could not contact server to verify payment.",
+      });
+    } finally {
+      setProcessingPlanId(null);
+    }
+  };
+
   // Trigger Razorpay Checkout
   const handleInitiateCheckout = async (plan: any) => {
     if (processingPlanId) return;
-
-    if (!isRazorpayLoaded) {
-      toast.error("Gateway Loading", "Please wait a moment while the secure payment gateway loads.");
-      return;
-    }
 
     setProcessingPlanId(plan.id);
 
@@ -156,7 +217,21 @@ export default function MembershipPage() {
         return;
       }
 
-      // 2. Open Razorpay Checkout modal
+      // 2. Check if using local demo credentials or if official SDK is unavailable
+      const isDemoMode = data.keyId?.startsWith("rzp_test_zenflowdemo") || !isRazorpayLoaded;
+      if (isDemoMode || !(window as any)?.Razorpay) {
+        setSimulatorOrder({
+          orderId: data.orderId,
+          amount: data.amount,
+          currency: data.currency || "INR",
+          planName: plan.name,
+          receipt: data.receipt,
+        });
+        setIsSimulatorOpen(true);
+        return;
+      }
+
+      // 3. Open official Razorpay Checkout modal
       const options = {
         key: data.keyId,
         amount: data.amount,
@@ -169,51 +244,7 @@ export default function MembershipPage() {
           razorpay_payment_id: string;
           razorpay_signature: string;
         }) => {
-          setPaymentResult({
-            status: "PENDING",
-            planName: plan.name,
-            amountPaise: data.amount,
-            receiptId: data.receipt,
-          });
-          setIsResultModalOpen(true);
-
-          try {
-            // 3. Verify signature on backend
-            const verifyRes = await fetch("/api/checkout/verify", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(response),
-            });
-
-            const verifyData = await verifyRes.json();
-            if (verifyRes.ok) {
-              setPaymentResult({
-                status: "SUCCESS",
-                planName: plan.name,
-                amountPaise: data.amount,
-                receiptId: data.receipt,
-                paymentId: response.razorpay_payment_id,
-              });
-
-              // Invalidate caches so UI updates without reload
-              queryClient.invalidateQueries({ queryKey: ["user-subscription"] });
-              queryClient.invalidateQueries({ queryKey: ["platform-plans"] });
-              queryClient.invalidateQueries({ queryKey: ["student-billing-history"] });
-              queryClient.invalidateQueries({ queryKey: ["user-stats"] });
-            } else {
-              setPaymentResult({
-                status: "FAILED",
-                errorMessage: verifyData.error || "Payment signature verification failed.",
-              });
-            }
-          } catch (err: any) {
-            setPaymentResult({
-              status: "FAILED",
-              errorMessage: "Could not contact server to verify payment.",
-            });
-          } finally {
-            setProcessingPlanId(null);
-          }
+          await handleVerifyPayment(response, plan, data.amount, data.receipt);
         },
         modal: {
           ondismiss: () => {
@@ -229,17 +260,28 @@ export default function MembershipPage() {
         },
       };
 
-      const razorpayInstance = new (window as any).Razorpay(options);
-      razorpayInstance.on("payment.failed", (failedRes: any) => {
-        setPaymentResult({
-          status: "FAILED",
-          errorMessage: failedRes.error?.description || "Payment failed or was declined.",
+      try {
+        const razorpayInstance = new (window as any).Razorpay(options);
+        razorpayInstance.on("payment.failed", (failedRes: any) => {
+          setPaymentResult({
+            status: "FAILED",
+            errorMessage: failedRes.error?.description || "Payment failed or was declined.",
+          });
+          setIsResultModalOpen(true);
+          setProcessingPlanId(null);
         });
-        setIsResultModalOpen(true);
-        setProcessingPlanId(null);
-      });
-
-      razorpayInstance.open();
+        razorpayInstance.open();
+      } catch (sdkErr) {
+        // Fallback to test simulator modal if official modal fails to open
+        setSimulatorOrder({
+          orderId: data.orderId,
+          amount: data.amount,
+          currency: data.currency || "INR",
+          planName: plan.name,
+          receipt: data.receipt,
+        });
+        setIsSimulatorOpen(true);
+      }
     } catch (err: any) {
       toast.error("Error", "An unexpected error occurred during checkout.");
       setProcessingPlanId(null);
@@ -607,6 +649,36 @@ export default function MembershipPage() {
             const plan = plansData?.plans?.find((p: any) => p.id === processingPlanId);
             if (plan) handleInitiateCheckout(plan);
           }
+        }}
+      />
+
+      {/* Sandbox Test Simulator Modal */}
+      <TestPaymentSimulatorModal
+        isOpen={isSimulatorOpen}
+        onClose={() => {
+          setIsSimulatorOpen(false);
+          setProcessingPlanId(null);
+        }}
+        orderData={simulatorOrder}
+        onSuccess={(response) => {
+          const currentPlanTarget =
+            plansData?.plans?.find((p: any) => p.id === processingPlanId) || {
+              name: simulatorOrder?.planName || "ZenFlow Plan",
+            };
+          handleVerifyPayment(
+            response,
+            currentPlanTarget,
+            simulatorOrder?.amount || 0,
+            simulatorOrder?.receipt
+          );
+        }}
+        onError={(errMsg) => {
+          setPaymentResult({
+            status: "FAILED",
+            errorMessage: errMsg,
+          });
+          setIsResultModalOpen(true);
+          setProcessingPlanId(null);
         }}
       />
     </div>
