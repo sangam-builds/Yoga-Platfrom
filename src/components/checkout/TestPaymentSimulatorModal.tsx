@@ -182,7 +182,7 @@ export function TestPaymentSimulatorModal({
                 <div className="flex justify-between items-center text-[#6C7B72]">
                   <span>Test Card Number:</span>
                   <span className="font-mono font-semibold text-[#29352F]">
-                    4111 1111 1111 1111
+                    4100 2800 0000 1007
                   </span>
                 </div>
                 <div className="flex justify-between items-center text-[#6C7B72]">

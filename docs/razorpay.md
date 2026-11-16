@@ -52,10 +52,14 @@ Razorpay provides dedicated test card numbers and virtual payment addresses (UPI
 
 ### A. Test Cards
 
+> **Note for Indian Razorpay Accounts:** Razorpay test accounts are domestic by default. Using an international card will result in *"This business accepts domestic (Indian) card payments only"*. Use the **Domestic Visa** or **Domestic RuPay** card below.
+
 | Test Scenario | Card Number | Expiry | CVV | OTP Behavior |
 |---|---|---|---|---|
-| **Success (Domestic)** | `4111 1111 1111 1111` | Any future date (e.g. `12/30`) | `123` | Any 6-digit OTP (e.g. `123456`) |
-| **Success (International)** | `4012 0000 0000 0002` | Any future date | `123` | Direct success / No OTP |
+| **Domestic Visa (Success)** | `4100 2800 0000 1007` | Any future date (e.g. `12/30`) | `123` | Any 4+ digit OTP (e.g. `1234`) or click **Submit** |
+| **Domestic Mastercard (Success)** | `5555 5100 0008 1006` | Any future date | `123` | Any 4+ digit OTP or click **Submit** |
+| **Domestic RuPay (Success)** | `6527 6589 0000 1005` | Any future date | `123` | Any 4+ digit OTP or click **Submit** |
+| **Success (International)** | `4012 0000 0000 0002` | Any future date | `123` | Direct success / No OTP (requires International payments enabled) |
 | **Insufficient Funds** | `4000 0000 0000 0002` | Any future date | `123` | Fails with Insufficient Funds |
 | **Card Declined / Do Not Honor** | `4000 0000 0000 0005` | Any future date | `123` | Fails with Card Declined |
 | **3D Secure OTP Failure** | `4111 1111 1111 1111` | Any future date | `123` | Click "Cancel" on bank OTP page |
