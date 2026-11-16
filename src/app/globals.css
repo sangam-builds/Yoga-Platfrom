@@ -1,30 +1,121 @@
 @import "tailwindcss";
 
+:root {
+  /* Surface & Canvas (Light - matches Sign-in / Sign-up) */
+  --bg-canvas: #FAF6ED;
+  --bg-surface: #FFFFFF;
+  --bg-elevated: #FAF6EE;
+  --border-subtle: #D1DBCF;
+  --border-hairline: #E4DFD3;
+
+  /* Typography */
+  --text-primary: #29352F;
+  --text-muted: #6C7B72;
+  --text-subtle: #8A978F;
+
+  /* Brand Primary Sage */
+  --primary-sage: #47664A;
+  --primary-hover: #3B563E;
+  --on-primary: #FFFFFF;
+
+  /* Soft Sage Icon Badge / Pills */
+  --sage-tint: #E1EDDD;
+  --sage-tint-icon: #35523E;
+
+  /* Accent & Status Colors */
+  --accent-amber: #D4973B;
+  --accent-amber-tint: #FDF4E5;
+  --info-teal: #459A94;
+  --info-teal-tint: #E8F5F4;
+  --negative-rose: #C75C5C;
+  --negative-rose-tint: #FBEBEB;
+
+  /* Chart Series Colors */
+  --chart-sage: #47664A;
+  --chart-amber: #D4973B;
+  --chart-teal: #459A94;
+  --chart-lavender: #7F71B8;
+  --chart-rose: #C75C5C;
+
+  /* Radii */
+  --radius-card: 22px;
+  --radius-control: 14px;
+  --radius-pill: 9999px;
+}
+
+.dark {
+  /* Surface & Canvas (Dark - Layered specification) */
+  --bg-canvas: #0E1512;
+  --bg-surface: #151F1A;
+  --bg-elevated: #1B2822;
+  --border-subtle: #263530;
+  --border-hairline: #263530;
+
+  /* Typography */
+  --text-primary: #E8EFE9;
+  --text-muted: #93A59A;
+  --text-subtle: #76887D;
+
+  /* Brand Primary Sage */
+  --primary-sage: #8DB596;
+  --primary-hover: #A3C7AC;
+  --on-primary: #0E1512;
+
+  /* Soft Sage Icon Badge / Pills */
+  --sage-tint: #1C2E24;
+  --sage-tint-icon: #8DB596;
+
+  /* Accent & Status Colors */
+  --accent-amber: #E6B566;
+  --accent-amber-tint: #2A2113;
+  --info-teal: #6FB7B0;
+  --info-teal-tint: #142826;
+  --negative-rose: #D98E8E;
+  --negative-rose-tint: #2E1818;
+
+  /* Chart Series Colors */
+  --chart-sage: #8DB596;
+  --chart-amber: #E6B566;
+  --chart-teal: #6FB7B0;
+  --chart-lavender: #A99BD6;
+  --chart-rose: #D98E8E;
+}
+
 @theme inline {
   --font-sans: var(--font-figtree), "Figtree", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-heading: var(--font-outfit), "Outfit", sans-serif;
   --font-outfit: var(--font-outfit), "Outfit", sans-serif;
   --font-figtree: var(--font-figtree), "Figtree", sans-serif;
 
-  --color-sage-50: #F4F7F4;
-  --color-sage-100: #E6EDE7;
-  --color-sage-200: #CDDCCD;
-  --color-sage-300: #ABC4AD;
-  --color-sage-400: #8BAA8F;
-  --color-sage-500: #6B8F71;
-  --color-sage-600: #57785D;
-  --color-sage-700: #435E48;
-  --color-sage-800: #334838;
-  --color-sage-900: #233D32;
+  --color-canvas: var(--bg-canvas);
+  --color-surface: var(--bg-surface);
+  --color-elevated: var(--bg-elevated);
+  --color-border-subtle: var(--border-subtle);
+  --color-border-hairline: var(--border-hairline);
 
-  --color-cream: #F8F7F2;
-  --color-cream-subtle: #F3F1E9;
-  --color-beige: #E9E2D0;
-  --color-beige-dark: #D8CEB7;
-  --color-forest: #233D32;
-  --color-forest-dark: #1A2F26;
-  --color-charcoal: #292D2A;
-  --color-charcoal-muted: #575E59;
+  --color-text-main: var(--text-primary);
+  --color-text-muted: var(--text-muted);
+  --color-text-subtle: var(--text-subtle);
+
+  --color-primary-sage: var(--primary-sage);
+  --color-primary-hover: var(--primary-hover);
+  --color-on-primary: var(--on-primary);
+
+  --color-sage-tint: var(--sage-tint);
+  --color-sage-tint-icon: var(--sage-tint-icon);
+
+  --color-accent-amber: var(--accent-amber);
+  --color-accent-amber-tint: var(--accent-amber-tint);
+  --color-info-teal: var(--info-teal);
+  --color-info-teal-tint: var(--info-teal-tint);
+  --color-negative-rose: var(--negative-rose);
+  --color-negative-rose-tint: var(--negative-rose-tint);
+
+  --color-chart-sage: var(--chart-sage);
+  --color-chart-amber: var(--chart-amber);
+  --color-chart-teal: var(--chart-teal);
+  --color-chart-lavender: var(--chart-lavender);
+  --color-chart-rose: var(--chart-rose);
 }
 
 html {
@@ -33,16 +124,27 @@ html {
 
 body {
   font-family: var(--font-figtree), "Figtree", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  background-color: var(--color-cream, #F8F7F2);
-  color: var(--color-charcoal, #292D2A);
+  background-color: var(--bg-canvas);
+  color: var(--text-primary);
   font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  transition: background-color 200ms ease, color 200ms ease;
 }
 
-.font-outfit,
-.font-heading {
+/* Ensure sans-serif Outfit is exclusively used for headings across dashboard */
+h1, h2, h3, h4, h5, h6, .font-heading, .font-outfit {
   font-family: var(--font-outfit), "Outfit", sans-serif;
 }
 
-.font-figtree {
+.font-figtree, .font-sans {
   font-family: var(--font-figtree), "Figtree", sans-serif;
+}
+
+/* Motion accessibility: respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

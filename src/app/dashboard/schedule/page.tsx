@@ -92,16 +92,16 @@ export default function SchedulePage() {
         description="Book your interactive live yoga sessions led by certified Himalayan tradition masters."
         breadcrumbs={[{ label: "Dashboard", href: "/dashboard" }, { label: "Schedule" }]}
         action={
-          <div className="flex items-center gap-1.5 p-1 bg-white dark:bg-[#18261E] border border-[#D1DBCF] dark:border-[#283E31] rounded-xl font-figtree">
+          <div className="flex items-center gap-1.5 p-1 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl">
             {(["week", "day", "list"] as const).map((view) => (
               <button
                 key={view}
                 type="button"
                 onClick={() => setActiveView(view)}
-                className={`px-3 py-1.5 text-xs font-semibold rounded-lg capitalize transition-colors ${
+                className={`px-3 py-1 text-xs font-semibold rounded-lg capitalize transition-colors ${
                   activeView === view
-                    ? "bg-[#47664A] text-white shadow-xs"
-                    : "text-[#6C7B72] dark:text-[#A4B5A9] hover:bg-[#FAF6EE] dark:hover:bg-[#1F3025]"
+                    ? "bg-[#233D32] text-white dark:bg-[#6B8F71] dark:text-gray-950"
+                    : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800"
                 }`}
               >
                 {view}
@@ -112,15 +112,15 @@ export default function SchedulePage() {
       />
 
       {/* ─── Filter Bar ─────────────────────────────────────────────── */}
-      <div className="p-4 rounded-2xl bg-white dark:bg-[#18261E] border border-[#D1DBCF] dark:border-[#283E31] shadow-xs space-y-3 font-figtree">
+      <div className="p-4 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-xs space-y-3">
         <div className="flex flex-wrap items-center gap-3">
           {/* Style Filter */}
           <div className="flex items-center gap-1.5 text-xs">
-            <span className="text-[#6C7B72] dark:text-[#A4B5A9] font-medium">Style:</span>
+            <span className="text-gray-500 font-medium">Style:</span>
             <select
               value={selectedStyle}
               onChange={(e) => setSelectedStyle(e.target.value)}
-              className="px-2.5 py-1.5 rounded-lg border border-[#D1DBCF] dark:border-[#283E31] bg-[#FAF6EE] dark:bg-[#1A2A21] text-xs font-semibold text-[#29352F] dark:text-[#E8EFE8] focus:outline-none focus:ring-1 focus:ring-[#47664A]"
+              className="px-2.5 py-1 rounded-lg border border-gray-200 dark:border-gray-700 bg-transparent text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-[#6B8F71]"
             >
               <option value="ALL">All Styles</option>
               <option value="VINYASA">Vinyasa Flow</option>
@@ -133,11 +133,11 @@ export default function SchedulePage() {
 
           {/* Level Filter */}
           <div className="flex items-center gap-1.5 text-xs">
-            <span className="text-[#6C7B72] dark:text-[#A4B5A9] font-medium">Level:</span>
+            <span className="text-gray-500 font-medium">Level:</span>
             <select
               value={selectedLevel}
               onChange={(e) => setSelectedLevel(e.target.value)}
-              className="px-2.5 py-1.5 rounded-lg border border-[#D1DBCF] dark:border-[#283E31] bg-[#FAF6EE] dark:bg-[#1A2A21] text-xs font-semibold text-[#29352F] dark:text-[#E8EFE8] focus:outline-none focus:ring-1 focus:ring-[#47664A]"
+              className="px-2.5 py-1 rounded-lg border border-gray-200 dark:border-gray-700 bg-transparent text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-[#6B8F71]"
             >
               <option value="ALL">All Levels</option>
               <option value="BEGINNER">Beginner</option>
@@ -149,11 +149,11 @@ export default function SchedulePage() {
 
           {/* Duration Filter */}
           <div className="flex items-center gap-1.5 text-xs">
-            <span className="text-[#6C7B72] dark:text-[#A4B5A9] font-medium">Duration:</span>
+            <span className="text-gray-500 font-medium">Duration:</span>
             <select
               value={selectedDuration}
               onChange={(e) => setSelectedDuration(e.target.value)}
-              className="px-2.5 py-1.5 rounded-lg border border-[#D1DBCF] dark:border-[#283E31] bg-[#FAF6EE] dark:bg-[#1A2A21] text-xs font-semibold text-[#29352F] dark:text-[#E8EFE8] focus:outline-none focus:ring-1 focus:ring-[#47664A]"
+              className="px-2.5 py-1 rounded-lg border border-gray-200 dark:border-gray-700 bg-transparent text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-[#6B8F71]"
             >
               <option value="ALL">Any Length</option>
               <option value="short">&lt; 30 mins</option>
@@ -163,12 +163,12 @@ export default function SchedulePage() {
           </div>
 
           {/* Open spots toggle */}
-          <label className="flex items-center gap-2 text-xs font-semibold cursor-pointer select-none ml-auto text-[#29352F] dark:text-[#E8EFE8]">
+          <label className="flex items-center gap-2 text-xs font-semibold cursor-pointer select-none ml-auto">
             <input
               type="checkbox"
               checked={openOnly}
               onChange={(e) => setOpenOnly(e.target.checked)}
-              className="rounded accent-[#47664A] text-[#47664A] focus:ring-[#47664A]"
+              className="rounded text-[#6B8F71] focus:ring-[#6B8F71]"
             />
             <span>Open spots only</span>
           </label>
@@ -176,10 +176,10 @@ export default function SchedulePage() {
 
         {/* Active filter chips */}
         {(selectedStyle !== "ALL" || selectedLevel !== "ALL" || selectedDuration !== "ALL" || openOnly) && (
-          <div className="flex items-center gap-2 pt-2 border-t border-[#E5DFD4] dark:border-[#283E31] text-xs">
-            <span className="text-[#6C7B72] dark:text-[#A4B5A9]">Active:</span>
+          <div className="flex items-center gap-2 pt-2 border-t border-gray-100 dark:border-gray-800 text-xs">
+            <span className="text-gray-400">Active:</span>
             {selectedStyle !== "ALL" && (
-              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-[#E1EDDD] text-[#35523E] font-semibold">
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-gray-100 dark:bg-gray-800 font-semibold">
                 {selectedStyle}
                 <button type="button" onClick={() => setSelectedStyle("ALL")} className="hover:text-rose-500">
                   <X className="w-3 h-3" />
@@ -187,7 +187,7 @@ export default function SchedulePage() {
               </span>
             )}
             {selectedLevel !== "ALL" && (
-              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-[#E1EDDD] text-[#35523E] font-semibold">
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-gray-100 dark:bg-gray-800 font-semibold">
                 {selectedLevel}
                 <button type="button" onClick={() => setSelectedLevel("ALL")} className="hover:text-rose-500">
                   <X className="w-3 h-3" />
@@ -202,7 +202,7 @@ export default function SchedulePage() {
                 setSelectedDuration("ALL");
                 setOpenOnly(false);
               }}
-              className="text-[#47664A] dark:text-[#8BB394] font-semibold hover:underline ml-2"
+              className="text-[#6B8F71] font-semibold hover:underline ml-2"
             >
               Clear All
             </button>
@@ -214,7 +214,7 @@ export default function SchedulePage() {
       {isLoading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 py-8">
           {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="h-64 rounded-2xl bg-[#FAF6EE] dark:bg-[#18261E] border border-[#D1DBCF] dark:border-[#283E31] animate-pulse" />
+            <div key={i} className="h-64 rounded-2xl bg-white dark:bg-gray-900 border animate-pulse" />
           ))}
         </div>
       ) : sessions.length === 0 ? (
@@ -241,22 +241,22 @@ export default function SchedulePage() {
             return (
               <div
                 key={session.id}
-                className="rounded-2xl bg-white dark:bg-[#18261E] border border-[#D1DBCF] dark:border-[#283E31] shadow-xs overflow-hidden flex flex-col justify-between hover:border-[#47664A] transition-all group"
+                className="rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-xs overflow-hidden flex flex-col justify-between hover:border-[#6B8F71] transition-all group"
               >
                 {/* Class Thumbnail & Badges */}
-                <div className="relative h-44 w-full bg-[#FAF6EE] overflow-hidden">
+                <div className="relative h-44 w-full bg-gray-100 overflow-hidden">
                   <img
                     src={session.thumbnailUrl || "https://images.unsplash.com/photo-1545205597-3d9d02c29597?w=600"}
                     alt={session.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
 
                   <div className="absolute top-3 left-3 flex gap-2">
-                    <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold font-outfit uppercase tracking-wider bg-[#47664A]/90 backdrop-blur-md text-white">
+                    <span className="px-2 py-0.5 rounded-full text-[11px] font-bold bg-[#233D32]/80 backdrop-blur-md text-white">
                       {session.style}
                     </span>
-                    <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold font-outfit uppercase tracking-wider bg-white/90 backdrop-blur-md text-[#29352F]">
+                    <span className="px-2 py-0.5 rounded-full text-[11px] font-bold bg-white/80 backdrop-blur-md text-gray-900">
                       {session.level}
                     </span>
                   </div>
@@ -266,8 +266,8 @@ export default function SchedulePage() {
                   </div>
 
                   <div className="absolute bottom-3 left-3 right-3 text-white">
-                    <h3 className="font-outfit text-lg font-semibold truncate text-white">{session.title}</h3>
-                    <p className="text-xs text-white/90 font-figtree flex items-center gap-1.5 mt-0.5">
+                    <h3 className="font-serif text-lg font-bold truncate">{session.title}</h3>
+                    <p className="text-xs text-white/80 flex items-center gap-1.5 mt-0.5">
                       <Clock className="w-3.5 h-3.5" />
                       <span>{session.durationMin} mins</span>
                       <span>•</span>
@@ -279,33 +279,33 @@ export default function SchedulePage() {
                 {/* Card Body */}
                 <div className="p-5 space-y-4 flex-1 flex flex-col justify-between">
                   <div className="space-y-2">
-                    <div className="flex items-center justify-between text-xs text-[#6C7B72] dark:text-[#A4B5A9] font-figtree">
-                      <span className="font-semibold text-[#29352F] dark:text-[#E8EFE8]">
+                    <div className="flex items-center justify-between text-xs text-gray-600 dark:text-gray-400">
+                      <span className="font-semibold text-gray-900 dark:text-white">
                         {formatDate(session.startsAt, { weekday: "short", month: "short", day: "numeric" })}
                       </span>
-                      <span className="font-mono text-[#47664A] dark:text-[#8BB394] font-semibold">{formatTime(session.startsAt)}</span>
+                      <span className="font-mono">{formatTime(session.startsAt)}</span>
                     </div>
 
-                    <p className="text-xs text-[#6C7B72] dark:text-[#A4B5A9] font-figtree line-clamp-2">{session.description}</p>
+                    <p className="text-xs text-gray-500 line-clamp-2">{session.description}</p>
                   </div>
 
                   {/* Actions Bar */}
-                  <div className="pt-3 border-t border-[#E5DFD4] dark:border-[#283E31] flex items-center justify-between gap-2 font-figtree">
+                  <div className="pt-3 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between gap-2">
                     <button
                       type="button"
                       onClick={() => setDetailSession(session)}
-                      className="text-xs font-semibold text-[#6C7B72] dark:text-[#A4B5A9] hover:text-[#29352F] dark:hover:text-[#E8EFE8]"
+                      className="text-xs font-semibold text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
                     >
                       View Details
                     </button>
 
                     {isBooked ? (
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-[#E1EDDD] text-[#35523E] dark:bg-[#223528] dark:text-[#A7C7A8]">
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300">
                         <CheckCircle2 className="w-3.5 h-3.5" />
                         <span>Booked</span>
                       </span>
                     ) : isWaitlisted ? (
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-[#FAF2E6] text-[#8C6228]">
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-amber-100 text-amber-800">
                         <span>Waitlisted</span>
                       </span>
                     ) : isFull ? (
@@ -313,7 +313,7 @@ export default function SchedulePage() {
                         type="button"
                         variant="outline"
                         onClick={() => setBookingSession(session)}
-                        className="rounded-xl px-3 py-1.5 text-xs font-semibold border-[#D1DBCF] text-[#8C6228] bg-[#FAF2E6]/50"
+                        className="rounded-xl px-3 py-1.5 text-xs font-semibold border-amber-300 text-amber-800"
                       >
                         Join Waitlist
                       </Button>
@@ -321,7 +321,7 @@ export default function SchedulePage() {
                       <Button
                         type="button"
                         onClick={() => setBookingSession(session)}
-                        className="rounded-xl px-4 py-1.5 text-xs font-semibold bg-[#47664A] hover:bg-[#3B563E] text-white shadow-xs"
+                        className="rounded-xl px-4 py-1.5 text-xs font-semibold bg-[#233D32] hover:bg-[#6B8F71] text-white shadow-xs"
                       >
                         Book Class
                       </Button>
@@ -339,48 +339,48 @@ export default function SchedulePage() {
         <div
           role="dialog"
           aria-modal="true"
-          className="fixed inset-0 z-50 flex justify-end bg-black/50 backdrop-blur-xs animate-in fade-in font-figtree"
+          className="fixed inset-0 z-50 flex justify-end bg-black/50 backdrop-blur-xs animate-in fade-in"
           onClick={() => setDetailSession(null)}
         >
           <div
-            className="w-full max-w-lg h-full bg-[#FAF6ED] dark:bg-[#16241C] border-l border-[#D1DBCF] dark:border-[#283E31] shadow-2xl flex flex-col p-6 space-y-6 overflow-y-auto animate-in slide-in-from-right"
+            className="w-full max-w-lg h-full bg-white dark:bg-gray-900 border-l border-gray-200 dark:border-gray-800 shadow-2xl flex flex-col p-6 space-y-6 overflow-y-auto animate-in slide-in-from-right"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between pb-3 border-b border-[#D1DBCF] dark:border-[#283E31]">
-              <span className="font-outfit text-[11px] font-bold uppercase tracking-[0.22em] text-[#607B6A]">
+            <div className="flex items-center justify-between pb-3 border-b border-gray-100 dark:border-gray-800">
+              <span className="text-xs font-bold uppercase tracking-wider text-[#6B8F71]">
                 Class Overview
               </span>
               <button
                 type="button"
                 onClick={() => setDetailSession(null)}
-                className="p-1 rounded-lg text-[#6C7B72] hover:text-[#29352F] dark:hover:text-white"
+                className="p-1 rounded-lg text-gray-400 hover:text-gray-600"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             <div className="space-y-2">
-              <h2 className="font-outfit text-2xl font-semibold text-[#29352F] dark:text-[#E8EFE8]">
+              <h2 className="font-serif text-2xl font-bold text-gray-900 dark:text-white">
                 {detailSession.title}
               </h2>
-              <p className="font-figtree text-xs text-[#6C7B72] dark:text-[#A4B5A9]">
+              <p className="text-xs text-gray-500">
                 {detailSession.style} • {detailSession.level} • {detailSession.durationMin} mins
               </p>
             </div>
 
-            <p className="font-figtree text-sm text-[#29352F]/90 dark:text-[#E8EFE8]/90 leading-relaxed">
+            <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
               {detailSession.description}
             </p>
 
             {detailSession.benefits && detailSession.benefits.length > 0 && (
               <div className="space-y-2">
-                <h4 className="font-outfit text-[11px] font-bold uppercase tracking-[0.2em] text-[#607B6A]">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-gray-900 dark:text-white">
                   Key Benefits
                 </h4>
-                <ul className="space-y-1.5 text-xs text-[#6C7B72] dark:text-[#A4B5A9]">
+                <ul className="space-y-1.5 text-xs text-gray-600 dark:text-gray-400">
                   {detailSession.benefits.map((b: string, i: number) => (
                     <li key={i} className="flex items-center gap-2">
-                      <Sparkles className="w-3.5 h-3.5 text-[#47664A]" />
+                      <Sparkles className="w-3.5 h-3.5 text-[#6B8F71]" />
                       <span>{b}</span>
                     </li>
                   ))}
@@ -389,9 +389,9 @@ export default function SchedulePage() {
             )}
 
             {/* Instructor Mini Bio */}
-            <div className="p-4 rounded-xl bg-white dark:bg-[#1A2A21] border border-[#D1DBCF] dark:border-[#283E31] space-y-2">
+            <div className="p-4 rounded-xl bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-800 space-y-2">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-[#E1EDDD] overflow-hidden">
+                <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden">
                   <img
                     src={detailSession.instructor.avatarUrl || "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=200"}
                     alt={detailSession.instructor.name}
@@ -399,21 +399,21 @@ export default function SchedulePage() {
                   />
                 </div>
                 <div>
-                  <p className="font-outfit text-xs font-semibold text-[#29352F] dark:text-[#E8EFE8]">
+                  <p className="text-xs font-bold text-gray-900 dark:text-white">
                     {detailSession.instructor.name}
                   </p>
-                  <p className="font-figtree text-[11px] text-[#6C7B72] dark:text-[#A4B5A9]">⭐ {detailSession.instructor.rating.toFixed(1)} Instructor</p>
+                  <p className="text-[11px] text-gray-500">⭐ {detailSession.instructor.rating.toFixed(1)} Instructor</p>
                 </div>
               </div>
               {detailSession.instructor.bio && (
-                <p className="font-figtree text-xs text-[#6C7B72] dark:text-[#A4B5A9] italic">
+                <p className="text-xs text-gray-600 dark:text-gray-400 italic">
                   &ldquo;{detailSession.instructor.bio}&rdquo;
                 </p>
               )}
             </div>
 
-            <div className="pt-4 border-t border-[#D1DBCF] dark:border-[#283E31] flex items-center justify-between">
-              <span className="font-figtree text-xs text-[#6C7B72] dark:text-[#A4B5A9]">
+            <div className="pt-4 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between">
+              <span className="text-xs text-gray-500">
                 Starts {formatDate(detailSession.startsAt)} at {formatTime(detailSession.startsAt)}
               </span>
               <Button
@@ -422,7 +422,7 @@ export default function SchedulePage() {
                   setBookingSession(detailSession);
                   setDetailSession(null);
                 }}
-                className="bg-[#47664A] hover:bg-[#3B563E] text-white rounded-xl text-xs font-semibold px-4 py-2 font-figtree"
+                className="bg-[#233D32] hover:bg-[#6B8F71] text-white rounded-xl text-xs font-semibold px-4 py-2"
               >
                 Continue to Book
               </Button>

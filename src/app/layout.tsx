@@ -14,6 +14,8 @@ const figtree = Figtree({
   display: "swap",
 });
 
+import { ThemeProvider } from "@/components/theme/ThemeProvider";
+
 export const metadata: Metadata = {
   title: "ZenFlow | Premium Yoga & Mindfulness Platform",
   description:
@@ -28,10 +30,11 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={`${outfit.variable} ${figtree.variable} h-full antialiased scroll-smooth`}
     >
-      <body className="min-h-full flex flex-col bg-[#F8F7F2] text-[#292D2A] font-sans">
-        {children}
+      <body className="min-h-full flex flex-col bg-[var(--bg-canvas)] text-[var(--text-primary)] font-sans">
+        <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
   );

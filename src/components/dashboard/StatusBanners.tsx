@@ -138,21 +138,21 @@ export function StatusBanners({
       {banners.map((b) => (
         <div
           key={b.id}
-          className={`flex items-center justify-between gap-3 px-4 py-3 rounded-xl text-xs sm:text-sm font-medium border font-figtree ${
+          className={`flex items-center justify-between gap-3 px-4 py-3 rounded-xl text-xs sm:text-sm font-medium border ${
             b.type === "critical"
-              ? "bg-[#FBF1F0] border-[#F0D5D3] text-[#A63A36]"
+              ? "bg-rose-50 border-rose-200 text-rose-900 dark:bg-rose-950/40 dark:border-rose-900 dark:text-rose-200"
               : b.type === "warning"
-              ? "bg-[#FAF2E6] border-[#EDD8B6] text-[#8C6228]"
-              : "bg-[#EDF5EE] border-[#CDE5D1] text-[#2D5A37]"
+              ? "bg-amber-50 border-amber-200 text-amber-900 dark:bg-amber-950/40 dark:border-amber-900 dark:text-amber-200"
+              : "bg-blue-50 border-blue-200 text-blue-900 dark:bg-blue-950/40 dark:border-blue-900 dark:text-blue-200"
           }`}
         >
           <div className="flex items-center gap-2.5 min-w-0">
             {b.type === "critical" ? (
-              <AlertCircle className="w-4 h-4 shrink-0 text-[#C2413C]" />
+              <AlertCircle className="w-4 h-4 shrink-0 text-rose-600 dark:text-rose-400" />
             ) : b.type === "warning" ? (
-              <AlertTriangle className="w-4 h-4 shrink-0 text-[#B88235]" />
+              <AlertTriangle className="w-4 h-4 shrink-0 text-amber-600 dark:text-amber-400" />
             ) : (
-              <Clock className="w-4 h-4 shrink-0 text-[#47664A]" />
+              <Clock className="w-4 h-4 shrink-0 text-blue-600 dark:text-blue-400" />
             )}
             <span className="truncate">{b.title}</span>
           </div>

@@ -106,21 +106,21 @@ export default function LiveClassRoomPage() {
   // ─── 1. Pre-Join Check Screen ──────────────────────────────────────────
   if (inPreJoin) {
     return (
-      <div className="max-w-xl mx-auto py-8 px-4 space-y-6 animate-in fade-in font-figtree">
+      <div className="max-w-xl mx-auto py-8 px-4 space-y-6 animate-in fade-in">
         <div className="text-center space-y-2">
-          <span className="font-outfit text-[11px] font-bold uppercase tracking-[0.22em] text-[#607B6A]">
+          <span className="text-xs font-bold uppercase tracking-wider text-[#6B8F71]">
             Pre-Flight Room Check
           </span>
-          <h1 className="font-outfit text-2xl sm:text-3xl font-semibold text-[#29352F] dark:text-[#E8EFE8]">
+          <h1 className="font-serif text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
             Audio & Video Setup
           </h1>
-          <p className="text-xs text-[#6C7B72] dark:text-[#A4B5A9] font-figtree">
+          <p className="text-xs text-gray-500">
             Check your camera angle and microphone before joining your instructor on the mat.
           </p>
         </div>
 
         {/* Video Preview Frame */}
-        <div className="relative aspect-video rounded-3xl bg-gray-950 overflow-hidden shadow-xl border border-[#D1DBCF] dark:border-gray-800 flex items-center justify-center">
+        <div className="relative aspect-video rounded-3xl bg-gray-950 overflow-hidden shadow-xl border border-gray-800 flex items-center justify-center">
           {isCamOn ? (
             <video
               ref={videoRef}
@@ -160,29 +160,29 @@ export default function LiveClassRoomPage() {
         </div>
 
         {/* Status Indicators */}
-        <div className="flex items-center justify-between p-4 rounded-2xl bg-white dark:bg-[#18261E] border border-[#D1DBCF] dark:border-[#283E31] text-xs text-[#6C7B72] dark:text-[#A4B5A9]">
+        <div className="flex items-center justify-between p-4 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 text-xs text-gray-600 dark:text-gray-400">
           <div className="flex items-center gap-2">
-            <Wifi className="w-4 h-4 text-[#47664A] dark:text-[#8BB394]" />
+            <Wifi className="w-4 h-4 text-emerald-500" />
             <span>Connection: HD Ready (54 Mbps)</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-[#47664A] animate-ping" />
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
             <span>Instructor is in the studio</span>
           </div>
         </div>
 
         {/* Join button */}
-        <div className="flex items-center justify-end gap-3 pt-2 font-figtree">
+        <div className="flex items-center justify-end gap-3 pt-2">
           <Link
             href="/dashboard"
-            className="px-4 py-2.5 rounded-xl text-xs font-semibold text-[#6C7B72] hover:bg-[#FAF6EE] dark:hover:bg-[#1A2A21] transition-colors"
+            className="px-4 py-2.5 rounded-xl text-xs font-semibold text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
           >
             Back to Dashboard
           </Link>
           <Button
             type="button"
             onClick={() => setInPreJoin(false)}
-            className="bg-[#47664A] hover:bg-[#3B563E] text-white rounded-xl text-sm font-semibold px-6 py-3 shadow-xs"
+            className="bg-[#233D32] hover:bg-[#6B8F71] text-white rounded-xl text-sm font-bold px-6 py-3 shadow-md"
           >
             Join Live Class Now 🧘
           </Button>
@@ -194,24 +194,24 @@ export default function LiveClassRoomPage() {
   // ─── 2. Post-Class Feedback Sheet ──────────────────────────────────────
   if (showPostClassSheet) {
     return (
-      <div className="max-w-md mx-auto py-12 px-4 space-y-6 text-center animate-in zoom-in-95 font-figtree">
-        <div className="w-14 h-14 rounded-full bg-[#E1EDDD] text-[#35523E] flex items-center justify-center mx-auto">
+      <div className="max-w-md mx-auto py-12 px-4 space-y-6 text-center animate-in zoom-in-95">
+        <div className="w-14 h-14 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center mx-auto">
           <CheckCircle2 className="w-8 h-8" />
         </div>
 
         <div className="space-y-1">
-          <h2 className="font-outfit text-2xl font-semibold text-[#29352F] dark:text-[#E8EFE8]">
+          <h2 className="font-serif text-2xl font-bold text-gray-900 dark:text-white">
             Class Completed! How Was Your Practice?
           </h2>
-          <p className="text-xs text-[#6C7B72] dark:text-[#A4B5A9]">
+          <p className="text-xs text-gray-500">
             Take a moment to record your mindfulness check-in for your streak.
           </p>
         </div>
 
-        <div className="p-6 rounded-2xl bg-white dark:bg-[#18261E] border border-[#D1DBCF] dark:border-[#283E31] space-y-5 text-left">
+        <div className="p-6 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 space-y-5 text-left">
           {/* Post-Class Mood (1-5) */}
           <div className="space-y-2">
-            <span className="text-xs font-semibold text-[#29352F] dark:text-[#E8EFE8]">
+            <span className="text-xs font-semibold text-gray-700 dark:text-gray-300">
               Mood after class (1 = Low, 5 = Blissful):
             </span>
             <div className="flex justify-between gap-2">
@@ -222,8 +222,8 @@ export default function LiveClassRoomPage() {
                   onClick={() => setPostMood(val)}
                   className={`w-10 h-10 rounded-xl text-xs font-bold transition-all ${
                     postMood === val
-                      ? "bg-[#47664A] text-white scale-110 shadow-xs"
-                      : "bg-[#FAF6EE] dark:bg-[#1A2A21] border border-[#D1DBCF] dark:border-[#283E31] text-[#29352F] dark:text-[#E8EFE8]"
+                      ? "bg-[#6B8F71] text-white scale-110 shadow-xs"
+                      : "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400"
                   }`}
                 >
                   {val === 1 ? "😔" : val === 3 ? "😐" : val === 5 ? "✨" : val}
@@ -234,7 +234,7 @@ export default function LiveClassRoomPage() {
 
           {/* Rating (1-5 Stars) */}
           <div className="space-y-2">
-            <span className="text-xs font-semibold text-[#29352F] dark:text-[#E8EFE8]">
+            <span className="text-xs font-semibold text-gray-700 dark:text-gray-300">
               Rate Instructor & Session:
             </span>
             <div className="flex gap-2">
@@ -253,7 +253,7 @@ export default function LiveClassRoomPage() {
 
           {/* Optional Reflection Note */}
           <div className="space-y-1.5">
-            <span className="text-xs font-semibold text-[#29352F] dark:text-[#E8EFE8]">
+            <span className="text-xs font-semibold text-gray-700 dark:text-gray-300">
               Personal Reflection / Comment:
             </span>
             <textarea
@@ -261,14 +261,14 @@ export default function LiveClassRoomPage() {
               onChange={(e) => setPostComment(e.target.value)}
               placeholder="e.g. Felt deep hip release in Pigeon pose, great pace..."
               rows={3}
-              className="w-full text-xs p-3 rounded-xl border border-[#D1DBCF] dark:border-[#283E31] bg-[#FAF6EE] dark:bg-[#1A2A21] text-[#29352F] dark:text-[#E8EFE8] focus:outline-none focus:ring-1 focus:ring-[#47664A]"
+              className="w-full text-xs p-3 rounded-xl border border-gray-200 dark:border-gray-800 bg-transparent focus:outline-none focus:ring-1 focus:ring-[#6B8F71]"
             />
           </div>
 
           <Button
             type="button"
             onClick={submitPostClassReview}
-            className="w-full bg-[#47664A] hover:bg-[#3B563E] text-white rounded-xl text-xs font-semibold py-3 shadow-xs"
+            className="w-full bg-[#233D32] hover:bg-[#6B8F71] text-white rounded-xl text-xs font-bold py-3"
           >
             Save Journal & Finish
           </Button>
