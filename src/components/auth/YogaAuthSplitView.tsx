@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -53,6 +53,19 @@ export function YogaAuthSplitView({ initialTab = "signin" }: YogaAuthSplitViewPr
   const [resetEmail, setResetEmail] = useState("");
   const [resetSent, setResetSent] = useState(false);
   const [resetLoading, setResetLoading] = useState(false);
+
+  // Auto-detect verified param from email-verified redirect
+  useEffect(() => {
+    const verified = searchParams?.get("verified");
+    const emailParam = searchParams?.get("email");
+    if (emailParam) {
+      setSignInEmail(emailParam);
+    }
+    if (verified === "true") {
+      setSuccessMessage("Your email has been successfully verified! Please sign in with your password.");
+      setActiveTab("signin");
+    }
+  }, [searchParams]);
 
   // Password Strength calculation for Sign Up
   const passwordStrength = useMemo(() => {
@@ -174,7 +187,7 @@ export function YogaAuthSplitView({ initialTab = "signin" }: YogaAuthSplitViewPr
           data: {
             full_name: signUpName.trim(),
           },
-          emailRedirectTo: `${window.location.origin}/auth/callback?next=/dashboard`,
+          emailRedirectTo: `${window.location.origin}/auth/callback?next=/email-verified`,
         },
       });
 
