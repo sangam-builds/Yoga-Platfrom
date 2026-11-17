@@ -218,7 +218,10 @@ export default function MembershipPage() {
       }
 
       // 2. Check if using local demo credentials or if official SDK is unavailable
-      const isDemoMode = data.keyId?.startsWith("rzp_test_zenflowdemo") || !isRazorpayLoaded;
+      const isDemoMode =
+        data.orderId?.startsWith("order_test_") ||
+        data.keyId?.startsWith("rzp_test_zenflowdemo") ||
+        !isRazorpayLoaded;
       if (isDemoMode || !(window as any)?.Razorpay) {
         setSimulatorOrder({
           orderId: data.orderId,

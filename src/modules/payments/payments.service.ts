@@ -209,8 +209,20 @@ export class PaymentsService {
       throw new PaymentError("Invalid payment signature verification.", 400, "BAD_SIGNATURE");
     }
 
-    // 3. Fetch verified payment status from Razorpay
-    const providerPayment = await provider.fetchPayment(paymentId);
+    // 3. Fetch verified payment status from Razorpay (or mock provider payment for test simulator)
+    const providerPayment = paymentId.startsWith("pay_test_")
+      ? {
+          id: paymentId,
+          orderId,
+          amount: payment.amount,
+          currency: payment.currency,
+          status: "captured" as const,
+          method: "card",
+          captured: true,
+          failureReason: null,
+          raw: { simulated: true },
+        }
+      : await provider.fetchPayment(paymentId);
 
     // Verify amount and currency match stored order
     if (providerPayment.amount !== payment.amount || providerPayment.currency !== payment.currency) {
