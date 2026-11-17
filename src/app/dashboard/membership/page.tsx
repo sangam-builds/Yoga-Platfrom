@@ -268,8 +268,9 @@ export default function MembershipPage() {
           },
         },
         prefill: {
-          name: "ZenFlow Student",
-          email: "student@zenflow.yoga",
+          name: subData?.user?.name || "ZenFlow Student",
+          email: subData?.user?.email || "student@zenflow.yoga",
+          contact: "9876543210",
         },
         theme: {
           color: "#47664A",

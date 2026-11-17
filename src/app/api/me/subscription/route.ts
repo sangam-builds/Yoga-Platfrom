@@ -35,6 +35,11 @@ export async function GET() {
     };
 
     return NextResponse.json({
+      user: {
+        id: auth.dbUser.id,
+        email: auth.dbUser.email,
+        name: auth.dbUser.name,
+      },
       subscription: {
         id: "trial_sub",
         status: "TRIALING",
@@ -77,6 +82,11 @@ export async function GET() {
   };
 
   return NextResponse.json({
+    user: {
+      id: auth.dbUser.id,
+      email: auth.dbUser.email,
+      name: auth.dbUser.name,
+    },
     subscription: {
       id: subscription.id,
       status: subscription.status,
