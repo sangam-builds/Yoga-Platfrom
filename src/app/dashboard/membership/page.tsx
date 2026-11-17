@@ -252,6 +252,19 @@ export default function MembershipPage() {
         modal: {
           ondismiss: () => {
             setProcessingPlanId(null);
+            // Notify backend that user closed checkout without completing
+            fetch("/api/checkout/fail", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                orderId: data.orderId,
+                failureReason: "Checkout modal dismissed before completion.",
+              }),
+            })
+              .then(() => {
+                queryClient.invalidateQueries({ queryKey: ["student-billing-history"] });
+              })
+              .catch(() => {});
           },
         },
         prefill: {
@@ -266,12 +279,28 @@ export default function MembershipPage() {
       try {
         const razorpayInstance = new (window as any).Razorpay(options);
         razorpayInstance.on("payment.failed", (failedRes: any) => {
+          const failDesc = failedRes.error?.description || "Payment failed or was declined.";
           setPaymentResult({
             status: "FAILED",
-            errorMessage: failedRes.error?.description || "Payment failed or was declined.",
+            errorMessage: failDesc,
           });
           setIsResultModalOpen(true);
           setProcessingPlanId(null);
+
+          // Update payment record in database to FAILED so it does not stay PENDING
+          fetch("/api/checkout/fail", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              orderId: data.orderId,
+              paymentId: failedRes.error?.metadata?.payment_id,
+              failureReason: failDesc,
+            }),
+          })
+            .then(() => {
+              queryClient.invalidateQueries({ queryKey: ["student-billing-history"] });
+            })
+            .catch(() => {});
         });
         razorpayInstance.open();
       } catch (sdkErr) {
@@ -286,7 +315,7 @@ export default function MembershipPage() {
         setIsSimulatorOpen(true);
       }
     } catch (err: any) {
-      toast.error("Error", "An unexpected error occurred during checkout.");
+      toast.error("Checkout Failed", err.message || "An unexpected error occurred during checkout.");
       setProcessingPlanId(null);
     }
   };

@@ -107,21 +107,11 @@ export class RazorpayProvider implements PaymentProvider {
     } catch (err: unknown) {
       const errorObj = err as { description?: string; message?: string; statusCode?: number };
 
-      // Graceful fallback for test mode if Razorpay API rejected test keys
-      if (this.mode === "TEST" && (errorObj.statusCode === 401 || errorObj.statusCode === 400)) {
-        const mockOrderId = `order_test_${Date.now().toString(36)}_${crypto.randomBytes(3).toString("hex")}`;
-        logger.warn(
-          { mockOrderId, originalError: errorObj.description || errorObj.message },
-          "Razorpay test credentials rejected by API; falling back to test simulator order"
-        );
-        return {
-          id: mockOrderId,
-          amount: Math.round(input.amount),
-          currency: input.currency || "INR",
-          receipt: input.receipt,
-          status: "created",
-          createdAt: Math.floor(Date.now() / 1000),
-        };
+      if (errorObj.statusCode === 401) {
+        const msg =
+          "Razorpay Authentication Failed: Your Key ID or Key Secret is invalid or expired. Please check/regenerate your API Key in Razorpay Dashboard and update .env.local";
+        logger.error({ keyId: this.keyId.slice(0, 10) }, msg);
+        throw new PaymentError(msg, 401, "INVALID_CREDENTIALS");
       }
 
       const message = errorObj.description || errorObj.message || "Failed to create Razorpay order";
