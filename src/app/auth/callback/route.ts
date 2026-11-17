@@ -13,6 +13,14 @@ export async function GET(request: Request) {
   const cookieStore = await cookies();
   const supabase = createClient(cookieStore);
 
+  // Check if Supabase returned an error in the redirect URL
+  const errorDescription = searchParams.get("error_description") || searchParams.get("error");
+  if (errorDescription) {
+    return NextResponse.redirect(
+      `${origin}/email-verified?error=${encodeURIComponent(errorDescription)}`
+    );
+  }
+
   // 1. PKCE Code Exchange flow
   if (code) {
     const { data, error } = await supabase.auth.exchangeCodeForSession(code);

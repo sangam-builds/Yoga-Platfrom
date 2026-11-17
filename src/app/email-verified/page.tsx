@@ -60,11 +60,16 @@ function EmailVerifiedContent() {
             const accessToken = params.get("access_token");
             if (accessToken) {
               setIsVerifying(true);
-              const { data: userData } = await supabase.auth.getUser(accessToken);
-              if (userData?.user?.email) {
-                setEmail(userData.user.email);
+              try {
+                const { data: userData } = await supabase.auth.getUser(accessToken);
+                if (userData?.user?.email) {
+                  setEmail(userData.user.email);
+                }
+              } catch (err) {
+                console.warn("Could not retrieve user from hash token:", err);
+              } finally {
+                setIsVerifying(false);
               }
-              setIsVerifying(false);
             }
           }
         }

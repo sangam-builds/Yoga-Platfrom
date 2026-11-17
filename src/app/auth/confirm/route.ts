@@ -8,6 +8,13 @@ export async function GET(request: NextRequest) {
   const token_hash = searchParams.get("token_hash");
   const type = searchParams.get("type") as EmailOtpType | null;
   const next = searchParams.get("next") ?? "/email-verified";
+  const errorDescription = searchParams.get("error_description") || searchParams.get("error");
+
+  if (errorDescription) {
+    return NextResponse.redirect(
+      `${origin}/email-verified?error=${encodeURIComponent(errorDescription)}`
+    );
+  }
 
   if (token_hash && type) {
     const cookieStore = await cookies();

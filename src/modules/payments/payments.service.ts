@@ -38,10 +38,6 @@ export class PaymentsService {
       throw new NotFoundError("Selected yoga plan is no longer available.");
     }
 
-    if (plan.priceInr <= 0) {
-      throw new BadRequestError("Free trial does not require a payment gateway checkout.");
-    }
-
     // Determine target price in paise based on requested interval
     let basePricePaise = plan.priceInr;
     if (billingInterval === "YEAR" && plan.interval !== "YEAR") {
@@ -71,8 +67,44 @@ export class PaymentsService {
     }
 
     // Minimum charge for Razorpay checkout is 100 paise (₹1.00)
-    // If payable amount is 0 after full discount, we handle direct zero-cost activation
+    // If payable amount is 0 (Free Trial or 100% coupon), activate directly
     if (payablePaise === 0) {
+      await runTransaction(async (tx) => {
+        const dates = subscriptionsService.calculatePeriodDates(plan);
+        const isTrial = plan.type === "TRIAL";
+        const credits = plan.credits ?? (isTrial ? 5 : null);
+
+        const sub = await subscriptionsRepository.createOrUpdateSubscription(tx, {
+          userId,
+          planId: plan.id,
+          status: isTrial ? "TRIALING" : "ACTIVE",
+          currentPeriodStart: dates.start,
+          currentPeriodEnd: dates.end,
+          trialEndsAt: isTrial ? dates.end : null,
+          creditsRemaining: credits,
+          cancelAtPeriodEnd: false,
+        });
+
+        // Record coupon redemption if applicable
+        if (couponId) {
+          await tx.couponRedemption.create({
+            data: {
+              couponId,
+              userId,
+            },
+          });
+        }
+
+        // Log SubscriptionEvent
+        await subscriptionsRepository.recordSubscriptionEvent(tx, {
+          userId,
+          subscriptionId: sub.id,
+          type: isTrial ? "TRIAL_STARTED" : "UPGRADE",
+          toPlanId: plan.id,
+          metadata: { zeroCost: true, reason: isTrial ? "free_trial" : "100_percent_discount" },
+        });
+      });
+
       return {
         isZeroCost: true,
         orderId: null,
