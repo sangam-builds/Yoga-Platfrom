@@ -113,15 +113,15 @@ export default function InstructorEarningsPage() {
   return (
     <div className="space-y-6 animate-in fade-in duration-200">
       {/* Top Banner */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-[#E9E2D0]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-[var(--border-hairline)]">
         <div>
-          <span className="text-[11px] font-mono uppercase tracking-wider text-[#6B8F71] font-semibold">
+          <span className="text-[11px] font-outfit uppercase tracking-widest text-[var(--primary-sage)] font-bold">
             Automated Settlement & RevShare
           </span>
-          <h1 className="font-serif text-2xl sm:text-3xl font-bold text-[#233D32]">
+          <h1 className="font-outfit text-2xl sm:text-3xl font-bold text-[var(--text-primary)] tracking-tight">
             Earnings & Payouts
           </h1>
-          <p className="text-xs sm:text-sm text-stone-600">
+          <p className="text-xs sm:text-sm text-[var(--text-muted)] font-figtree">
             Monthly teaching revenue share is computed directly from verified session attendance.
           </p>
         </div>
@@ -131,18 +131,18 @@ export default function InstructorEarningsPage() {
             size="sm"
             variant="outline"
             onClick={handleDownloadCsv}
-            className="text-xs gap-1.5 border-[#E9E2D0] bg-white text-stone-700"
+            className="text-xs gap-1.5 border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-primary)] hover:bg-[var(--bg-elevated)] cursor-pointer"
           >
-            <Download className="w-3.5 h-3.5 text-stone-500" />
+            <Download className="w-3.5 h-3.5 text-[var(--text-muted)]" />
             Download Statement (.CSV)
           </Button>
 
           <Button
             size="sm"
             onClick={() => setIsPayoutModalOpen(true)}
-            className="bg-[#233D32] hover:bg-[#1a2f26] text-white text-xs gap-1.5 shadow-xs"
+            className="bg-[var(--primary-sage)] hover:bg-[var(--primary-hover)] text-[var(--on-primary)] text-xs gap-1.5 shadow-xs cursor-pointer"
           >
-            <CreditCard className="w-3.5 h-3.5 text-amber-300" />
+            <CreditCard className="w-3.5 h-3.5 text-[var(--on-primary)]" />
             Payout Destination
           </Button>
         </div>
@@ -150,73 +150,73 @@ export default function InstructorEarningsPage() {
 
       {/* Summary KPI Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-[#233D32] text-white p-5 rounded-2xl shadow-xs space-y-2">
-          <div className="flex items-center justify-between text-[#A8C2AC]">
-            <span className="text-xs font-medium">Estimated This Month</span>
-            <DollarSign className="w-4 h-4 text-emerald-300" />
+        <div className="bg-[var(--primary-sage)] text-[var(--on-primary)] p-5 rounded-2xl shadow-xs space-y-2">
+          <div className="flex items-center justify-between text-[var(--on-primary)]/80">
+            <span className="text-xs font-figtree font-medium">Estimated This Month</span>
+            <DollarSign className="w-4 h-4 text-white" />
           </div>
-          <div className="font-serif text-2xl sm:text-3xl font-bold text-white">
+          <div className="font-outfit text-2xl sm:text-3xl font-bold text-white">
             {formatCurrency(summary.thisMonth)}
           </div>
-          <p className="text-[10px] text-[#A8C2AC]">
+          <p className="text-[11px] text-[var(--on-primary)]/80 font-figtree">
             Based on {summary.revenueSharePercent}% RevShare policy
           </p>
         </div>
 
-        <div className="bg-white p-5 rounded-2xl border border-[#E9E2D0] shadow-xs space-y-2">
-          <div className="flex items-center justify-between text-stone-500">
-            <span className="text-xs font-medium">Last Month Paid</span>
-            <CheckCircle className="w-4 h-4 text-emerald-600" />
+        <div className="bg-[var(--bg-surface)] p-5 rounded-2xl border border-[var(--border-subtle)] shadow-2xs space-y-2">
+          <div className="flex items-center justify-between text-[var(--text-muted)]">
+            <span className="text-xs font-figtree font-medium">Last Month Paid</span>
+            <CheckCircle className="w-4 h-4 text-[var(--primary-sage)]" />
           </div>
-          <div className="font-serif text-2xl sm:text-3xl font-bold text-[#233D32]">
+          <div className="font-outfit text-2xl sm:text-3xl font-bold text-[var(--text-primary)]">
             {formatCurrency(summary.lastMonth)}
           </div>
-          <p className="text-[10px] text-stone-400">Settled automatically</p>
+          <p className="text-[11px] text-[var(--text-subtle)] font-figtree">Settled automatically</p>
         </div>
 
-        <div className="bg-white p-5 rounded-2xl border border-[#E9E2D0] shadow-xs space-y-2">
-          <div className="flex items-center justify-between text-stone-500">
-            <span className="text-xs font-medium">Year to Date (YTD)</span>
-            <TrendingUp className="w-4 h-4 text-[#6B8F71]" />
+        <div className="bg-[var(--bg-surface)] p-5 rounded-2xl border border-[var(--border-subtle)] shadow-2xs space-y-2">
+          <div className="flex items-center justify-between text-[var(--text-muted)]">
+            <span className="text-xs font-figtree font-medium">Year to Date (YTD)</span>
+            <TrendingUp className="w-4 h-4 text-[var(--primary-sage)]" />
           </div>
-          <div className="font-serif text-2xl sm:text-3xl font-bold text-[#233D32]">
+          <div className="font-outfit text-2xl sm:text-3xl font-bold text-[var(--text-primary)]">
             {formatCurrency(summary.yearToDate)}
           </div>
-          <p className="text-[10px] text-stone-400">Cumulative earnings</p>
+          <p className="text-[11px] text-[var(--text-subtle)] font-figtree">Cumulative earnings</p>
         </div>
 
-        <div className="bg-white p-5 rounded-2xl border border-[#E9E2D0] shadow-xs space-y-2">
-          <div className="flex items-center justify-between text-stone-500">
-            <span className="text-xs font-medium">Payout Account</span>
-            <ShieldCheck className="w-4 h-4 text-blue-600" />
+        <div className="bg-[var(--bg-surface)] p-5 rounded-2xl border border-[var(--border-subtle)] shadow-2xs space-y-2">
+          <div className="flex items-center justify-between text-[var(--text-muted)]">
+            <span className="text-xs font-figtree font-medium">Payout Account</span>
+            <ShieldCheck className="w-4 h-4 text-[var(--info-teal)]" />
           </div>
-          <div className="text-xs font-mono font-bold text-stone-800 truncate">
+          <div className="text-xs font-mono font-bold text-[var(--text-primary)] truncate">
             {summary.payoutDetailsMasked || "Not Configured"}
           </div>
-          <p className="text-[10px] text-stone-400">AES-256 encrypted & masked</p>
+          <p className="text-[11px] text-[var(--text-subtle)] font-figtree">AES-256 encrypted & masked</p>
         </div>
       </div>
 
       {/* Session Earnings Breakdown (Section 5.9 of Spec) */}
-      <div className="bg-white p-5 rounded-2xl border border-[#E9E2D0] shadow-xs space-y-4">
+      <div className="bg-[var(--bg-surface)] p-5 rounded-2xl border border-[var(--border-subtle)] shadow-2xs space-y-4 font-figtree">
         <div className="flex items-center justify-between">
-          <h3 className="font-serif font-bold text-base text-[#233D32] flex items-center gap-2">
-            <Calendar className="w-4 h-4 text-[#6B8F71]" />
+          <h3 className="font-outfit font-bold text-base text-[var(--text-primary)] flex items-center gap-2">
+            <Calendar className="w-4 h-4 text-[var(--primary-sage)]" />
             Session Breakdown (This Month)
           </h3>
-          <span className="text-xs font-mono text-stone-500">
+          <span className="text-xs text-[var(--text-muted)]">
             Server computed: attendance × base rate × {summary.revenueSharePercent}%
           </span>
         </div>
 
         {sessions.length === 0 ? (
-          <p className="text-xs text-stone-500 italic p-6 text-center">
+          <p className="text-xs text-[var(--text-muted)] italic p-6 text-center">
             No completed sessions recorded yet for this billing cycle.
           </p>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-[#F8F7F2] text-stone-600 border-b border-[#E9E2D0] font-mono text-[11px] uppercase tracking-wider">
+              <thead className="bg-[var(--bg-elevated)] text-[var(--text-muted)] border-b border-[var(--border-hairline)] font-outfit text-[11px] uppercase tracking-wider">
                 <tr>
                   <th className="py-3 px-4">Date</th>
                   <th className="py-3 px-4">Class</th>
@@ -225,22 +225,22 @@ export default function InstructorEarningsPage() {
                   <th className="py-3 px-4 text-right">Instructor Share</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#E9E2D0]">
+              <tbody className="divide-y divide-[var(--border-hairline)]">
                 {sessions.map((item: any) => (
-                  <tr key={item.id} className="hover:bg-[#F8F7F2]/50 transition-colors">
-                    <td className="py-3 px-4 font-mono text-stone-600">
+                  <tr key={item.id} className="hover:bg-[var(--bg-elevated)]/50 transition-colors">
+                    <td className="py-3 px-4 text-[var(--text-muted)]">
                       {new Date(item.date).toLocaleDateString()}
                     </td>
-                    <td className="py-3 px-4 font-semibold text-stone-800">
+                    <td className="py-3 px-4 font-semibold text-[var(--text-primary)]">
                       {item.classTitle}
                     </td>
-                    <td className="py-3 px-4 font-mono font-semibold text-[#6B8F71]">
+                    <td className="py-3 px-4 font-semibold text-[var(--primary-sage)]">
                       {item.attendanceCount} practitioners
                     </td>
-                    <td className="py-3 px-4 font-mono text-stone-600">
+                    <td className="py-3 px-4 text-[var(--text-muted)]">
                       {item.revSharePercent}%
                     </td>
-                    <td className="py-3 px-4 font-mono font-bold text-stone-900 text-right">
+                    <td className="py-3 px-4 font-bold text-[var(--text-primary)] text-right">
                       {formatCurrency(item.amount)}
                     </td>
                   </tr>
@@ -254,17 +254,17 @@ export default function InstructorEarningsPage() {
       {/* Payout Details Step-Up Modal (Rule 7 of Spec) */}
       {isPayoutModalOpen && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 space-y-6 border border-[#E9E2D0] shadow-2xl animate-in zoom-in-95">
-            <div className="flex items-center justify-between pb-3 border-b border-[#E9E2D0]">
+          <div className="bg-[var(--bg-surface)] rounded-3xl max-w-md w-full p-6 sm:p-8 space-y-6 border border-[var(--border-subtle)] shadow-2xl animate-in zoom-in-95 font-figtree">
+            <div className="flex items-center justify-between pb-3 border-b border-[var(--border-hairline)]">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center">
+                <div className="w-8 h-8 rounded-xl bg-[var(--accent-amber-tint)] text-[var(--accent-amber)] flex items-center justify-center">
                   <Lock className="w-4 h-4" />
                 </div>
-                <h3 className="font-serif font-bold text-base text-[#233D32]">
+                <h3 className="font-outfit font-bold text-base text-[var(--text-primary)]">
                   Update Payout Destination
                 </h3>
               </div>
-              <button onClick={() => setIsPayoutModalOpen(false)} className="p-1 text-stone-400">
+              <button onClick={() => setIsPayoutModalOpen(false)} className="p-1 text-[var(--text-muted)] hover:text-[var(--text-primary)] cursor-pointer">
                 <X className="w-5 h-5" />
               </button>
             </div>
@@ -277,15 +277,15 @@ export default function InstructorEarningsPage() {
               className="space-y-4 text-xs"
             >
               <div>
-                <label className="block font-semibold text-stone-700 mb-1">Method</label>
+                <label className="block font-semibold text-[var(--text-primary)] mb-1">Method</label>
                 <div className="grid grid-cols-2 gap-2">
                   <button
                     type="button"
                     onClick={() => setAccountType("BANK_ACCOUNT")}
-                    className={`py-2 px-3 rounded-xl font-bold border ${
+                    className={`py-2 px-3 rounded-xl font-bold border transition-colors cursor-pointer ${
                       accountType === "BANK_ACCOUNT"
-                        ? "bg-[#6B8F71]/10 border-[#6B8F71] text-[#233D32]"
-                        : "border-stone-200 text-stone-600"
+                        ? "bg-[var(--sage-tint)] border-[var(--primary-sage)] text-[var(--primary-sage)]"
+                        : "border-[var(--border-subtle)] text-[var(--text-muted)] hover:bg-[var(--bg-elevated)]"
                     }`}
                   >
                     Direct Bank Transfer
@@ -293,10 +293,10 @@ export default function InstructorEarningsPage() {
                   <button
                     type="button"
                     onClick={() => setAccountType("UPI")}
-                    className={`py-2 px-3 rounded-xl font-bold border ${
+                    className={`py-2 px-3 rounded-xl font-bold border transition-colors cursor-pointer ${
                       accountType === "UPI"
-                        ? "bg-[#6B8F71]/10 border-[#6B8F71] text-[#233D32]"
-                        : "border-stone-200 text-stone-600"
+                        ? "bg-[var(--sage-tint)] border-[var(--primary-sage)] text-[var(--primary-sage)]"
+                        : "border-[var(--border-subtle)] text-[var(--text-muted)] hover:bg-[var(--bg-elevated)]"
                     }`}
                   >
                     UPI ID
@@ -305,7 +305,7 @@ export default function InstructorEarningsPage() {
               </div>
 
               <div>
-                <label className="block font-semibold text-stone-700 mb-1">
+                <label className="block font-semibold text-[var(--text-primary)] mb-1">
                   Account Holder Full Legal Name *
                 </label>
                 <input
@@ -314,25 +314,25 @@ export default function InstructorEarningsPage() {
                   value={accountHolder}
                   onChange={(e) => setAccountHolder(e.target.value)}
                   placeholder="As registered with your bank"
-                  className="w-full px-3 py-2 border border-[#E9E2D0] rounded-xl text-xs"
+                  className="w-full px-3 py-2 border border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-primary)] rounded-xl text-xs outline-none"
                 />
               </div>
 
               {accountType === "BANK_ACCOUNT" ? (
                 <>
                   <div>
-                    <label className="block font-semibold text-stone-700 mb-1">Bank Name</label>
+                    <label className="block font-semibold text-[var(--text-primary)] mb-1">Bank Name</label>
                     <input
                       type="text"
                       required
                       value={bankName}
                       onChange={(e) => setBankName(e.target.value)}
                       placeholder="e.g. HDFC Bank, ICICI Bank"
-                      className="w-full px-3 py-2 border border-[#E9E2D0] rounded-xl text-xs"
+                      className="w-full px-3 py-2 border border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-primary)] rounded-xl text-xs outline-none"
                     />
                   </div>
                   <div>
-                    <label className="block font-semibold text-stone-700 mb-1">
+                    <label className="block font-semibold text-[var(--text-primary)] mb-1">
                       Account Number *
                     </label>
                     <input
@@ -341,11 +341,11 @@ export default function InstructorEarningsPage() {
                       value={accountNumber}
                       onChange={(e) => setAccountNumber(e.target.value)}
                       placeholder="Enter full bank account number"
-                      className="w-full px-3 py-2 border border-[#E9E2D0] rounded-xl text-xs font-mono"
+                      className="w-full px-3 py-2 border border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-primary)] rounded-xl text-xs font-mono outline-none"
                     />
                   </div>
                   <div>
-                    <label className="block font-semibold text-stone-700 mb-1">
+                    <label className="block font-semibold text-[var(--text-primary)] mb-1">
                       IFSC Code *
                     </label>
                     <input
@@ -354,13 +354,13 @@ export default function InstructorEarningsPage() {
                       value={ifscCode}
                       onChange={(e) => setIfscCode(e.target.value.toUpperCase())}
                       placeholder="e.g. HDFC0001234"
-                      className="w-full px-3 py-2 border border-[#E9E2D0] rounded-xl text-xs font-mono"
+                      className="w-full px-3 py-2 border border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-primary)] rounded-xl text-xs font-mono outline-none"
                     />
                   </div>
                 </>
               ) : (
                 <div>
-                  <label className="block font-semibold text-stone-700 mb-1">
+                  <label className="block font-semibold text-[var(--text-primary)] mb-1">
                     UPI ID (Virtual Payment Address) *
                   </label>
                   <input
@@ -369,18 +369,18 @@ export default function InstructorEarningsPage() {
                     value={upiId}
                     onChange={(e) => setUpiId(e.target.value)}
                     placeholder="e.g. name@okhdfcbank"
-                    className="w-full px-3 py-2 border border-[#E9E2D0] rounded-xl text-xs font-mono"
+                    className="w-full px-3 py-2 border border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-primary)] rounded-xl text-xs font-mono outline-none"
                   />
                 </div>
               )}
 
               {/* Step-up Re-Authentication Passcode (Rule 7 & Page 12) */}
-              <div className="p-3.5 rounded-2xl bg-amber-50/60 border border-amber-200 space-y-2">
-                <div className="flex items-center gap-2 font-bold text-amber-900">
-                  <ShieldCheck className="w-4 h-4 text-amber-700" />
+              <div className="p-3.5 rounded-2xl bg-[var(--accent-amber-tint)] border border-[var(--accent-amber)]/30 space-y-2">
+                <div className="flex items-center gap-2 font-bold text-[var(--accent-amber)]">
+                  <ShieldCheck className="w-4 h-4 text-[var(--accent-amber)]" />
                   Step-Up Authentication
                 </div>
-                <p className="text-[11px] text-amber-800">
+                <p className="text-[11px] text-[var(--text-muted)]">
                   To protect against unauthorized diversion of teacher funds, enter your account password or step-up authorization code:
                 </p>
                 <input
@@ -389,18 +389,18 @@ export default function InstructorEarningsPage() {
                   value={stepUpPasscode}
                   onChange={(e) => setStepUpPasscode(e.target.value)}
                   placeholder="Enter current password to authorize..."
-                  className="w-full px-3 py-2 border border-amber-300 rounded-xl bg-white text-xs"
+                  className="w-full px-3 py-2 border border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-primary)] rounded-xl text-xs outline-none"
                 />
               </div>
 
-              <div className="flex items-center justify-end gap-3 pt-3 border-t border-[#E9E2D0]">
-                <Button variant="ghost" onClick={() => setIsPayoutModalOpen(false)}>
+              <div className="flex items-center justify-end gap-3 pt-3 border-t border-[var(--border-hairline)]">
+                <Button variant="ghost" onClick={() => setIsPayoutModalOpen(false)} className="text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-elevated)] cursor-pointer">
                   Cancel
                 </Button>
                 <Button
                   type="submit"
                   disabled={updatePayoutMutation.isPending || !stepUpPasscode}
-                  className="bg-[#233D32] hover:bg-[#1a2f26] text-white"
+                  className="bg-[var(--primary-sage)] hover:bg-[var(--primary-hover)] text-[var(--on-primary)] text-xs cursor-pointer shadow-xs"
                 >
                   {updatePayoutMutation.isPending ? "Encrypting & Saving..." : "Confirm & Save"}
                 </Button>

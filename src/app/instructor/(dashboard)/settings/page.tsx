@@ -24,44 +24,44 @@ export default function InstructorSettingsPage() {
 
   return (
     <div className="space-y-6 animate-in fade-in duration-200">
-      <div className="pb-2 border-b border-[#E9E2D0]">
-        <span className="text-[11px] font-mono uppercase tracking-wider text-[#6B8F71] font-semibold">
+      <div className="pb-2 border-b border-[var(--border-hairline)]">
+        <span className="text-[11px] font-outfit uppercase tracking-widest text-[var(--primary-sage)] font-bold">
           Security & Access Control
         </span>
-        <h1 className="font-serif text-2xl sm:text-3xl font-bold text-[#233D32]">
+        <h1 className="font-outfit text-2xl sm:text-3xl font-bold text-[var(--text-primary)] tracking-tight">
           Settings & Security
         </h1>
-        <p className="text-xs sm:text-sm text-stone-600">
+        <p className="text-xs sm:text-sm text-[var(--text-muted)] font-figtree">
           Manage two-factor authentication, active devices, and teacher account preferences.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 font-figtree">
         {/* Two-Factor Authentication (MFA Mandatory for Instructors) */}
-        <div className="bg-white p-6 rounded-2xl border border-[#E9E2D0] shadow-xs space-y-4">
-          <div className="flex items-center justify-between pb-2 border-b border-[#E9E2D0]">
+        <div className="bg-[var(--bg-surface)] p-6 rounded-2xl border border-[var(--border-subtle)] shadow-2xs space-y-4">
+          <div className="flex items-center justify-between pb-2 border-b border-[var(--border-hairline)]">
             <div className="flex items-center gap-2">
-              <ShieldCheck className="w-5 h-5 text-emerald-600" />
-              <h3 className="font-serif font-bold text-base text-[#233D32]">
+              <ShieldCheck className="w-5 h-5 text-[var(--primary-sage)]" />
+              <h3 className="font-outfit font-bold text-base text-[var(--text-primary)]">
                 Two-Factor Authentication (MFA)
               </h3>
             </div>
-            <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-100 text-emerald-800">
+            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[var(--sage-tint)] text-[var(--primary-sage)]">
               Active (Enforced)
             </span>
           </div>
 
-          <p className="text-xs text-stone-600 leading-relaxed">
+          <p className="text-xs text-[var(--text-muted)] leading-relaxed">
             MFA protects your instructor revenue share, payout accounts, and practitioner privacy. An authenticator app (Google Authenticator, 1Password) is paired with your account.
           </p>
 
-          <div className="p-3.5 rounded-xl bg-[#F8F7F2] border border-[#E9E2D0] flex items-center justify-between text-xs font-mono">
-            <span>Primary Method: TOTP App</span>
+          <div className="p-3.5 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-hairline)] flex items-center justify-between text-xs">
+            <span className="text-[var(--text-primary)] font-medium">Primary Method: TOTP App</span>
             <Button
               size="sm"
               variant="outline"
               onClick={() => toast.info("Recovery codes generated and saved.")}
-              className="text-xs border-[#E9E2D0]"
+              className="text-xs border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-primary)] hover:bg-[var(--bg-elevated)] cursor-pointer"
             >
               View Recovery Codes
             </Button>
@@ -69,17 +69,17 @@ export default function InstructorSettingsPage() {
         </div>
 
         {/* Password Update */}
-        <div className="bg-white p-6 rounded-2xl border border-[#E9E2D0] shadow-xs space-y-4">
-          <div className="flex items-center gap-2 pb-2 border-b border-[#E9E2D0]">
-            <Key className="w-5 h-5 text-[#6B8F71]" />
-            <h3 className="font-serif font-bold text-base text-[#233D32]">
+        <div className="bg-[var(--bg-surface)] p-6 rounded-2xl border border-[var(--border-subtle)] shadow-2xs space-y-4">
+          <div className="flex items-center gap-2 pb-2 border-b border-[var(--border-hairline)]">
+            <Key className="w-5 h-5 text-[var(--primary-sage)]" />
+            <h3 className="font-outfit font-bold text-base text-[var(--text-primary)]">
               Change Password
             </h3>
           </div>
 
           <form onSubmit={handleChangePassword} className="space-y-3 text-xs">
             <div>
-              <label className="block font-semibold text-stone-700 mb-1">
+              <label className="block font-semibold text-[var(--text-primary)] mb-1">
                 Current Password *
               </label>
               <input
@@ -87,12 +87,12 @@ export default function InstructorSettingsPage() {
                 required
                 value={currentPassword}
                 onChange={(e) => setCurrentPassword(e.target.value)}
-                className="w-full px-3 py-2 border border-[#E9E2D0] rounded-xl"
+                className="w-full px-3 py-2 border border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-primary)] rounded-xl outline-none focus:ring-2 focus:ring-[var(--primary-sage)]/30 focus:border-[var(--primary-sage)]"
               />
             </div>
 
             <div>
-              <label className="block font-semibold text-stone-700 mb-1">
+              <label className="block font-semibold text-[var(--text-primary)] mb-1">
                 New Secure Password *
               </label>
               <input
@@ -101,13 +101,13 @@ export default function InstructorSettingsPage() {
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 placeholder="Min. 8 characters"
-                className="w-full px-3 py-2 border border-[#E9E2D0] rounded-xl"
+                className="w-full px-3 py-2 border border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-primary)] rounded-xl outline-none focus:ring-2 focus:ring-[var(--primary-sage)]/30 focus:border-[var(--primary-sage)]"
               />
             </div>
 
             <Button
               type="submit"
-              className="w-full bg-[#233D32] hover:bg-[#1a2f26] text-white text-xs"
+              className="w-full bg-[var(--primary-sage)] hover:bg-[var(--primary-hover)] text-[var(--on-primary)] text-xs cursor-pointer shadow-xs"
             >
               Update Password
             </Button>

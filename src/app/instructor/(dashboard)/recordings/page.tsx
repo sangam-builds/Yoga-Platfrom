@@ -40,15 +40,15 @@ export default function InstructorRecordingsPage() {
 
   return (
     <div className="space-y-6 animate-in fade-in duration-200">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-[#E9E2D0]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-[var(--border-hairline)]">
         <div>
-          <span className="text-[11px] font-mono uppercase tracking-wider text-[#6B8F71] font-semibold">
+          <span className="text-[11px] font-outfit uppercase tracking-widest text-[var(--primary-sage)] font-bold">
             On-Demand Cloud Archive
           </span>
-          <h1 className="font-serif text-2xl sm:text-3xl font-bold text-[#233D32]">
+          <h1 className="font-outfit text-2xl sm:text-3xl font-bold text-[var(--text-primary)] tracking-tight">
             Session Recordings
           </h1>
-          <p className="text-xs sm:text-sm text-stone-600">
+          <p className="text-xs sm:text-sm text-[var(--text-muted)] font-figtree">
             Review recorded live sessions, manage on-demand student access, and publish replay editions.
           </p>
         </div>
@@ -58,37 +58,37 @@ export default function InstructorRecordingsPage() {
         {recordings.map((rec) => (
           <div
             key={rec.id}
-            className="bg-white rounded-2xl border border-[#E9E2D0] p-5 shadow-xs space-y-3 hover:border-[#6B8F71]/60 transition-all flex flex-col justify-between"
+            className="bg-[var(--bg-surface)] rounded-2xl border border-[var(--border-subtle)] p-5 shadow-2xs space-y-3 hover:border-[var(--primary-sage)]/60 transition-all flex flex-col justify-between font-figtree"
           >
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <span
-                  className={`px-2 py-0.5 rounded-full text-[10px] font-mono font-bold ${
+                  className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
                     rec.status === "READY"
-                      ? "bg-emerald-50 text-emerald-700"
-                      : "bg-amber-50 text-amber-700"
+                      ? "bg-[var(--sage-tint)] text-[var(--primary-sage)]"
+                      : "bg-[var(--accent-amber-tint)] text-[var(--accent-amber)]"
                   }`}
                 >
                   {rec.status}
                 </span>
-                <span className="text-[10px] font-mono text-stone-400">
+                <span className="text-[10px] text-[var(--text-subtle)]">
                   {new Date(rec.date).toLocaleDateString()}
                 </span>
               </div>
 
-              <h3 className="font-serif font-bold text-base text-[#233D32]">
+              <h3 className="font-outfit font-bold text-base text-[var(--text-primary)]">
                 {rec.title}
               </h3>
             </div>
 
-            <div className="pt-2 border-t border-[#E9E2D0] space-y-3">
-              <div className="flex items-center justify-between text-xs text-stone-600 font-mono">
+            <div className="pt-2 border-t border-[var(--border-hairline)] space-y-3">
+              <div className="flex items-center justify-between text-xs text-[var(--text-muted)]">
                 <span className="flex items-center gap-1">
-                  <Clock className="w-3.5 h-3.5 text-[#6B8F71]" />
+                  <Clock className="w-3.5 h-3.5 text-[var(--primary-sage)]" />
                   {rec.durationMin} mins
                 </span>
                 <span className="flex items-center gap-1">
-                  <Eye className="w-3.5 h-3.5 text-stone-400" />
+                  <Eye className="w-3.5 h-3.5 text-[var(--text-subtle)]" />
                   {rec.views} on-demand views
                 </span>
               </div>
@@ -97,9 +97,9 @@ export default function InstructorRecordingsPage() {
                 size="sm"
                 variant="outline"
                 onClick={() => toast.info("Recording playback preview launched.")}
-                className="w-full text-xs border-[#E9E2D0] hover:border-[#6B8F71] gap-1.5"
+                className="w-full text-xs border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-primary)] hover:bg-[var(--bg-elevated)] hover:border-[var(--primary-sage)] gap-1.5 cursor-pointer"
               >
-                <Play className="w-3 h-3 fill-current text-[#6B8F71]" />
+                <Play className="w-3 h-3 fill-current text-[var(--primary-sage)]" />
                 Preview Video
               </Button>
             </div>

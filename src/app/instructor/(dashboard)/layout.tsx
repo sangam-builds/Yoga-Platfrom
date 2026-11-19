@@ -23,7 +23,7 @@ export default async function InstructorDashboardLayout({
   return (
     <QueryProvider>
       <ToastProvider>
-        <div className="min-h-screen bg-[#F8F7F2] flex">
+        <div className="min-h-screen bg-[var(--bg-canvas)] text-[var(--text-primary)] flex antialiased">
           {/* Sidebar (Desktop & Drawer) */}
           <InstructorSidebar />
 
@@ -35,7 +35,7 @@ export default async function InstructorDashboardLayout({
               timezone={profile.timezone}
             />
 
-            <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto space-y-6">
+            <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl 2xl:max-w-[1600px] w-full mx-auto space-y-6">
               {/* Always-Visible Next Session Bar */}
               <NextSessionBar />
 

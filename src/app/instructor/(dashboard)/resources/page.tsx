@@ -51,40 +51,40 @@ export default function InstructorResourcesPage() {
 
   return (
     <div className="space-y-6 animate-in fade-in duration-200">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-[#E9E2D0]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-[var(--border-hairline)]">
         <div>
-          <span className="text-[11px] font-mono uppercase tracking-wider text-[#6B8F71] font-semibold">
+          <span className="text-[11px] font-outfit uppercase tracking-widest text-[var(--primary-sage)] font-bold">
             Teaching Tools & Sequences
           </span>
-          <h1 className="font-serif text-2xl sm:text-3xl font-bold text-[#233D32]">
+          <h1 className="font-outfit text-2xl sm:text-3xl font-bold text-[var(--text-primary)] tracking-tight">
             Curriculum & Resources
           </h1>
-          <p className="text-xs sm:text-sm text-stone-600">
+          <p className="text-xs sm:text-sm text-[var(--text-muted)] font-figtree">
             Access Sanskrit pose encyclopedia, build reusable lesson plan sequences, and attach playlists.
           </p>
         </div>
 
-        <div className="flex items-center gap-2 bg-white p-1 rounded-2xl border border-[#E9E2D0] self-start sm:self-auto">
+        <div className="flex items-center gap-2 bg-[var(--bg-surface)] p-1 rounded-2xl border border-[var(--border-subtle)] self-start sm:self-auto shadow-2xs font-figtree">
           <button
             onClick={() => setActiveTab("poses")}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold ${
-              activeTab === "poses" ? "bg-[#6B8F71] text-white shadow-2xs" : "text-stone-600"
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+              activeTab === "poses" ? "bg-[var(--primary-sage)] text-[var(--on-primary)] shadow-2xs" : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"
             }`}
           >
             Pose Library
           </button>
           <button
             onClick={() => setActiveTab("sequences")}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold ${
-              activeTab === "sequences" ? "bg-[#6B8F71] text-white shadow-2xs" : "text-stone-600"
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+              activeTab === "sequences" ? "bg-[var(--primary-sage)] text-[var(--on-primary)] shadow-2xs" : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"
             }`}
           >
             Sequences
           </button>
           <button
             onClick={() => setActiveTab("music")}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold ${
-              activeTab === "music" ? "bg-[#6B8F71] text-white shadow-2xs" : "text-stone-600"
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+              activeTab === "music" ? "bg-[var(--primary-sage)] text-[var(--on-primary)] shadow-2xs" : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"
             }`}
           >
             Playlists
@@ -95,13 +95,13 @@ export default function InstructorResourcesPage() {
       {activeTab === "poses" && (
         <div className="space-y-4">
           <div className="relative max-w-sm">
-            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-stone-400" />
+            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-subtle)]" />
             <input
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search pose in English or Sanskrit..."
-              className="w-full pl-9 pr-4 py-2 text-xs bg-white border border-[#E9E2D0] rounded-xl focus:ring-2 focus:ring-[#6B8F71]/30"
+              className="w-full pl-9 pr-4 py-2 text-xs bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-[var(--text-primary)] placeholder:text-[var(--text-subtle)] rounded-xl focus:ring-2 focus:ring-[var(--primary-sage)]/30 focus:border-[var(--primary-sage)] outline-none font-figtree"
             />
           </div>
 
@@ -109,21 +109,21 @@ export default function InstructorResourcesPage() {
             {samplePoses.map((pose) => (
               <div
                 key={pose.english}
-                className="bg-white p-5 rounded-2xl border border-[#E9E2D0] shadow-xs space-y-2 hover:border-[#6B8F71]/60 transition-all"
+                className="bg-[var(--bg-surface)] p-5 rounded-2xl border border-[var(--border-subtle)] shadow-2xs space-y-2 hover:border-[var(--primary-sage)]/60 transition-all font-figtree"
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#6B8F71]/10 text-[#6B8F71] font-bold">
+                  <span className="text-[10px] font-figtree px-2.5 py-0.5 rounded-full bg-[var(--sage-tint)] text-[var(--primary-sage)] font-bold">
                     {pose.level}
                   </span>
-                  <BookOpen className="w-4 h-4 text-stone-400" />
+                  <BookOpen className="w-4 h-4 text-[var(--text-subtle)]" />
                 </div>
-                <h3 className="font-serif font-bold text-base text-[#233D32]">
+                <h3 className="font-outfit font-bold text-base text-[var(--text-primary)]">
                   {pose.english}
                 </h3>
-                <p className="text-xs font-serif italic text-stone-500">
+                <p className="text-xs font-outfit italic text-[var(--text-muted)]">
                   {pose.sanskrit}
                 </p>
-                <p className="text-xs text-stone-600 leading-relaxed pt-1 border-t border-[#E9E2D0]">
+                <p className="text-xs text-[var(--text-muted)] leading-relaxed pt-1 border-t border-[var(--border-hairline)]">
                   {pose.benefits}
                 </p>
               </div>
@@ -134,20 +134,20 @@ export default function InstructorResourcesPage() {
 
       {activeTab === "sequences" && (
         <div className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 font-figtree">
             {sequences.map((seq) => (
-              <div key={seq.title} className="bg-white p-5 rounded-2xl border border-[#E9E2D0] shadow-xs space-y-3">
-                <div className="flex items-center justify-between text-xs font-mono text-stone-500">
-                  <span>{seq.style}</span>
-                  <span>{seq.duration}</span>
+              <div key={seq.title} className="bg-[var(--bg-surface)] p-5 rounded-2xl border border-[var(--border-subtle)] shadow-2xs space-y-3">
+                <div className="flex items-center justify-between text-xs text-[var(--text-muted)]">
+                  <span className="font-medium text-[var(--text-primary)]">{seq.style}</span>
+                  <span className="text-[var(--text-subtle)]">{seq.duration}</span>
                 </div>
-                <h3 className="font-serif font-bold text-base text-[#233D32]">{seq.title}</h3>
-                <p className="text-xs text-stone-600 font-mono">{seq.posesCount} sequenced postures</p>
+                <h3 className="font-outfit font-bold text-base text-[var(--text-primary)]">{seq.title}</h3>
+                <p className="text-xs text-[var(--text-muted)]">{seq.posesCount} sequenced postures</p>
                 <Button
                   size="sm"
                   variant="outline"
                   onClick={() => toast.success("Sequence template attached to active session plan.")}
-                  className="w-full text-xs border-[#E9E2D0] hover:border-[#6B8F71]"
+                  className="w-full text-xs border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-primary)] hover:bg-[var(--bg-elevated)] hover:border-[var(--primary-sage)] cursor-pointer"
                 >
                   Use as Lesson Plan
                 </Button>
@@ -158,16 +158,16 @@ export default function InstructorResourcesPage() {
       )}
 
       {activeTab === "music" && (
-        <div className="bg-white p-8 rounded-3xl border border-[#E9E2D0] text-center space-y-3">
-          <Music className="w-10 h-10 text-stone-300 mx-auto" />
-          <h3 className="font-serif font-bold text-base text-[#233D32]">Spotify & Apple Music Playlists</h3>
-          <p className="text-xs text-stone-500 max-w-sm mx-auto">
+        <div className="bg-[var(--bg-surface)] p-8 rounded-3xl border border-[var(--border-subtle)] text-center space-y-3 shadow-2xs font-figtree">
+          <Music className="w-10 h-10 text-[var(--text-subtle)] mx-auto" />
+          <h3 className="font-outfit font-bold text-base text-[var(--text-primary)]">Spotify & Apple Music Playlists</h3>
+          <p className="text-xs text-[var(--text-muted)] max-w-sm mx-auto">
             Attach ambient meditation, binaural beats, or acoustic guitar playlists to your scheduled classes.
           </p>
           <Button
             size="sm"
             onClick={() => toast.info("Playlist integration ready.")}
-            className="bg-[#6B8F71] hover:bg-[#58775D] text-white text-xs gap-1.5"
+            className="bg-[var(--primary-sage)] hover:bg-[var(--primary-hover)] text-[var(--on-primary)] text-xs gap-1.5 cursor-pointer shadow-xs"
           >
             <Plus className="w-3.5 h-3.5" />
             Link New Playlist

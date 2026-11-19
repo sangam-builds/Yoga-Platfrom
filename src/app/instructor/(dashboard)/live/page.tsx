@@ -165,31 +165,31 @@ export default function InstructorLiveStudioPage() {
   return (
     <div className="space-y-4 animate-in fade-in duration-200">
       {/* Top Studio Control Bar */}
-      <div className="bg-[#1A2F26] text-white p-4 rounded-2xl border border-[#305344] flex flex-wrap items-center justify-between gap-4 shadow-lg">
+      <div className="bg-[var(--bg-surface)] text-[var(--text-primary)] p-4 rounded-2xl border border-[var(--border-subtle)] flex flex-wrap items-center justify-between gap-4 shadow-2xs">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-[#6B8F71] flex items-center justify-center font-bold">
-            <Radio className="w-5 h-5 text-amber-200 animate-pulse" />
+          <div className="w-10 h-10 rounded-xl bg-[var(--sage-tint)] text-[var(--primary-sage)] flex items-center justify-center font-bold">
+            <Radio className="w-5 h-5 animate-pulse" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="font-serif font-bold text-base sm:text-lg">
+              <span className="font-outfit font-bold text-base sm:text-lg text-[var(--text-primary)]">
                 Vinyasa Flow Studio Room
               </span>
               {isSessionActive && (
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-red-500 text-white flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[var(--negative-rose-tint)] text-[var(--negative-rose)] flex items-center gap-1 font-figtree">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[var(--negative-rose)] animate-pulse" />
                   Live Broadcast
                 </span>
               )}
             </div>
-            <div className="flex items-center gap-3 text-xs text-[#A8C2AC] font-mono">
+            <div className="flex items-center gap-3 text-xs text-[var(--text-muted)] font-figtree">
               <span className="flex items-center gap-1">
-                <Clock className="w-3.5 h-3.5" />
+                <Clock className="w-3.5 h-3.5 text-[var(--primary-sage)]" />
                 {isSessionActive ? `Class Time: ${formatTimer(timerSeconds)}` : "Not Started"}
               </span>
               <span>•</span>
               <span className="flex items-center gap-1">
-                <Users className="w-3.5 h-3.5" />
+                <Users className="w-3.5 h-3.5 text-[var(--primary-sage)]" />
                 {participants.length} Active Practitioners
               </span>
             </div>
@@ -201,7 +201,7 @@ export default function InstructorLiveStudioPage() {
           {!isSessionActive ? (
             <Button
               onClick={handleStartSession}
-              className="bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-bold gap-2 shadow-md animate-pulse"
+              className="bg-[var(--primary-sage)] hover:bg-[var(--primary-hover)] text-[var(--on-primary)] text-xs font-bold gap-2 shadow-xs cursor-pointer"
             >
               <Play className="w-4 h-4 fill-current" />
               Launch Live Studio (Host)
@@ -214,11 +214,11 @@ export default function InstructorLiveStudioPage() {
                   setIsRecording(!isRecording);
                   toast.info(isRecording ? "Recording paused." : "Recording started with practitioner consent notice.");
                 }}
-                className={`text-xs gap-1.5 ${
-                  isRecording ? "bg-red-600 text-white animate-pulse" : "bg-white/10 text-stone-200"
+                className={`text-xs gap-1.5 cursor-pointer ${
+                  isRecording ? "bg-[var(--negative-rose)] text-white animate-pulse" : "bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-[var(--text-primary)] hover:bg-[var(--sage-tint)]"
                 }`}
               >
-                <div className={`w-2 h-2 rounded-full ${isRecording ? "bg-white" : "bg-red-400"}`} />
+                <div className={`w-2 h-2 rounded-full ${isRecording ? "bg-white" : "bg-[var(--negative-rose)]"}`} />
                 {isRecording ? "Recording Active" : "Record Session"}
               </Button>
 
@@ -229,8 +229,8 @@ export default function InstructorLiveStudioPage() {
                   setIsLocked(!isLocked);
                   toast.info(isLocked ? "Room unlocked." : "Room locked: new joins prevented.");
                 }}
-                className={`text-xs border-white/20 gap-1.5 ${
-                  isLocked ? "bg-amber-500/20 text-amber-300 border-amber-400" : "text-white bg-white/5"
+                className={`text-xs gap-1.5 cursor-pointer ${
+                  isLocked ? "bg-[var(--accent-amber-tint)] text-[var(--accent-amber)] border-[var(--accent-amber)]/40" : "text-[var(--text-primary)] bg-[var(--bg-surface)] border-[var(--border-subtle)] hover:bg-[var(--bg-elevated)]"
                 }`}
               >
                 <Lock className="w-3.5 h-3.5" />
@@ -240,7 +240,7 @@ export default function InstructorLiveStudioPage() {
               <Button
                 size="sm"
                 onClick={handleEndSession}
-                className="bg-red-600 hover:bg-red-700 text-white text-xs font-bold gap-1.5 shadow-xs"
+                className="bg-[var(--negative-rose)] hover:opacity-90 text-white text-xs font-bold gap-1.5 shadow-xs cursor-pointer"
               >
                 <Square className="w-3.5 h-3.5 fill-current" />
                 End Session for All
@@ -254,17 +254,17 @@ export default function InstructorLiveStudioPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
         {/* Stage / Video Feed (2 cols) */}
         <div className="lg:col-span-2 space-y-4">
-          <div className="relative aspect-video bg-[#1B2922] rounded-3xl overflow-hidden border border-[#305344] flex flex-col justify-between p-4 shadow-xl">
+          <div className="relative aspect-video bg-[var(--bg-elevated)] rounded-3xl overflow-hidden border border-[var(--border-subtle)] flex flex-col justify-between p-4 shadow-xs">
             {/* Top Bar inside Stage */}
-            <div className="flex items-center justify-between text-white text-xs z-10">
-              <span className="px-3 py-1 rounded-full bg-black/50 backdrop-blur-md font-mono text-[11px] flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-emerald-400" />
+            <div className="flex items-center justify-between text-[var(--text-primary)] text-xs z-10">
+              <span className="px-3 py-1 rounded-full bg-[var(--bg-surface)]/80 backdrop-blur-md font-figtree text-[11px] flex items-center gap-2 border border-[var(--border-hairline)] shadow-2xs">
+                <span className="w-2 h-2 rounded-full bg-[var(--primary-sage)]" />
                 Host Feed • 1080p 60fps
               </span>
 
               {isRecording && (
-                <span className="px-3 py-1 rounded-full bg-red-600/80 backdrop-blur-md font-mono text-[11px] font-bold flex items-center gap-1.5 animate-pulse">
-                  <div className="w-2 h-2 rounded-full bg-white" />
+                <span className="px-3 py-1 rounded-full bg-[var(--negative-rose-tint)] text-[var(--negative-rose)] border border-[var(--negative-rose)]/20 font-figtree text-[11px] font-bold flex items-center gap-1.5 animate-pulse">
+                  <div className="w-2 h-2 rounded-full bg-[var(--negative-rose)]" />
                   REC
                 </span>
               )}
@@ -272,14 +272,14 @@ export default function InstructorLiveStudioPage() {
 
             {/* Central Placeholder when video is previewing */}
             <div className="flex flex-col items-center justify-center text-center space-y-3 z-10">
-              <div className="w-20 h-20 rounded-full bg-[#233D32] border-2 border-[#6B8F71] text-white flex items-center justify-center shadow-xl">
-                {isVideoOff ? <VideoOff className="w-8 h-8 text-stone-400" /> : <Video className="w-8 h-8 text-[#A8C2AC]" />}
+              <div className="w-20 h-20 rounded-full bg-[var(--sage-tint)] text-[var(--sage-tint-icon)] border-2 border-[var(--border-subtle)] flex items-center justify-center shadow-xs">
+                {isVideoOff ? <VideoOff className="w-8 h-8 text-[var(--text-subtle)]" /> : <Video className="w-8 h-8 text-[var(--primary-sage)]" />}
               </div>
               <div>
-                <p className="font-serif font-bold text-white text-lg">
+                <p className="font-outfit font-bold text-[var(--text-primary)] text-lg">
                   Teacher Stage • Camera {isVideoOff ? "Disabled" : "Active"}
                 </p>
-                <p className="text-xs text-[#A8C2AC]">
+                <p className="text-xs text-[var(--text-muted)] font-figtree">
                   {isSessionActive
                     ? "Practitioners are currently viewing your stream."
                     : "Pre-class room ready. Check audio and camera below before launching."}
@@ -291,8 +291,8 @@ export default function InstructorLiveStudioPage() {
             <div className="flex items-center justify-center gap-3 z-10">
               <button
                 onClick={() => setIsMuted(!isMuted)}
-                className={`p-3 rounded-full transition-all shadow-md ${
-                  isMuted ? "bg-red-500 text-white" : "bg-white/20 hover:bg-white/30 text-white"
+                className={`p-3 rounded-full transition-all shadow-md cursor-pointer ${
+                  isMuted ? "bg-[var(--negative-rose)] text-white" : "bg-[var(--bg-surface)] text-[var(--text-primary)] border border-[var(--border-subtle)] hover:bg-[var(--bg-elevated)]"
                 }`}
                 title={isMuted ? "Unmute Mic" : "Mute Mic"}
               >
@@ -301,8 +301,8 @@ export default function InstructorLiveStudioPage() {
 
               <button
                 onClick={() => setIsVideoOff(!isVideoOff)}
-                className={`p-3 rounded-full transition-all shadow-md ${
-                  isVideoOff ? "bg-red-500 text-white" : "bg-white/20 hover:bg-white/30 text-white"
+                className={`p-3 rounded-full transition-all shadow-md cursor-pointer ${
+                  isVideoOff ? "bg-[var(--negative-rose)] text-white" : "bg-[var(--bg-surface)] text-[var(--text-primary)] border border-[var(--border-subtle)] hover:bg-[var(--bg-elevated)]"
                 }`}
                 title={isVideoOff ? "Turn Camera On" : "Turn Camera Off"}
               >
@@ -316,29 +316,29 @@ export default function InstructorLiveStudioPage() {
             {participants.map((p) => (
               <div
                 key={p.id}
-                className="aspect-video bg-white rounded-2xl border border-[#E9E2D0] p-2 flex flex-col justify-between text-xs relative overflow-hidden shadow-2xs hover:border-[#6B8F71]"
+                className="aspect-video bg-[var(--bg-surface)] rounded-2xl border border-[var(--border-subtle)] p-2.5 flex flex-col justify-between text-xs relative overflow-hidden shadow-2xs hover:border-[var(--primary-sage)]/50 transition-colors"
               >
                 <div className="flex items-center justify-between">
-                  <span className="font-bold text-[11px] text-[#233D32] truncate">
+                  <span className="font-outfit font-bold text-[11px] text-[var(--text-primary)] truncate">
                     {p.name}
                   </span>
                   {p.handRaised && (
-                    <span className="p-1 rounded-full bg-amber-100 text-amber-700 animate-bounce" title="Raised hand">
+                    <span className="p-1 rounded-full bg-[var(--accent-amber-tint)] text-[var(--accent-amber)] animate-bounce" title="Raised hand">
                       <Hand className="w-3 h-3" />
                     </span>
                   )}
                 </div>
 
                 <div className="flex items-center justify-center">
-                  <div className="w-8 h-8 rounded-full bg-[#6B8F71]/15 text-[#233D32] flex items-center justify-center font-bold text-xs">
+                  <div className="w-8 h-8 rounded-full bg-[var(--sage-tint)] text-[var(--sage-tint-icon)] flex items-center justify-center font-outfit font-bold text-xs">
                     {p.name.charAt(0)}
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between text-[10px] text-stone-500 pt-1 border-t border-stone-100">
+                <div className="flex items-center justify-between text-[10px] text-[var(--text-subtle)] pt-1 border-t border-[var(--border-hairline)] font-figtree">
                   <span>{p.isMuted ? "Muted" : "Unmuted"}</span>
                   {p.injury && (
-                    <span className="text-amber-600 font-bold" title={p.injury}>
+                    <span className="text-[var(--accent-amber)] font-bold" title={p.injury}>
                       ⚠️ Flag
                     </span>
                   )}
@@ -351,33 +351,33 @@ export default function InstructorLiveStudioPage() {
         {/* Side Panels: Participants, Chat, and Pose Sequence (1 col) */}
         <div className="space-y-4">
           {/* Panel Selector */}
-          <div className="bg-white p-1 rounded-2xl border border-[#E9E2D0] flex items-center justify-between shadow-xs text-xs font-semibold">
+          <div className="bg-[var(--bg-surface)] p-1 rounded-2xl border border-[var(--border-subtle)] flex items-center justify-between shadow-2xs text-xs font-semibold font-figtree">
             <button
               onClick={() => setActiveSidePanel("participants")}
-              className={`flex-1 py-2 text-center rounded-xl transition-all ${
+              className={`flex-1 py-2 text-center rounded-xl transition-all cursor-pointer ${
                 activeSidePanel === "participants"
-                  ? "bg-[#6B8F71] text-white shadow-2xs"
-                  : "text-stone-600 hover:text-stone-900"
+                  ? "bg-[var(--primary-sage)] text-[var(--on-primary)] shadow-2xs font-semibold"
+                  : "text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-elevated)]"
               }`}
             >
               Roster ({participants.length})
             </button>
             <button
               onClick={() => setActiveSidePanel("chat")}
-              className={`flex-1 py-2 text-center rounded-xl transition-all ${
+              className={`flex-1 py-2 text-center rounded-xl transition-all cursor-pointer ${
                 activeSidePanel === "chat"
-                  ? "bg-[#6B8F71] text-white shadow-2xs"
-                  : "text-stone-600 hover:text-stone-900"
+                  ? "bg-[var(--primary-sage)] text-[var(--on-primary)] shadow-2xs font-semibold"
+                  : "text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-elevated)]"
               }`}
             >
               Chat ({chatMessages.length})
             </button>
             <button
               onClick={() => setActiveSidePanel("sequence")}
-              className={`flex-1 py-2 text-center rounded-xl transition-all ${
+              className={`flex-1 py-2 text-center rounded-xl transition-all cursor-pointer ${
                 activeSidePanel === "sequence"
-                  ? "bg-[#6B8F71] text-white shadow-2xs"
-                  : "text-stone-600 hover:text-stone-900"
+                  ? "bg-[var(--primary-sage)] text-[var(--on-primary)] shadow-2xs font-semibold"
+                  : "text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-elevated)]"
               }`}
             >
               Sequence
@@ -386,9 +386,9 @@ export default function InstructorLiveStudioPage() {
 
           {/* Panel: Participants */}
           {activeSidePanel === "participants" && (
-            <div className="bg-white p-5 rounded-2xl border border-[#E9E2D0] shadow-xs space-y-4">
-              <div className="flex items-center justify-between pb-2 border-b border-[#E9E2D0]">
-                <h4 className="font-serif font-bold text-sm text-[#233D32]">
+            <div className="bg-[var(--bg-surface)] p-5 rounded-2xl border border-[var(--border-subtle)] shadow-2xs space-y-4">
+              <div className="flex items-center justify-between pb-2 border-b border-[var(--border-hairline)]">
+                <h4 className="font-outfit font-bold text-sm text-[var(--text-primary)]">
                   Live Attendees ({participants.length})
                 </h4>
                 <Button
@@ -398,7 +398,7 @@ export default function InstructorLiveStudioPage() {
                     setParticipants((prev) => prev.map((p) => ({ ...p, isMuted: true })));
                     toast.info("All participants muted.");
                   }}
-                  className="text-[11px] text-stone-600 hover:text-stone-900 h-7 px-2"
+                  className="text-[11px] text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-elevated)] h-7 px-2 cursor-pointer font-figtree"
                 >
                   <VolumeX className="w-3.5 h-3.5 mr-1" />
                   Mute All
@@ -409,13 +409,13 @@ export default function InstructorLiveStudioPage() {
                 {participants.map((p) => (
                   <div
                     key={p.id}
-                    className="p-3 rounded-xl bg-[#F8F7F2] border border-[#E9E2D0] space-y-1.5 text-xs"
+                    className="p-3 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-hairline)] space-y-1.5 text-xs font-figtree"
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <span className="font-bold text-stone-800">{p.name}</span>
+                        <span className="font-bold text-[var(--text-primary)]">{p.name}</span>
                         {p.handRaised && (
-                          <span className="px-1.5 py-0.2 rounded-full text-[9px] bg-amber-100 text-amber-800 font-bold">
+                          <span className="px-1.5 py-0.2 rounded-full text-[9px] bg-[var(--accent-amber-tint)] text-[var(--accent-amber)] font-bold">
                             Hand Raised
                           </span>
                         )}
@@ -423,14 +423,14 @@ export default function InstructorLiveStudioPage() {
                       <div className="flex items-center gap-1">
                         <button
                           onClick={() => handleToggleMuteParticipant(p.id)}
-                          className="p-1 text-stone-400 hover:text-stone-700"
+                          className="p-1 text-[var(--text-subtle)] hover:text-[var(--text-primary)] cursor-pointer"
                           title="Toggle Mute"
                         >
-                          {p.isMuted ? <MicOff className="w-3.5 h-3.5 text-red-500" /> : <Mic className="w-3.5 h-3.5 text-emerald-600" />}
+                          {p.isMuted ? <MicOff className="w-3.5 h-3.5 text-[var(--negative-rose)]" /> : <Mic className="w-3.5 h-3.5 text-[var(--primary-sage)]" />}
                         </button>
                         <button
                           onClick={() => handleRemoveParticipant(p.id, p.name)}
-                          className="p-1 text-stone-400 hover:text-red-600"
+                          className="p-1 text-[var(--text-subtle)] hover:text-[var(--negative-rose)] cursor-pointer"
                           title="Remove Participant"
                         >
                           <UserX className="w-3.5 h-3.5" />
@@ -440,8 +440,8 @@ export default function InstructorLiveStudioPage() {
 
                     {/* Discreet Injury Health Alert (Section 5.4: Only agreed health note) */}
                     {p.injury && (
-                      <div className="p-2 rounded-lg bg-amber-50 border border-amber-200 text-amber-900 text-[11px] flex items-start gap-1.5">
-                        <AlertTriangle className="w-3.5 h-3.5 text-amber-600 shrink-0 mt-0.5" />
+                      <div className="p-2 rounded-lg bg-[var(--accent-amber-tint)] border border-[var(--accent-amber)]/20 text-[var(--accent-amber)] text-[11px] flex items-start gap-1.5">
+                        <AlertTriangle className="w-3.5 h-3.5 text-[var(--accent-amber)] shrink-0 mt-0.5" />
                         <span><strong>Health Alert:</strong> {p.injury}</span>
                       </div>
                     )}
@@ -453,29 +453,29 @@ export default function InstructorLiveStudioPage() {
 
           {/* Panel: Chat */}
           {activeSidePanel === "chat" && (
-            <div className="bg-white p-5 rounded-2xl border border-[#E9E2D0] shadow-xs flex flex-col h-[450px] justify-between">
-              <div className="space-y-3 overflow-y-auto flex-1 pr-1">
+            <div className="bg-[var(--bg-surface)] p-5 rounded-2xl border border-[var(--border-subtle)] shadow-2xs flex flex-col h-[450px] justify-between">
+              <div className="space-y-3 overflow-y-auto flex-1 pr-1 font-figtree">
                 {chatMessages.map((msg) => (
                   <div key={msg.id} className="text-xs space-y-0.5">
-                    <span className="font-bold text-stone-700 text-[11px]">
+                    <span className="font-bold text-[var(--text-muted)] text-[11px]">
                       {msg.sender}:
                     </span>
-                    <p className="p-2 rounded-xl bg-[#F8F7F2] border border-[#E9E2D0] text-stone-800">
+                    <p className="p-2 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-hairline)] text-[var(--text-primary)]">
                       {msg.text}
                     </p>
                   </div>
                 ))}
               </div>
 
-              <form onSubmit={handleSendMessage} className="pt-3 border-t border-[#E9E2D0] flex gap-2">
+              <form onSubmit={handleSendMessage} className="pt-3 border-t border-[var(--border-hairline)] flex gap-2 font-figtree">
                 <input
                   type="text"
                   value={chatInput}
                   onChange={(e) => setChatInput(e.target.value)}
                   placeholder="Post announcement or reply..."
-                  className="flex-1 px-3 py-1.5 text-xs bg-[#F8F7F2] border border-[#E9E2D0] rounded-xl focus:ring-2 focus:ring-[#6B8F71]/30 focus:border-[#6B8F71]"
+                  className="flex-1 px-3 py-1.5 text-xs bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-[var(--text-primary)] placeholder:text-[var(--text-subtle)] rounded-xl focus:ring-2 focus:ring-[var(--primary-sage)]/30 focus:border-[var(--primary-sage)] outline-none"
                 />
-                <Button size="sm" type="submit" className="bg-[#6B8F71] hover:bg-[#58775D] text-white text-xs px-3">
+                <Button size="sm" type="submit" className="bg-[var(--primary-sage)] hover:bg-[var(--primary-hover)] text-[var(--on-primary)] text-xs px-3 cursor-pointer shadow-xs">
                   Send
                 </Button>
               </form>
@@ -484,23 +484,23 @@ export default function InstructorLiveStudioPage() {
 
           {/* Panel: Pose Sequence Lesson Plan (Section 5.11 & 5.4) */}
           {activeSidePanel === "sequence" && (
-            <div className="bg-white p-5 rounded-2xl border border-[#E9E2D0] shadow-xs space-y-3 max-h-[450px] overflow-y-auto">
-              <div className="pb-2 border-b border-[#E9E2D0]">
-                <h4 className="font-serif font-bold text-sm text-[#233D32] flex items-center gap-1.5">
-                  <BookOpen className="w-4 h-4 text-[#6B8F71]" />
+            <div className="bg-[var(--bg-surface)] p-5 rounded-2xl border border-[var(--border-subtle)] shadow-2xs space-y-3 max-h-[450px] overflow-y-auto">
+              <div className="pb-2 border-b border-[var(--border-hairline)]">
+                <h4 className="font-outfit font-bold text-sm text-[var(--text-primary)] flex items-center gap-1.5">
+                  <BookOpen className="w-4 h-4 text-[var(--primary-sage)]" />
                   Session Lesson Plan & Poses
                 </h4>
-                <p className="text-[11px] text-stone-500">Visible only to the instructor</p>
+                <p className="text-[11px] text-[var(--text-subtle)] font-figtree">Visible only to the instructor</p>
               </div>
 
-              <div className="space-y-2">
+              <div className="space-y-2 font-figtree">
                 {sequencePoses.map((p, idx) => (
-                  <div key={idx} className="p-2.5 rounded-xl bg-[#F8F7F2] border border-[#E9E2D0] text-xs space-y-1">
-                    <div className="flex items-center justify-between font-semibold text-stone-800">
+                  <div key={idx} className="p-2.5 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-hairline)] text-xs space-y-1">
+                    <div className="flex items-center justify-between font-semibold text-[var(--text-primary)]">
                       <span>{idx + 1}. {p.name}</span>
-                      <span className="text-[10px] font-mono text-[#6B8F71]">{p.duration}</span>
+                      <span className="text-[10px] font-figtree text-[var(--primary-sage)] font-bold">{p.duration}</span>
                     </div>
-                    <p className="text-[11px] text-stone-500 italic">Cue: {p.cue}</p>
+                    <p className="text-[11px] text-[var(--text-muted)] italic">Cue: {p.cue}</p>
                   </div>
                 ))}
               </div>
