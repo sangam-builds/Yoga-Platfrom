@@ -76,22 +76,22 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
           <div
             key={item.id}
             role="status"
-            className="pointer-events-auto flex items-start gap-3 p-4 rounded-xl shadow-lg border backdrop-blur-md bg-white/95 dark:bg-gray-900/95 border-gray-200 dark:border-gray-800 transition-all animate-in slide-in-from-bottom-3"
+            className="pointer-events-auto flex items-start gap-3 p-4 rounded-xl shadow-xl border backdrop-blur-md bg-[var(--bg-surface)]/95 border-[var(--border-subtle)] transition-all animate-in slide-in-from-bottom-3 font-figtree select-none"
           >
             {item.type === "success" && (
-              <CheckCircle2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
+              <CheckCircle2 className="w-5 h-5 text-[var(--primary-sage)] shrink-0 mt-0.5" />
             )}
             {item.type === "error" && (
-              <AlertTriangle className="w-5 h-5 text-rose-600 dark:text-rose-400 shrink-0 mt-0.5" />
+              <AlertTriangle className="w-5 h-5 text-[var(--negative-rose)] shrink-0 mt-0.5" />
             )}
             {item.type === "info" && (
-              <Info className="w-5 h-5 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
+              <Info className="w-5 h-5 text-[var(--info-teal)] shrink-0 mt-0.5" />
             )}
 
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">{item.title}</p>
+              <p className="text-sm font-semibold text-[var(--text-primary)] font-outfit">{item.title}</p>
               {item.message && (
-                <p className="text-xs text-gray-600 dark:text-gray-400 mt-0.5">{item.message}</p>
+                <p className="text-xs text-[var(--text-muted)] mt-0.5 font-figtree">{item.message}</p>
               )}
               {item.onUndo && (
                 <button
@@ -100,7 +100,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
                     item.onUndo?.();
                     removeToast(item.id);
                   }}
-                  className="mt-2 inline-flex items-center gap-1.5 text-xs font-semibold text-[#6B8F71] hover:text-[#233D32] dark:hover:text-[#A7C4B5] transition-colors"
+                  className="mt-2 inline-flex items-center gap-1.5 text-xs font-semibold text-[var(--primary-sage)] hover:underline transition-colors cursor-pointer"
                 >
                   <Undo2 className="w-3.5 h-3.5" />
                   <span>{item.undoLabel || "Undo"}</span>
@@ -111,7 +111,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
             <button
               type="button"
               onClick={() => removeToast(item.id)}
-              className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors p-1"
+              className="text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors p-1 cursor-pointer"
               aria-label="Close notification"
             >
               <X className="w-4 h-4" />

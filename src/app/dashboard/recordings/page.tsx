@@ -80,27 +80,27 @@ export default function RecordingsLibraryPage() {
       />
 
       {/* ─── Search & Filters Bar ───────────────────────────────────── */}
-      <div className="p-4 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 flex items-center justify-between gap-4">
+      <div className="p-4 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-2xs flex items-center justify-between gap-4 font-figtree">
         <div className="flex items-center gap-2 max-w-sm w-full">
-          <Search className="w-4 h-4 text-gray-400" />
+          <Search className="w-4 h-4 text-[var(--text-subtle)]" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search recordings by title or instructor..."
-            className="w-full text-xs bg-transparent focus:outline-none text-gray-900 dark:text-white"
+            className="w-full text-xs bg-transparent focus:outline-none text-[var(--text-primary)] placeholder-[var(--text-subtle)] font-medium"
           />
         </div>
       </div>
 
       {/* ─── Video Library Grid ─────────────────────────────────────── */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 font-figtree select-none">
         {filtered.map((item) => (
           <div
             key={item.id}
-            className="rounded-3xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 overflow-hidden shadow-xs hover:border-[#6B8F71] transition-all flex flex-col justify-between group"
+            className="rounded-3xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] overflow-hidden shadow-2xs hover:border-[var(--primary-sage)] transition-all flex flex-col justify-between group"
           >
-            <div className="relative aspect-video bg-gray-100 overflow-hidden">
+            <div className="relative aspect-video bg-[var(--border-hairline)] overflow-hidden">
               <img
                 src={item.thumbnailUrl}
                 alt={item.title}
@@ -110,7 +110,7 @@ export default function RecordingsLibraryPage() {
                 <button
                   type="button"
                   onClick={() => setPlayingVideo(item)}
-                  className="w-12 h-12 rounded-full bg-white/90 text-[#233D32] flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform"
+                  className="w-12 h-12 rounded-full bg-[var(--bg-surface)] text-[var(--primary-sage)] flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform cursor-pointer"
                 >
                   <Play className="w-5 h-5 fill-current ml-0.5" />
                 </button>
@@ -123,7 +123,7 @@ export default function RecordingsLibraryPage() {
               </div>
 
               <div className="absolute top-3 right-3">
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500 text-white shadow-xs">
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[var(--accent-amber)] text-white shadow-2xs">
                   {item.expiry}
                 </span>
               </div>
@@ -131,23 +131,23 @@ export default function RecordingsLibraryPage() {
 
             <div className="p-5 space-y-3">
               <div>
-                <h4 className="font-serif font-bold text-base text-gray-900 dark:text-white truncate">
+                <h4 className="font-outfit font-bold text-base text-[var(--text-primary)] truncate">
                   {item.title}
                 </h4>
-                <p className="text-xs text-gray-500 mt-0.5">
+                <p className="text-xs text-[var(--text-muted)] mt-0.5">
                   With {item.instructor} • Recorded {formatDate(item.date)}
                 </p>
               </div>
 
-              <div className="flex items-center justify-between pt-2 border-t border-gray-100 dark:border-gray-800">
-                <span className="text-[11px] font-bold text-[#6B8F71]">{item.style}</span>
+              <div className="flex items-center justify-between pt-2 border-t border-[var(--border-hairline)]">
+                <span className="text-[11px] font-bold text-[var(--primary-sage)]">{item.style}</span>
                 {item.watched ? (
-                  <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-600">
+                  <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-[var(--primary-sage)]">
                     <CheckCircle2 className="w-3.5 h-3.5" />
                     <span>Watched</span>
                   </span>
                 ) : (
-                  <span className="text-[11px] text-gray-400">New replay</span>
+                  <span className="text-[11px] text-[var(--text-subtle)]">New replay</span>
                 )}
               </div>
             </div>

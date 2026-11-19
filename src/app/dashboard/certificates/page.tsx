@@ -64,10 +64,10 @@ export default function CertificatesPage() {
       />
 
       {/* ─── 1. Milestone Progress Trackers ───────────────────────────── */}
-      <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-xs space-y-6">
+      <div className="p-6 sm:p-8 rounded-3xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-2xs space-y-6 font-figtree select-none">
         <div className="flex items-center gap-2.5">
-          <Sparkles className="w-5 h-5 text-amber-500" />
-          <h3 className="font-serif font-bold text-lg text-gray-900 dark:text-white">
+          <Sparkles className="w-5 h-5 text-[var(--accent-amber)]" />
+          <h3 className="font-outfit font-bold text-lg text-[var(--text-primary)]">
             Upcoming Milestone Roadmap
           </h3>
         </div>
@@ -75,10 +75,10 @@ export default function CertificatesPage() {
         <div className="space-y-4">
           <div className="space-y-2">
             <div className="flex items-center justify-between text-xs font-semibold">
-              <span className="text-gray-900 dark:text-white">
+              <span className="text-[var(--text-primary)]">
                 {milestonesData?.nextMilestone?.name || "30-Class Mindfulness Master"}
               </span>
-              <span className="text-[#6B8F71]">
+              <span className="text-[var(--primary-sage)]">
                 {milestonesData?.nextMilestone?.current ?? 6} / {milestonesData?.nextMilestone?.target ?? 10} Sessions
               </span>
             </div>
@@ -92,8 +92,8 @@ export default function CertificatesPage() {
       </div>
 
       {/* ─── 2. Certificates Gallery ─────────────────────────────────── */}
-      <div className="space-y-4">
-        <h3 className="font-serif font-bold text-lg text-gray-900 dark:text-white">
+      <div className="space-y-4 font-figtree">
+        <h3 className="font-outfit font-bold text-lg text-[var(--text-primary)]">
           Earned Certificates ({certificates.length})
         </h3>
 
@@ -101,38 +101,38 @@ export default function CertificatesPage() {
           {certificates.map((cert) => (
             <div
               key={cert.id}
-              className="p-6 rounded-3xl bg-gradient-to-br from-amber-50/50 via-white to-amber-50/20 dark:from-gray-900 dark:to-gray-800/80 border border-amber-200/80 dark:border-amber-900/60 shadow-xs space-y-6 flex flex-col justify-between"
+              className="p-6 rounded-3xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-2xs hover:border-[var(--primary-sage)] transition-all space-y-6 flex flex-col justify-between select-none"
             >
               <div className="space-y-3">
                 <div className="flex items-start justify-between gap-4">
-                  <div className="w-12 h-12 rounded-2xl bg-amber-100 dark:bg-amber-950 flex items-center justify-center text-amber-700 dark:text-amber-400 font-bold shrink-0">
+                  <div className="w-12 h-12 rounded-2xl bg-[var(--accent-amber-tint)] text-[var(--accent-amber)] flex items-center justify-center font-bold shrink-0">
                     <Award className="w-6 h-6" />
                   </div>
-                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">
+                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[var(--sage-tint)] text-[var(--primary-sage)]">
                     {cert.status}
                   </span>
                 </div>
 
                 <div>
-                  <h4 className="font-serif text-xl font-bold text-gray-900 dark:text-white">
+                  <h4 className="font-outfit text-xl font-bold text-[var(--text-primary)]">
                     {cert.title}
                   </h4>
-                  <p className="text-xs text-gray-500 mt-1">
+                  <p className="text-xs text-[var(--text-muted)] mt-1">
                     Issued on {formatDate(cert.issuedAt)} • Certified by {cert.signer}
                   </p>
-                  <p className="text-[11px] font-mono text-gray-400 mt-0.5">
+                  <p className="text-[11px] font-mono text-[var(--text-subtle)] mt-0.5">
                     ID: {cert.code}
                   </p>
                 </div>
               </div>
 
               {/* Action Buttons */}
-              <div className="pt-4 border-t border-amber-100 dark:border-gray-800 flex flex-wrap items-center gap-2">
+              <div className="pt-4 border-t border-[var(--border-hairline)] flex flex-wrap items-center gap-2">
                 <Button
                   type="button"
                   variant="outline"
                   onClick={() => setPreviewCert(cert)}
-                  className="rounded-xl px-3 py-1.5 text-xs font-semibold"
+                  className="rounded-xl px-3 py-1.5 text-xs font-semibold border-[var(--border-subtle)] bg-[var(--bg-surface)] hover:bg-[var(--bg-elevated)] text-[var(--text-primary)] cursor-pointer"
                 >
                   View Diploma
                 </Button>
@@ -140,7 +140,7 @@ export default function CertificatesPage() {
                 <Button
                   type="button"
                   onClick={() => handleShareLinkedIn(cert)}
-                  className="rounded-xl px-3 py-1.5 text-xs font-semibold bg-[#0A66C2] hover:bg-[#004182] text-white"
+                  className="rounded-xl px-3 py-1.5 text-xs font-semibold bg-[var(--primary-sage)] hover:bg-[var(--primary-hover)] text-[var(--on-primary)] cursor-pointer shadow-xs"
                 >
                   Add to LinkedIn
                 </Button>
@@ -160,48 +160,48 @@ export default function CertificatesPage() {
         <div
           role="dialog"
           aria-modal="true"
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xs animate-in fade-in"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs animate-in fade-in"
           onClick={() => setPreviewCert(null)}
         >
           <div
-            className="w-full max-w-2xl bg-[#F8F7F2] text-gray-900 rounded-3xl shadow-2xl border-8 border-amber-900/20 p-8 sm:p-12 space-y-6 text-center relative"
+            className="w-full max-w-2xl bg-[var(--bg-canvas)] text-[var(--text-primary)] rounded-3xl shadow-2xl border-4 border-[var(--border-subtle)] p-8 sm:p-12 space-y-6 text-center relative font-figtree"
             onClick={(e) => e.stopPropagation()}
           >
             <button
               type="button"
               onClick={() => setPreviewCert(null)}
-              className="absolute top-4 right-4 p-2 text-gray-500 hover:text-gray-900"
+              className="absolute top-4 right-4 p-2 text-[var(--text-muted)] hover:text-[var(--text-primary)] cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>
 
             <div className="space-y-2">
-              <span className="text-xs font-serif uppercase tracking-widest text-[#6B8F71] font-bold">
+              <span className="text-xs uppercase tracking-widest text-[var(--primary-sage)] font-bold font-outfit">
                 ZenFlow Yoga Academy • Official Diploma
               </span>
-              <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#233D32]">
+              <h2 className="font-outfit text-3xl sm:text-4xl font-bold text-[var(--text-primary)]">
                 Certificate of Completion
               </h2>
             </div>
 
-            <p className="text-sm text-gray-600 max-w-md mx-auto leading-relaxed">
+            <p className="text-sm text-[var(--text-muted)] max-w-md mx-auto leading-relaxed">
               This certifies that the recipient has demonstrated mindful dedication and completed accredited practice milestones for:
             </p>
 
-            <h3 className="font-serif text-xl sm:text-2xl font-bold text-gray-900">
+            <h3 className="font-outfit text-xl sm:text-2xl font-bold text-[var(--primary-sage)]">
               {previewCert.title}
             </h3>
 
-            <div className="pt-6 border-t border-amber-900/10 flex items-center justify-between text-xs text-gray-600">
+            <div className="pt-6 border-t border-[var(--border-hairline)] flex items-center justify-between text-xs text-[var(--text-muted)]">
               <div className="text-left">
-                <span className="font-serif italic block text-sm font-bold text-[#233D32]">
+                <span className="font-outfit italic block text-sm font-bold text-[var(--text-primary)]">
                   Priya Sharma
                 </span>
                 <span>Senior Acharya</span>
               </div>
 
               <div className="text-right">
-                <span className="font-mono block text-[11px]">{previewCert.code}</span>
+                <span className="font-mono block text-[11px] text-[var(--text-subtle)]">{previewCert.code}</span>
                 <span>Verified by ZenFlow Platform</span>
               </div>
             </div>

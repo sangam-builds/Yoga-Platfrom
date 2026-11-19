@@ -54,24 +54,24 @@ export default function PoseLibraryPage() {
       />
 
       {/* ─── Search & Filters ───────────────────────────────────────── */}
-      <div className="p-4 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="p-4 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-4 font-figtree">
         <div className="flex items-center gap-2 max-w-sm w-full">
-          <Search className="w-4 h-4 text-gray-400" />
+          <Search className="w-4 h-4 text-[var(--text-subtle)]" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search by English or Sanskrit name (e.g. Adho Mukha, Warrior)..."
-            className="w-full text-xs bg-transparent focus:outline-none text-gray-900 dark:text-white"
+            className="w-full text-xs bg-transparent focus:outline-none text-[var(--text-primary)] placeholder-[var(--text-subtle)] font-medium"
           />
         </div>
 
         <div className="flex items-center gap-2 text-xs">
-          <span className="text-gray-500 font-medium">Difficulty:</span>
+          <span className="text-[var(--text-muted)] font-medium">Difficulty:</span>
           <select
             value={difficultyFilter}
             onChange={(e) => setDifficultyFilter(e.target.value)}
-            className="px-2.5 py-1 rounded-lg border border-gray-200 dark:border-gray-700 bg-transparent font-semibold"
+            className="px-2.5 py-1 rounded-lg border border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-primary)] font-semibold cursor-pointer focus:ring-1 focus:ring-[var(--primary-sage)]"
           >
             <option value="ALL">All Levels</option>
             <option value="BEGINNER">Beginner</option>
@@ -82,7 +82,7 @@ export default function PoseLibraryPage() {
       </div>
 
       {/* ─── Poses Grid ─────────────────────────────────────────────── */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 font-figtree select-none">
         {poses.map((pose: any) => {
           const isFav = !!favorites[pose.id];
 
@@ -90,9 +90,9 @@ export default function PoseLibraryPage() {
             <div
               key={pose.id}
               id={pose.slug}
-              className="rounded-3xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 overflow-hidden shadow-xs hover:border-[#6B8F71] transition-all flex flex-col justify-between space-y-4"
+              className="rounded-3xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] overflow-hidden shadow-2xs hover:border-[var(--primary-sage)] transition-all flex flex-col justify-between space-y-4"
             >
-              <div className="relative aspect-video bg-gray-100 overflow-hidden">
+              <div className="relative aspect-video bg-[var(--border-hairline)] overflow-hidden">
                 <img
                   src={pose.imageUrl || "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=600"}
                   alt={pose.englishName}
@@ -101,9 +101,9 @@ export default function PoseLibraryPage() {
                 <button
                   type="button"
                   onClick={() => toggleFavorite(pose.id, pose.englishName)}
-                  className={`absolute top-3 right-3 p-2.5 rounded-full backdrop-blur-md transition-colors ${
+                  className={`absolute top-3 right-3 p-2.5 rounded-full backdrop-blur-md transition-colors cursor-pointer ${
                     isFav
-                      ? "bg-rose-500 text-white"
+                      ? "bg-[var(--negative-rose)] text-white"
                       : "bg-black/40 text-white hover:bg-black/60"
                   }`}
                   aria-label="Favorite pose"
@@ -121,31 +121,31 @@ export default function PoseLibraryPage() {
               <div className="p-6 space-y-4 flex-1 flex flex-col justify-between">
                 <div className="space-y-2">
                   <div>
-                    <h3 className="font-serif text-xl font-bold text-gray-900 dark:text-white">
+                    <h3 className="font-outfit text-xl font-bold text-[var(--text-primary)]">
                       {pose.englishName}
                     </h3>
                     {pose.sanskritName && (
-                      <p className="font-serif italic text-xs text-[#6B8F71] font-semibold">
+                      <p className="font-outfit italic text-xs text-[var(--primary-sage)] font-semibold">
                         {pose.sanskritName}
                       </p>
                     )}
                   </div>
 
-                  <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+                  <p className="text-xs text-[var(--text-muted)] leading-relaxed">
                     {pose.description}
                   </p>
                 </div>
 
                 {/* Benefits */}
                 {pose.benefits && pose.benefits.length > 0 && (
-                  <div className="space-y-1.5 pt-2 border-t border-gray-100 dark:border-gray-800">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-gray-500">
+                  <div className="space-y-1.5 pt-2 border-t border-[var(--border-hairline)]">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-subtle)] font-outfit">
                       Anatomical Benefits
                     </span>
-                    <ul className="space-y-1 text-xs text-gray-700 dark:text-gray-300">
+                    <ul className="space-y-1 text-xs text-[var(--text-muted)]">
                       {pose.benefits.map((b: string, i: number) => (
                         <li key={i} className="flex items-center gap-2">
-                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                          <CheckCircle2 className="w-3.5 h-3.5 text-[var(--primary-sage)] shrink-0" />
                           <span>{b}</span>
                         </li>
                       ))}
@@ -155,10 +155,10 @@ export default function PoseLibraryPage() {
 
                 {/* Contraindications */}
                 {pose.contraindications && pose.contraindications.length > 0 && (
-                  <div className="p-3 rounded-xl bg-rose-50/60 dark:bg-rose-950/20 border border-rose-200 dark:border-rose-900/60 text-xs text-rose-900 dark:text-rose-200 flex items-start gap-2">
-                    <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
+                  <div className="p-3 rounded-xl bg-[var(--negative-rose-tint)] border border-[var(--negative-rose-tint)] text-xs text-[var(--negative-rose)] flex items-start gap-2">
+                    <AlertTriangle className="w-4 h-4 text-[var(--negative-rose)] shrink-0 mt-0.5" />
                     <div>
-                      <span className="font-bold block text-[10px] uppercase">Contraindications</span>
+                      <span className="font-bold block text-[10px] uppercase font-outfit">Contraindications</span>
                       <span>{pose.contraindications.join(", ")}</span>
                     </div>
                   </div>

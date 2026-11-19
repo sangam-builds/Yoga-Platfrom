@@ -93,15 +93,15 @@ export default function AssistantPage() {
       />
 
       {/* ─── Medical Disclaimer Callout ─────────────────────────────── */}
-      <div className="p-3.5 rounded-2xl bg-amber-50/70 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/60 flex items-start gap-2.5 text-xs text-amber-900 dark:text-amber-200">
-        <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+      <div className="p-3.5 rounded-2xl bg-[var(--accent-amber-tint)] border border-[var(--accent-amber)]/20 flex items-start gap-2.5 text-xs text-[var(--accent-amber)] font-figtree select-none">
+        <AlertTriangle className="w-4 h-4 text-[var(--accent-amber)] shrink-0 mt-0.5" />
         <p className="leading-relaxed">
           <strong className="font-semibold">Medical Disclaimer:</strong> ZenFlow AI provides wellness guidance, not medical diagnosis or prescription. Always consult a physician or licensed therapist for acute injuries.
         </p>
       </div>
 
       {/* ─── Chat Window ────────────────────────────────────────────── */}
-      <div className="rounded-3xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-md flex flex-col h-[600px] overflow-hidden">
+      <div className="rounded-3xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-2xs flex flex-col h-[600px] overflow-hidden font-figtree">
         {/* Messages Stream */}
         <div className="flex-1 p-6 space-y-4 overflow-y-auto">
           {messages.map((m) => (
@@ -112,8 +112,8 @@ export default function AssistantPage() {
               <div
                 className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 text-xs font-bold ${
                   m.sender === "user"
-                    ? "bg-[#233D32] text-white"
-                    : "bg-[#6B8F71] text-white shadow-xs"
+                    ? "bg-[var(--primary-sage)] text-[var(--on-primary)]"
+                    : "bg-[var(--sage-tint)] text-[var(--sage-tint-icon)] shadow-2xs"
                 }`}
               >
                 {m.sender === "user" ? <User className="w-4 h-4" /> : <Bot className="w-4 h-4" />}
@@ -122,20 +122,20 @@ export default function AssistantPage() {
               <div
                 className={`max-w-xl p-4 rounded-2xl text-xs sm:text-sm leading-relaxed whitespace-pre-wrap ${
                   m.sender === "user"
-                    ? "bg-[#233D32] text-white rounded-tr-none"
-                    : "bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-100 rounded-tl-none border border-gray-200/50 dark:border-gray-700/50"
+                    ? "bg-[var(--primary-sage)] text-[var(--on-primary)] rounded-tr-none shadow-xs"
+                    : "bg-[var(--bg-elevated)] text-[var(--text-primary)] rounded-tl-none border border-[var(--border-hairline)]"
                 }`}
               >
                 {m.text}
 
                 {/* Suggested Class Routine Buttons */}
                 {m.suggestedClasses && m.suggestedClasses.length > 0 && (
-                  <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700 flex flex-wrap gap-2">
+                  <div className="mt-3 pt-3 border-t border-[var(--border-hairline)] flex flex-wrap gap-2">
                     {m.suggestedClasses.map((cls, i) => (
                       <Link
                         key={i}
                         href="/dashboard/schedule"
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#233D32] text-white text-xs font-bold hover:bg-[#6B8F71] transition-colors"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[var(--primary-sage)] text-[var(--on-primary)] text-xs font-bold hover:bg-[var(--primary-hover)] transition-colors shadow-xs"
                       >
                         <Calendar className="w-3.5 h-3.5" />
                         <span>Book {cls}</span>
@@ -148,21 +148,21 @@ export default function AssistantPage() {
           ))}
 
           {isLoading && (
-            <div className="flex items-center gap-2 text-xs text-gray-400 italic">
-              <span className="w-2 h-2 rounded-full bg-[#6B8F71] animate-ping" />
+            <div className="flex items-center gap-2 text-xs text-[var(--text-muted)] italic">
+              <span className="w-2 h-2 rounded-full bg-[var(--primary-sage)] animate-ping" />
               <span>Analyzing anatomical alignment & routines...</span>
             </div>
           )}
         </div>
 
         {/* Suggested Prompts Strip */}
-        <div className="p-3 border-t border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-800/30 flex items-center gap-2 overflow-x-auto">
+        <div className="p-3 border-t border-[var(--border-hairline)] bg-[var(--bg-elevated)]/50 flex items-center gap-2 overflow-x-auto">
           {suggestedPrompts.map((p, i) => (
             <button
               key={i}
               type="button"
               onClick={() => handleSendMessage(p)}
-              className="px-3 py-1 rounded-full text-xs font-medium bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:border-[#6B8F71] text-gray-700 dark:text-gray-300 shrink-0 transition-colors"
+              className="px-3 py-1 rounded-full text-xs font-medium bg-[var(--bg-surface)] border border-[var(--border-subtle)] hover:border-[var(--primary-sage)] text-[var(--text-muted)] hover:text-[var(--text-primary)] shrink-0 transition-colors cursor-pointer"
             >
               {p}
             </button>
@@ -175,19 +175,19 @@ export default function AssistantPage() {
             e.preventDefault();
             handleSendMessage();
           }}
-          className="p-4 border-t border-gray-200 dark:border-gray-800 flex gap-2"
+          className="p-4 border-t border-[var(--border-hairline)] flex gap-2"
         >
           <input
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Ask anything about yoga routines, alignments, or breathing..."
-            className="flex-1 text-xs sm:text-sm px-4 py-2.5 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#6B8F71]"
+            className="flex-1 text-xs sm:text-sm px-4 py-2.5 rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-primary)] placeholder-[var(--text-subtle)] focus:outline-none focus:ring-2 focus:ring-[var(--primary-sage)]"
           />
           <Button
             type="submit"
             disabled={!input.trim() || isLoading}
-            className="bg-[#233D32] hover:bg-[#6B8F71] text-white rounded-2xl px-5 py-2.5 shadow-xs"
+            className="bg-[var(--primary-sage)] hover:bg-[var(--primary-hover)] text-[var(--on-primary)] rounded-2xl px-5 py-2.5 shadow-xs cursor-pointer"
           >
             <Send className="w-4 h-4" />
           </Button>

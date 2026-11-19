@@ -57,23 +57,23 @@ export function ConfirmDialog({
     >
       <div
         ref={dialogRef}
-        className="w-full max-w-md bg-white dark:bg-gray-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-800 p-6 space-y-5"
+        className="w-full max-w-md bg-[var(--bg-surface)] rounded-2xl shadow-2xl border border-[var(--border-subtle)] p-6 space-y-5 font-figtree select-none"
       >
         <div className="flex items-start gap-4">
           <div
             className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${
               isDestructive
-                ? "bg-rose-100 dark:bg-rose-950/50 text-rose-600 dark:text-rose-400"
-                : "bg-emerald-100 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400"
+                ? "bg-[var(--negative-rose-tint)] text-[var(--negative-rose)]"
+                : "bg-[var(--sage-tint)] text-[var(--sage-tint-icon)]"
             }`}
           >
             <AlertTriangle className="w-5 h-5" />
           </div>
           <div className="flex-1 min-w-0">
-            <h3 id="confirm-dialog-title" className="text-lg font-serif font-bold text-gray-900 dark:text-white">
+            <h3 id="confirm-dialog-title" className="text-lg font-outfit font-bold text-[var(--text-primary)]">
               {title}
             </h3>
-            <p id="confirm-dialog-desc" className="text-sm text-gray-600 dark:text-gray-400 mt-1.5 leading-relaxed">
+            <p id="confirm-dialog-desc" className="text-sm text-[var(--text-muted)] mt-1.5 leading-relaxed font-figtree">
               {description}
             </p>
           </div>
@@ -81,7 +81,7 @@ export function ConfirmDialog({
             type="button"
             onClick={onClose}
             disabled={isLoading}
-            className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 p-1"
+            className="text-[var(--text-muted)] hover:text-[var(--text-primary)] p-1 cursor-pointer"
             aria-label="Close dialog"
           >
             <X className="w-5 h-5" />
@@ -94,7 +94,7 @@ export function ConfirmDialog({
             variant="outline"
             onClick={onClose}
             disabled={isLoading}
-            className="rounded-xl px-4 py-2"
+            className="rounded-xl px-4 py-2 border-[var(--border-subtle)] bg-[var(--bg-surface)] hover:bg-[var(--bg-elevated)] text-[var(--text-primary)] cursor-pointer"
           >
             {cancelLabel}
           </Button>
@@ -103,10 +103,10 @@ export function ConfirmDialog({
             variant="primary"
             onClick={onConfirm}
             isLoading={isLoading}
-            className={`rounded-xl px-4 py-2 ${
+            className={`rounded-xl px-4 py-2 cursor-pointer font-semibold shadow-xs ${
               isDestructive
-                ? "bg-rose-600 hover:bg-rose-700 text-white"
-                : "bg-[#233D32] hover:bg-[#6B8F71] text-white"
+                ? "bg-[var(--negative-rose)] hover:bg-[var(--negative-rose)]/90 text-white"
+                : "bg-[var(--primary-sage)] hover:bg-[var(--primary-hover)] text-[var(--on-primary)]"
             }`}
           >
             {confirmLabel}

@@ -112,16 +112,16 @@ export default function MyBookingsPage() {
       />
 
       {/* ─── Tabs ───────────────────────────────────────────────────── */}
-      <div className="flex items-center gap-2 border-b border-gray-200 dark:border-gray-800 pb-2 overflow-x-auto text-xs font-semibold">
+      <div className="flex items-center gap-2 border-b border-[var(--border-hairline)] pb-2 overflow-x-auto text-xs font-semibold font-figtree">
         {(["upcoming", "past", "cancelled", "waitlisted"] as const).map((tab) => (
           <button
             key={tab}
             type="button"
             onClick={() => setActiveTab(tab)}
-            className={`px-4 py-2 rounded-xl capitalize transition-all ${
+            className={`px-4 py-2 rounded-xl capitalize transition-all cursor-pointer ${
               activeTab === tab
-                ? "bg-[#233D32] text-white dark:bg-[#6B8F71] dark:text-gray-950 font-bold shadow-xs"
-                : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800"
+                ? "bg-[var(--primary-sage)] text-[var(--on-primary)] font-bold shadow-xs"
+                : "text-[var(--text-muted)] hover:bg-[var(--bg-elevated)] hover:text-[var(--text-primary)]"
             }`}
           >
             {tab}
@@ -133,7 +133,7 @@ export default function MyBookingsPage() {
       {isLoading ? (
         <div className="space-y-4 py-8">
           {Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="h-28 rounded-2xl bg-white dark:bg-gray-900 border animate-pulse" />
+            <div key={i} className="h-28 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] animate-pulse" />
           ))}
         </div>
       ) : activeTab === "waitlisted" ? (
@@ -144,29 +144,29 @@ export default function MyBookingsPage() {
             action={{ label: "View Schedule", href: "/dashboard/schedule" }}
           />
         ) : (
-          <div className="space-y-3">
+          <div className="space-y-3 font-figtree">
             {waitlist.map((item: any) => (
               <div
                 key={item.id}
-                className="p-5 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+                className="p-5 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-4 select-none"
               >
                 <div>
                   <div className="flex items-center gap-2">
-                    <h3 className="font-serif font-bold text-base text-gray-900 dark:text-white">
+                    <h3 className="font-outfit font-bold text-base text-[var(--text-primary)]">
                       {item.classTitle}
                     </h3>
-                    <span className="px-2 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800">
+                    <span className="px-2 py-0.5 rounded-full text-xs font-bold bg-[var(--accent-amber-tint)] text-[var(--accent-amber)]">
                       Position #{item.position}
                     </span>
                   </div>
-                  <p className="text-xs text-gray-500 mt-1">
+                  <p className="text-xs text-[var(--text-muted)] mt-1">
                     With {item.instructor.name} • {formatDate(item.startsAt)} at {formatTime(item.startsAt)}
                   </p>
                 </div>
                 <Button
                   type="button"
                   variant="outline"
-                  className="rounded-xl text-xs font-medium text-rose-600 border-rose-200 hover:bg-rose-50"
+                  className="rounded-xl text-xs font-medium text-[var(--negative-rose)] border-[var(--negative-rose)]/30 hover:bg-[var(--negative-rose-tint)] cursor-pointer"
                   onClick={() => toast.info("Waitlist entry removed")}
                 >
                   Leave Waitlist
@@ -182,18 +182,18 @@ export default function MyBookingsPage() {
           action={activeTab === "upcoming" ? { label: "Browse Schedule", href: "/dashboard/schedule" } : undefined}
         />
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-4 font-figtree">
           {bookings.map((booking: any) => {
             const joinAllowed = isJoinWindowOpen(booking.startsAt, booking.endsAt);
 
             return (
               <div
                 key={booking.id}
-                className="p-5 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:border-[#6B8F71] transition-all"
+                className="p-5 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:border-[var(--primary-sage)] transition-all select-none"
               >
                 {/* Left side info */}
                 <div className="flex items-center gap-4">
-                  <div className="w-14 h-14 rounded-2xl bg-gray-100 dark:bg-gray-800 overflow-hidden shrink-0">
+                  <div className="w-14 h-14 rounded-2xl bg-[var(--border-hairline)] overflow-hidden shrink-0">
                     <img
                       src={booking.thumbnailUrl || "https://images.unsplash.com/photo-1545205597-3d9d02c29597?w=200"}
                       alt={booking.classTitle}
@@ -203,15 +203,15 @@ export default function MyBookingsPage() {
 
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
-                      <h3 className="font-serif font-bold text-base text-gray-900 dark:text-white">
+                      <h3 className="font-outfit font-bold text-base text-[var(--text-primary)]">
                         {booking.classTitle}
                       </h3>
                       <StatusBadge status={booking.status} />
                     </div>
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs text-[var(--text-muted)]">
                       With {booking.instructor.name} • {booking.durationMin} mins • {booking.level}
                     </p>
-                    <p className="text-xs font-semibold text-[#6B8F71]">
+                    <p className="text-xs font-semibold text-[var(--primary-sage)]">
                       {formatDate(booking.startsAt, { weekday: "short", month: "short", day: "numeric" })} at{" "}
                       {formatTime(booking.startsAt)}
                     </p>
@@ -219,7 +219,7 @@ export default function MyBookingsPage() {
                 </div>
 
                 {/* Right side actions */}
-                <div className="flex flex-wrap items-center gap-2 shrink-0 pt-3 sm:pt-0 border-t sm:border-t-0 border-gray-100 dark:border-gray-800">
+                <div className="flex flex-wrap items-center gap-2 shrink-0 pt-3 sm:pt-0 border-t sm:border-t-0 border-[var(--border-hairline)]">
                   {/* Calendar Options (Upcoming only) */}
                   {activeTab === "upcoming" && (
                     <>
@@ -227,7 +227,7 @@ export default function MyBookingsPage() {
                         href={getGoogleCalendarUrl(booking)}
                         target="_blank"
                         rel="noreferrer"
-                        className="p-2 rounded-xl border border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-300 transition-colors"
+                        className="p-2 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] hover:bg-[var(--bg-elevated)] text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors cursor-pointer"
                         title="Add to Google Calendar"
                       >
                         <Calendar className="w-4 h-4" />
@@ -235,7 +235,7 @@ export default function MyBookingsPage() {
                       <button
                         type="button"
                         onClick={() => downloadIcs(booking)}
-                        className="p-2 rounded-xl border border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-300 transition-colors"
+                        className="p-2 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] hover:bg-[var(--bg-elevated)] text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors cursor-pointer"
                         title="Download .ics Calendar File"
                       >
                         <Download className="w-4 h-4" />
@@ -248,13 +248,13 @@ export default function MyBookingsPage() {
                     (joinAllowed ? (
                       <Link
                         href={booking.videoRoomUrl}
-                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-[#6B8F71] hover:bg-[#233D32] text-white shadow-md animate-pulse transition-colors"
+                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-[var(--primary-sage)] hover:bg-[var(--primary-hover)] text-[var(--on-primary)] shadow-xs animate-pulse transition-colors"
                       >
                         <Video className="w-4 h-4" />
                         <span>Join Live Room</span>
                       </Link>
                     ) : (
-                      <span className="px-3 py-2 rounded-xl text-xs font-medium text-gray-400 bg-gray-100 dark:bg-gray-800">
+                      <span className="px-3 py-2 rounded-xl text-xs font-medium text-[var(--text-muted)] bg-[var(--bg-elevated)] border border-[var(--border-hairline)]">
                         Join opens 10m before start
                       </span>
                     ))}
@@ -265,7 +265,7 @@ export default function MyBookingsPage() {
                       type="button"
                       variant="outline"
                       onClick={() => setCancelBookingId(booking.id)}
-                      className="rounded-xl px-3 py-2 text-xs font-medium text-rose-600 border-rose-200 dark:border-rose-900 hover:bg-rose-50"
+                      className="rounded-xl px-3 py-2 text-xs font-medium text-[var(--negative-rose)] border-[var(--negative-rose)]/30 hover:bg-[var(--negative-rose-tint)] cursor-pointer"
                     >
                       Cancel
                     </Button>
@@ -275,7 +275,7 @@ export default function MyBookingsPage() {
                   {(activeTab === "past" || activeTab === "cancelled") && (
                     <Link
                       href="/dashboard/schedule"
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-[#233D32] hover:bg-[#6B8F71] text-white transition-colors"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-[var(--primary-sage)] hover:bg-[var(--primary-hover)] text-[var(--on-primary)] transition-colors shadow-xs"
                     >
                       <RefreshCw className="w-3.5 h-3.5" />
                       <span>Rebook Session</span>
