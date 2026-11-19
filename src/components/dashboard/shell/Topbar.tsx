@@ -92,7 +92,7 @@ export function Topbar({
   const currentLang = languages.find((l) => l.code === locale) || languages[0];
 
   return (
-    <header className="sticky top-0 z-20 h-16 w-full border-b border-[var(--border-hairline)] bg-[var(--bg-surface)]/85 backdrop-blur-md px-4 sm:px-6 flex items-center justify-between gap-3 select-none">
+    <header className="sticky top-0 z-20 h-16 w-full border-b border-[var(--border-hairline)] bg-[var(--bg-surface)]/85 backdrop-blur-md px-4 sm:px-6 flex items-center justify-between gap-3 select-none shrink-0">
       {/* Left: Mobile Menu Button & Search Trigger */}
       <div className="flex items-center gap-2 sm:gap-4 flex-1 max-w-md">
         {onOpenMobileMenu && (

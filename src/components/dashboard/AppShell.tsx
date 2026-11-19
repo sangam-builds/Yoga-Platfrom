@@ -62,8 +62,8 @@ export function AppShell({ children, user }: AppShellProps) {
   };
 
   return (
-    <div className="min-h-screen bg-[var(--bg-canvas)] text-[var(--text-primary)] flex flex-row antialiased">
-      {/* Desktop / Tablet Sidebar */}
+    <div className="h-screen w-full bg-[var(--bg-canvas)] text-[var(--text-primary)] flex flex-row antialiased overflow-hidden">
+      {/* Desktop / Tablet Sidebar (Fixed Options Side) */}
       <Sidebar
         isCollapsed={isCollapsed}
         onToggleCollapse={handleToggleCollapse}
@@ -71,8 +71,8 @@ export function AppShell({ children, user }: AppShellProps) {
         todayBookingsCount={user.todayBookingsCount}
       />
 
-      {/* Main Column */}
-      <div className="flex-1 flex flex-col min-w-0 min-h-screen">
+      {/* Main Scrollable Dashboard Area */}
+      <div className="flex-1 flex flex-col min-w-0 h-screen overflow-y-auto">
         {/* Sticky Topbar */}
         <Topbar
           user={user}

@@ -132,12 +132,12 @@ export function Sidebar({
 
   return (
     <aside
-      className={`hidden md:flex flex-col bg-[var(--bg-surface)] border-r border-[var(--border-hairline)] transition-all duration-300 relative z-30 select-none ${
+      className={`hidden md:flex flex-col bg-[var(--bg-surface)] border-r border-[var(--border-hairline)] transition-all duration-300 h-screen sticky top-0 shrink-0 z-30 select-none ${
         isCollapsed ? "w-20" : "w-64"
       }`}
     >
       {/* Brand Header */}
-      <div className="h-16 flex items-center justify-between px-5 border-b border-[var(--border-hairline)]">
+      <div className="h-16 flex items-center justify-between px-5 border-b border-[var(--border-hairline)] shrink-0">
         <Link href="/dashboard" className="flex items-center gap-3 group overflow-hidden">
           <div className="w-9 h-9 rounded-full bg-[var(--sage-tint)] text-[var(--sage-tint-icon)] flex items-center justify-center shrink-0 shadow-2xs group-hover:scale-105 transition-transform">
             <Leaf className="w-4 h-4 text-[var(--sage-tint-icon)] stroke-[2]" />
@@ -166,7 +166,7 @@ export function Sidebar({
       </div>
 
       {/* Nav List */}
-      <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-1">
+      <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-1 pb-20">
         {navItems.map((item) => {
           const isActive =
             item.href === "/dashboard"
@@ -214,7 +214,7 @@ export function Sidebar({
 
       {/* Studio Philosophy Footer (Expanded only) */}
       {!isCollapsed && (
-        <div className="p-4 border-t border-[var(--border-hairline)] bg-[var(--bg-elevated)]/40 rounded-b-xl m-2">
+        <div className="p-4 border-t border-[var(--border-hairline)] bg-[var(--bg-elevated)]/40 rounded-b-xl m-2 shrink-0">
           <p className="font-outfit text-[10px] tracking-[0.25em] font-bold text-[var(--primary-sage)] uppercase mb-1">
             MOVE WITH INTENTION
           </p>
