@@ -102,6 +102,7 @@ export function AppShell({ children, user }: AppShellProps) {
 
       {/* Mobile Bottom Tab Bar */}
       <MobileTabBar
+        user={user}
         hasActivePlan={user.hasActivePlan}
         todayBookingsCount={user.todayBookingsCount}
       />

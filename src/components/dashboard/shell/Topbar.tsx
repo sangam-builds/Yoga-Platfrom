@@ -93,20 +93,8 @@ export function Topbar({
 
   return (
     <header className="sticky top-0 z-20 h-16 w-full border-b border-[var(--border-hairline)] bg-[var(--bg-surface)]/85 backdrop-blur-md px-4 sm:px-6 flex items-center justify-between gap-3 select-none shrink-0">
-      {/* Left: Mobile Menu Button & Search Trigger */}
+      {/* Left: Global Search Bar (Full width on mobile without top hamburger) */}
       <div className="flex items-center gap-2 sm:gap-4 flex-1 max-w-md">
-        {onOpenMobileMenu && (
-          <button
-            type="button"
-            onClick={onOpenMobileMenu}
-            aria-label="Open navigation menu"
-            className="md:hidden w-9 h-9 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-primary)] flex items-center justify-center cursor-pointer"
-          >
-            <Menu className="w-4 h-4" />
-          </button>
-        )}
-
-        {/* Global Search Bar Button */}
         <button
           type="button"
           onClick={onOpenSearch}
@@ -158,8 +146,10 @@ export function Topbar({
           )}
         </div>
 
-        {/* Theme Toggle (Light / Dark / System) */}
-        <ThemeToggle />
+        {/* Theme Toggle (Desktop: In header, Mobile: Moved to More options bottom tab) */}
+        <div className="hidden md:flex items-center">
+          <ThemeToggle />
+        </div>
 
         {/* Notification Bell */}
         <button
@@ -174,8 +164,8 @@ export function Topbar({
           )}
         </button>
 
-        {/* User Avatar Menu */}
-        <div className="relative" ref={userMenuRef}>
+        {/* User Avatar Menu (Desktop: In header, Mobile: Moved to More options bottom tab) */}
+        <div className="relative hidden md:block" ref={userMenuRef}>
           <button
             type="button"
             onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
