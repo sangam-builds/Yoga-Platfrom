@@ -89,7 +89,13 @@ export function AppShell({ children, user }: AppShellProps) {
         />
 
         {/* Content Viewport */}
-        <main className="flex-1 px-4 sm:px-6 lg:px-8 py-6 pb-24 md:pb-12 max-w-7xl mx-auto w-full">
+        <main
+          className={`flex-1 py-6 pb-24 md:pb-12 w-full transition-all duration-300 ${
+            isCollapsed
+              ? "px-4 sm:px-6 lg:px-8 max-w-none"
+              : "px-4 sm:px-6 lg:px-8 max-w-7xl 2xl:max-w-[1600px] mx-auto"
+          }`}
+        >
           {children}
         </main>
       </div>

@@ -94,13 +94,15 @@ export function NextClassHeroCard({
           </p>
         </div>
 
-        <Link
-          href="/dashboard/schedule"
-          className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-5 py-3 rounded-xl bg-[var(--primary-sage)] hover:bg-[var(--primary-hover)] text-[var(--on-primary)] font-figtree font-medium text-xs sm:text-sm transition-all duration-200 shadow-xs cursor-pointer group"
-        >
-          <span>Find a class today</span>
-          <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
-        </Link>
+        <div className="pt-2">
+          <Link
+            href="/dashboard/schedule"
+            className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-5 py-3 rounded-xl bg-[var(--primary-sage)] hover:bg-[var(--primary-hover)] text-[var(--on-primary)] font-figtree font-medium text-xs sm:text-sm transition-all duration-200 shadow-xs cursor-pointer group"
+          >
+            <span>Find a class today</span>
+            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
+          </Link>
+        </div>
       </div>
     );
   }
