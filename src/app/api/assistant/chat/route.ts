@@ -1,46 +1,71 @@
 import { NextResponse } from "next/server";
 import { getAuthUser } from "@/lib/auth/get-user";
-import { prisma } from "@/lib/prisma";
+import { aiService } from "@/modules/ai";
 
+/**
+ * GET /api/assistant/chat
+ * Retrieves the student's conversation history.
+ */
+export async function GET() {
+  const auth = await getAuthUser();
+  if (!auth) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  try {
+    const history = await aiService.getChatHistory(auth.dbUser.id);
+    return NextResponse.json({ history });
+  } catch (err: unknown) {
+    const error = err as { statusCode?: number; message?: string };
+    const status = error.statusCode || 500;
+    return NextResponse.json({ error: error.message || "Failed to fetch history" }, { status });
+  }
+}
+
+/**
+ * POST /api/assistant/chat
+ * Sends a message to Google Gemini for the student and returns the personalized response.
+ */
 export async function POST(request: Request) {
   const auth = await getAuthUser();
   if (!auth) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { message } = await request.json();
-  const lowerMsg = (message || "").toLowerCase();
-  const userName = auth.dbUser.name.split(" ")[0];
+  try {
+    const body = await request.json();
+    const message = body.message;
 
-  let reply = "";
-  let suggestedClasses: string[] = [];
+    if (!message || typeof message !== "string" || !message.trim()) {
+      return NextResponse.json({ error: "Message is required" }, { status: 400 });
+    }
 
-  if (lowerMsg.includes("lower back") || lowerMsg.includes("back pain") || lowerMsg.includes("spine")) {
-    reply = `Namaste ${userName}. For lower back support, gentle decompression and mindful pelvic tilts work best.\n\n` +
-      `⚠️ Medical Disclaimer: If you are experiencing acute pain or disc herniation, please consult a physiotherapist before attempting deep twists.\n\n` +
-      `Recommended Practice:\n` +
-      `• Adho Mukha Svanasana (Downward-Facing Dog with bent knees)\n` +
-      `• Balasana (Child's Pose)\n` +
-      `• Marjaryasana-Bitilasana (Cat-Cow Pose, 10 rounds)\n\n` +
-      `I recommend joining our "Hatha Spine & Alignment" session tomorrow at 7:00 AM!`;
-    suggestedClasses = ["Hatha Spine & Alignment"];
-  } else if (lowerMsg.includes("routine") || lowerMsg.includes("4-week") || lowerMsg.includes("schedule")) {
-    reply = `Here is a balanced 4-Week Holistic Yoga Program customized for you, ${userName}:\n\n` +
-      `• Monday & Wednesday (7:00 AM): Morning Sun Vinyasa (Active Energy & Prana)\n` +
-      `• Tuesday & Thursday (6:30 PM): Hatha Spine & Alignment (Structural Health)\n` +
-      `• Friday Evening: Yin for Deep Rest & Sleep (Connective Tissue Recovery)\n` +
-      `• Sunday Morning: Pranayama & Sound Meditation (Mental Clarity)\n\n` +
-      `Would you like me to book your spots for this week's morning flow?`;
-    suggestedClasses = ["Morning Sun Vinyasa", "Yin for Deep Rest & Sleep"];
-  } else if (lowerMsg.includes("plan") || lowerMsg.includes("membership") || lowerMsg.includes("subscription")) {
-    reply = `Based on our current schedule and daily live offerings, the "Monthly Flow" (₹1,499/mo) gives you unlimited access to all live classes, recordings, and interactive teacher feedback. If you practice more than twice a week, it offers maximum savings!`;
-  } else {
-    reply = `Hello ${userName}! As your ZenFlow Wellness Assistant, I can design personalized yoga routines, provide posture modifications, or recommend live classes matching your goals. What would you like to explore today?`;
+    const result = await aiService.sendMessage(auth.dbUser.id, message.trim());
+
+    return NextResponse.json(result);
+  } catch (err: unknown) {
+    const error = err as { statusCode?: number; message?: string };
+    const status = error.statusCode || 500;
+    return NextResponse.json({ error: error.message || "Failed to process message" }, { status });
   }
-
-  return NextResponse.json({
-    reply,
-    suggestedClasses,
-  });
 }
 
+/**
+ * DELETE /api/assistant/chat
+ * Clears the student's conversation history.
+ */
+export async function DELETE() {
+  const auth = await getAuthUser();
+  if (!auth) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  try {
+    await aiService.clearChat(auth.dbUser.id);
+    return NextResponse.json({ success: true, message: "Chat history cleared" });
+  } catch (err: unknown) {
+    const error = err as { statusCode?: number; message?: string };
+    const status = error.statusCode || 500;
+    return NextResponse.json({ error: error.message || "Failed to clear chat" }, { status });
+  }
+}
