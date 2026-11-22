@@ -136,7 +136,7 @@ export default function AssistantPage() {
     {
       id: "intro-1",
       sender: "assistant",
-      text: "Namaste! I am your ZenFlow AI Wellness & Yoga Advisor, powered by Google Gemini. I can build personalized asana sequences, provide anatomical posture guidance, or recommend studio classes tailored to your body and goals.",
+      text: "Namaste! I am your ZenFlow AI Wellness & Yoga Advisor. I can build personalized asana sequences, provide anatomical posture guidance, or recommend studio classes tailored to your body and goals.",
     },
   ]);
 
@@ -245,30 +245,11 @@ export default function AssistantPage() {
 
   return (
     <div className="space-y-6 max-w-4xl mx-auto animate-in fade-in">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <PageHeader
-          title="AI Wellness & Sequence Assistant"
-          description="Receive personalized practice guidance adapting to your goals, physical constraints, and daily energy."
-          breadcrumbs={[{ label: "Dashboard", href: "/dashboard" }, { label: "AI Assistant" }]}
-        />
-
-        {/* Gemini Badge & Reset Button */}
-        <div className="flex items-center gap-2 self-start sm:self-center">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[var(--sage-tint)] border border-[var(--primary-sage)]/25 text-[var(--primary-sage)] text-xs font-semibold shadow-2xs">
-            <Sparkles className="w-3.5 h-3.5 fill-[var(--primary-sage)]" />
-            <span>Google Gemini</span>
-          </div>
-
-          <button
-            type="button"
-            onClick={handleClearChat}
-            title="Reset conversation"
-            className="p-2 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-elevated)] transition-colors cursor-pointer"
-          >
-            <RotateCcw className="w-3.5 h-3.5" />
-          </button>
-        </div>
-      </div>
+      <PageHeader
+        title="AI Wellness & Sequence Assistant"
+        description="Receive personalized practice guidance adapting to your goals, physical constraints, and daily energy."
+        breadcrumbs={[{ label: "Dashboard", href: "/dashboard" }, { label: "AI Assistant" }]}
+      />
 
       {/* ─── Medical Disclaimer Callout ─────────────────────────────── */}
       <div className="p-3.5 rounded-2xl bg-[var(--accent-amber-tint)] border border-[var(--accent-amber)]/20 flex items-start gap-2.5 text-xs text-[var(--accent-amber)] font-figtree select-none">
@@ -345,7 +326,7 @@ export default function AssistantPage() {
           {isLoading && (
             <div className="flex items-center gap-2 text-xs text-[var(--text-muted)] italic pl-11">
               <span className="w-2 h-2 rounded-full bg-[var(--primary-sage)] animate-ping" />
-              <span>Consulting Google Gemini for anatomical alignment & sequences...</span>
+              <span>Analyzing anatomical alignment & routines...</span>
             </div>
           )}
           <div ref={messagesEndRef} />
@@ -377,7 +358,7 @@ export default function AssistantPage() {
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Ask Google Gemini about asana alignment, routines, or breathing..."
+            placeholder="Ask anything about yoga routines, alignments, or breathing..."
             className="flex-1 text-xs sm:text-sm px-4 py-2.5 rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-elevated)] text-[var(--text-primary)] placeholder-[var(--text-subtle)] focus:outline-none focus:ring-2 focus:ring-[var(--primary-sage)]"
           />
           <Button

@@ -131,7 +131,7 @@ export class GeminiProvider {
         `• **Weekend**: *Yin Yoga & Yoga Nidra* for parasympathetic nervous system restoration.\n\n` +
         `Take a look at the studio schedule to book your preferred time slot!`;
     } else {
-      reply = `Namaste ${firstName}! I am your ZenFlow AI Wellness Assistant, powered by Google Gemini.\n\n` +
+      reply = `Namaste ${firstName}! I am your ZenFlow AI Wellness Assistant.\n\n` +
         `I can help you with:\n` +
         `• Designing customized asana sequences for energy, flexibility, or relaxation\n` +
         `• Anatomical adjustments, prop usage, and safe modifications\n` +
@@ -144,9 +144,7 @@ export class GeminiProvider {
       suggested.push(...available.slice(0, 2));
     }
 
-    if (!aiConfig.isConfigured()) {
-      reply += `\n\n*(Note: To unlock live Google Gemini responses, add \`GEMINI_API_KEY\` to your \`.env.local\` file.)*`;
-    } else if (errorMessage) {
+    if (errorMessage) {
       console.warn(`[GeminiProvider] Using fallback due to: ${errorMessage}`);
     }
 
