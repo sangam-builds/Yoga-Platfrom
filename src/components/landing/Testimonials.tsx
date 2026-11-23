@@ -34,49 +34,49 @@ export function Testimonials() {
   ];
 
   return (
-    <section className="py-20 md:py-28 bg-[#F4F7F4]/40 relative border-t border-[#E9E2D0]/60">
+    <section className="py-14 sm:py-20 md:py-28 bg-[#F4F7F4]/40 relative border-t border-[#E9E2D0]/60">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="max-w-3xl mx-auto text-center space-y-4 mb-16 md:mb-20">
+        <div className="max-w-3xl mx-auto text-center space-y-3 sm:space-y-4 mb-10 sm:mb-16 md:mb-20">
           <span className="text-xs sm:text-sm uppercase tracking-widest text-[#6B8F71] font-semibold">
             Member Reflections
           </span>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-[#233D32] tracking-tight">
+          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-serif font-bold text-[#233D32] tracking-tight">
             What Our Members Say
           </h2>
-          <p className="text-base sm:text-lg text-[#292D2A]/75 font-light leading-relaxed">
+          <p className="text-sm sm:text-lg text-[#292D2A]/75 font-light leading-relaxed">
             Real stories of quiet transformation, renewed vitality, and mindful grounding
             from practitioners across the globe.
           </p>
         </div>
 
         {/* 3 Testimonials Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-8">
           {testimonials.map((t, index) => (
             <div
               key={index}
-              className="p-8 rounded-3xl bg-white border border-[#E9E2D0] hover:border-[#6B8F71]/40 shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col justify-between relative"
+              className="p-6 sm:p-8 rounded-2xl sm:rounded-3xl bg-white border border-[#E9E2D0] hover:border-[#6B8F71]/40 shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col justify-between relative"
             >
-              <div className="space-y-4">
+              <div className="space-y-3 sm:space-y-4">
                 {/* Quote Icon */}
-                <Quote className="w-8 h-8 text-[#6B8F71]/30 rotate-180" />
+                <Quote className="w-6 h-6 sm:w-8 sm:h-8 text-[#6B8F71]/30 rotate-180" />
 
                 {/* Stars */}
                 <div className="flex text-amber-500 gap-1">
                   {[...Array(t.rating)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-current" />
+                    <Star key={i} className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-current" />
                   ))}
                 </div>
 
                 {/* Testimonial Quote */}
-                <p className="text-sm text-[#292D2A]/80 font-light leading-relaxed italic">
+                <p className="text-xs sm:text-sm text-[#292D2A]/80 font-light leading-relaxed italic">
                   &ldquo;{t.content}&rdquo;
                 </p>
               </div>
 
               {/* Author Info */}
-              <div className="pt-6 mt-6 border-t border-[#E9E2D0]/60 flex items-center gap-3.5">
-                <div className="relative w-11 h-11 rounded-full overflow-hidden border border-[#6B8F71]/30 bg-[#E9E2D0]/40 shrink-0">
+              <div className="pt-4 sm:pt-6 mt-4 sm:mt-6 border-t border-[#E9E2D0]/60 flex items-center gap-3 sm:gap-3.5">
+                <div className="relative w-10 h-10 sm:w-11 sm:h-11 rounded-full overflow-hidden border border-[#6B8F71]/30 bg-[#E9E2D0]/40 shrink-0">
                   <Image
                     src={t.avatar}
                     alt={t.name}
@@ -86,10 +86,10 @@ export function Testimonials() {
                   />
                 </div>
                 <div>
-                  <h4 className="text-sm font-serif font-bold text-[#233D32]">
+                  <h4 className="text-xs sm:text-sm font-serif font-bold text-[#233D32]">
                     {t.name}
                   </h4>
-                  <p className="text-[11px] text-[#292D2A]/60 font-light">
+                  <p className="text-[10px] sm:text-[11px] text-[#292D2A]/60 font-light">
                     {t.role}
                   </p>
                 </div>

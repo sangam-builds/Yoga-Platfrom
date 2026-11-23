@@ -19,12 +19,12 @@ export const metadata: Metadata = {
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-[#F8F7F2] text-[#292D2A] flex flex-col selection:bg-[#6B8F71]/30 selection:text-[#233D32]">
+    <div className="min-h-screen bg-[#F8F7F2] text-[#292D2A] flex flex-col selection:bg-[#6B8F71]/30 selection:text-[#233D32] overflow-x-hidden">
       {/* Navigation */}
       <Navbar />
 
       {/* Main Landing Sections */}
-      <main className="flex-1">
+      <main className="flex-1 overflow-x-hidden">
         <Hero />
         <Features />
         <YogaClasses />

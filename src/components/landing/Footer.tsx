@@ -6,12 +6,12 @@ export function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-[#1A2F26] text-[#F8F7F2]/80 border-t border-[#233D32] pt-16 pb-12">
+    <footer className="bg-[#1A2F26] text-[#F8F7F2]/80 border-t border-[#233D32] pt-12 pb-8 sm:pt-16 sm:pb-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Main Footer Content */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-white/10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 sm:gap-10 pb-8 sm:pb-12 border-b border-white/10">
           {/* Brand Column */}
-          <div className="lg:col-span-2 space-y-4">
+          <div className="sm:col-span-2 space-y-4">
             <Link href="#" className="flex items-center gap-3 group">
               <div className="w-10 h-10 rounded-full bg-[#6B8F71] flex items-center justify-center text-[#F8F7F2] shadow-sm">
                 <svg
@@ -189,7 +189,7 @@ export function Footer() {
         </div>
 
         {/* Bottom Legal, Attribution & Copyright Bar */}
-        <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-[#F8F7F2]/60">
+        <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-[#F8F7F2]/60 text-center md:text-left">
           <p>© {currentYear} ZenFlow Yoga Platform. All rights reserved.</p>
 
           <p className="flex items-center gap-1.5 text-center flex-wrap justify-center">

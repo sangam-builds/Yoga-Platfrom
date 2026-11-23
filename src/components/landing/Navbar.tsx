@@ -34,13 +34,13 @@ export function Navbar() {
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
+        <div className="flex items-center justify-between h-16 sm:h-20">
           {/* Left: Brand Logo */}
-          <Link href="#" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 rounded-full bg-[#233D32] flex items-center justify-center text-[#F8F7F2] shadow-sm group-hover:bg-[#6B8F71] transition-colors">
+          <Link href="#" className="flex items-center gap-2.5 sm:gap-3 group">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#233D32] flex items-center justify-center text-[#F8F7F2] shadow-sm group-hover:bg-[#6B8F71] transition-colors shrink-0">
               {/* Lotus / Yoga Inspired SVG Icon */}
               <svg
-                className="w-6 h-6"
+                className="w-5 h-5 sm:w-6 sm:h-6"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -54,10 +54,10 @@ export function Navbar() {
               </svg>
             </div>
             <div className="flex flex-col">
-              <span className="font-serif text-2xl tracking-tight text-[#233D32] font-semibold">
+              <span className="font-serif text-xl sm:text-2xl tracking-tight text-[#233D32] font-semibold leading-none">
                 ZenFlow
               </span>
-              <span className="text-[10px] tracking-widest uppercase text-[#6B8F71] font-medium -mt-1">
+              <span className="text-[9px] sm:text-[10px] tracking-widest uppercase text-[#6B8F71] font-medium mt-0.5">
                 Yoga Sanctuary
               </span>
             </div>
@@ -91,10 +91,10 @@ export function Navbar() {
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 rounded-lg text-[#233D32] hover:bg-[#E9E2D0]/50 transition-colors focus:outline-none"
+              className="p-2 rounded-xl text-[#233D32] hover:bg-[#E9E2D0]/50 transition-colors focus:outline-none"
               aria-label="Toggle Navigation Menu"
             >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {mobileMenuOpen ? <X className="w-5 h-5 sm:w-6 sm:h-6" /> : <Menu className="w-5 h-5 sm:w-6 sm:h-6" />}
             </button>
           </div>
         </div>
@@ -102,14 +102,14 @@ export function Navbar() {
 
       {/* Mobile Menu Dropdown */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-[#F8F7F2] border-b border-[#E9E2D0] px-4 pt-3 pb-6 space-y-3 shadow-lg animate-in slide-in-from-top-2 duration-200">
+        <div className="md:hidden bg-[#F8F7F2]/95 backdrop-blur-md border-b border-[#E9E2D0] px-4 pt-3 pb-6 space-y-3 shadow-xl animate-in slide-in-from-top-2 duration-200 max-h-[calc(100vh-4rem)] overflow-y-auto">
           <div className="space-y-1">
             {navLinks.map((link) => (
               <a
                 key={link.label}
                 href={link.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className="block px-3 py-2.5 rounded-lg text-base font-medium text-[#292D2A] hover:bg-[#E9E2D0]/50 hover:text-[#233D32] transition-colors"
+                className="block px-3.5 py-2.5 rounded-xl text-sm font-medium text-[#292D2A] hover:bg-[#E9E2D0]/60 hover:text-[#233D32] transition-colors"
               >
                 {link.label}
               </a>
@@ -119,7 +119,7 @@ export function Navbar() {
             <Link
               href="/login"
               onClick={() => setMobileMenuOpen(false)}
-              className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl text-base font-medium bg-[#233D32] text-[#F8F7F2] hover:bg-[#6B8F71] transition-colors shadow-sm"
+              className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold bg-[#233D32] text-[#F8F7F2] hover:bg-[#6B8F71] transition-colors shadow-sm"
             >
               <Sparkles className="w-4 h-4 text-[#E9E2D0]" />
               <span>Get Started</span>

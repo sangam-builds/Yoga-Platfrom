@@ -40,28 +40,28 @@ export function Instructors() {
   ];
 
   return (
-    <section id="instructors" className="py-20 md:py-28 bg-[#F4F7F4]/50 relative">
+    <section id="instructors" className="py-14 sm:py-20 md:py-28 bg-[#F4F7F4]/50 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="max-w-3xl mx-auto text-center space-y-4 mb-16 md:mb-20">
+        <div className="max-w-3xl mx-auto text-center space-y-3 sm:space-y-4 mb-10 sm:mb-16 md:mb-20">
           <span className="text-xs sm:text-sm uppercase tracking-widest text-[#6B8F71] font-semibold">
             Certified Masters & Guides
           </span>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-[#233D32] tracking-tight">
+          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-serif font-bold text-[#233D32] tracking-tight">
             Meet Our Expert Instructors
           </h2>
-          <p className="text-base sm:text-lg text-[#292D2A]/75 font-light leading-relaxed">
+          <p className="text-sm sm:text-lg text-[#292D2A]/75 font-light leading-relaxed">
             Our teachers hold the highest international accreditations and share a deep
             commitment to guiding you with warmth, patience, and precise knowledge.
           </p>
         </div>
 
         {/* 4 Instructor Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-8">
           {instructors.map((instructor, index) => (
             <div
               key={index}
-              className="group rounded-3xl overflow-hidden bg-white border border-[#E9E2D0] hover:border-[#6B8F71]/50 shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col"
+              className="group rounded-2xl sm:rounded-3xl overflow-hidden bg-white border border-[#E9E2D0] hover:border-[#6B8F71]/50 shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col"
             >
               {/* Image Frame */}
               <div className="relative aspect-[4/5] overflow-hidden bg-[#E9E2D0]/30">
@@ -72,7 +72,7 @@ export function Instructors() {
                   className="object-cover group-hover:scale-105 transition-transform duration-500"
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#233D32]/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-5">
+                <div className="absolute inset-0 bg-gradient-to-t from-[#233D32]/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4 sm:p-5">
                   <span className="text-xs text-[#F8F7F2] font-medium flex items-center gap-1.5">
                     <Award className="w-3.5 h-3.5 text-[#E9E2D0]" />
                     {instructor.credentials}
@@ -81,15 +81,15 @@ export function Instructors() {
               </div>
 
               {/* Information */}
-              <div className="p-6 flex-1 flex flex-col justify-between space-y-3">
+              <div className="p-5 sm:p-6 flex-1 flex flex-col justify-between space-y-3">
                 <div className="space-y-1.5">
-                  <h3 className="text-lg font-serif font-bold text-[#233D32]">
+                  <h3 className="text-base sm:text-lg font-serif font-bold text-[#233D32]">
                     {instructor.name}
                   </h3>
                   <p className="text-xs font-semibold text-[#6B8F71] tracking-wide uppercase">
                     {instructor.specialization}
                   </p>
-                  <p className="text-xs text-[#292D2A]/70 leading-relaxed font-light pt-1">
+                  <p className="text-xs text-[#292D2A]/70 leading-relaxed font-light pt-1 line-clamp-3 sm:line-clamp-none">
                     {instructor.bio}
                   </p>
                 </div>

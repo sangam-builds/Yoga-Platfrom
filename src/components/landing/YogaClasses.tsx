@@ -68,18 +68,18 @@ export function YogaClasses() {
   ];
 
   return (
-    <section id="classes" className="py-20 md:py-28 bg-[#F4F7F4]/40 relative">
+    <section id="classes" className="py-14 sm:py-20 md:py-28 bg-[#F4F7F4]/40 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
-          <div className="space-y-3 max-w-2xl">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 sm:mb-16 gap-4 sm:gap-6">
+          <div className="space-y-2 sm:space-y-3 max-w-2xl">
             <span className="text-xs sm:text-sm uppercase tracking-widest text-[#6B8F71] font-semibold">
               Curated Curriculum
             </span>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-[#233D32] tracking-tight">
+            <h2 className="text-2xl sm:text-4xl lg:text-5xl font-serif font-bold text-[#233D32] tracking-tight">
               Explore Our Yoga Programs
             </h2>
-            <p className="text-base sm:text-lg text-[#292D2A]/75 font-light">
+            <p className="text-sm sm:text-lg text-[#292D2A]/75 font-light leading-relaxed">
               Designed by master practitioners to nurture physical resilience and mental
               clarity, tailored to where you are on your path today.
             </p>
@@ -87,7 +87,7 @@ export function YogaClasses() {
 
           <Link
             href="/login"
-            className="inline-flex items-center gap-2 text-sm font-semibold text-[#233D32] hover:text-[#6B8F71] transition-colors self-start md:self-auto group pb-1 border-b border-[#233D32]/30 hover:border-[#6B8F71]"
+            className="inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-[#233D32] hover:text-[#6B8F71] transition-colors self-start md:self-auto group pb-1 border-b border-[#233D32]/30 hover:border-[#6B8F71]"
           >
             <span>View All 50+ Classes</span>
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -95,11 +95,11 @@ export function YogaClasses() {
         </div>
 
         {/* Classes Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-8">
           {classes.map((cls, index) => (
             <div
               key={index}
-              className="group rounded-3xl overflow-hidden bg-white border border-[#E9E2D0] hover:border-[#6B8F71]/50 shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col"
+              className="group rounded-2xl sm:rounded-3xl overflow-hidden bg-white border border-[#E9E2D0] hover:border-[#6B8F71]/50 shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col"
             >
               {/* Card Image */}
               <div className="relative aspect-[16/10] overflow-hidden bg-[#E9E2D0]/30">
@@ -110,44 +110,44 @@ export function YogaClasses() {
                   className="object-cover group-hover:scale-105 transition-transform duration-500"
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 />
-                <div className="absolute top-4 left-4">
-                  <span className="px-3 py-1 rounded-full text-xs font-medium bg-[#233D32]/85 text-[#F8F7F2] backdrop-blur-md">
+                <div className="absolute top-3.5 left-3.5 sm:top-4 sm:left-4">
+                  <span className="px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full text-[11px] sm:text-xs font-medium bg-[#233D32]/85 text-[#F8F7F2] backdrop-blur-md">
                     {cls.tag}
                   </span>
                 </div>
               </div>
 
               {/* Card Body */}
-              <div className="p-6 sm:p-7 flex-1 flex flex-col justify-between space-y-4">
-                <div className="space-y-2.5">
+              <div className="p-5 sm:p-7 flex-1 flex flex-col justify-between space-y-4">
+                <div className="space-y-2 sm:space-y-2.5">
                   {/* Meta Badges: duration & level */}
-                  <div className="flex items-center gap-4 text-xs text-[#292D2A]/60">
+                  <div className="flex items-center gap-3 sm:gap-4 text-[11px] sm:text-xs text-[#292D2A]/60">
                     <div className="flex items-center gap-1.5">
-                      <Clock className="w-3.5 h-3.5 text-[#6B8F71]" />
+                      <Clock className="w-3.5 h-3.5 text-[#6B8F71] shrink-0" />
                       <span>{cls.duration}</span>
                     </div>
                     <div className="flex items-center gap-1.5">
-                      <BarChart2 className="w-3.5 h-3.5 text-[#6B8F71]" />
+                      <BarChart2 className="w-3.5 h-3.5 text-[#6B8F71] shrink-0" />
                       <span>{cls.level}</span>
                     </div>
                   </div>
 
-                  <h3 className="text-xl font-serif font-semibold text-[#233D32] group-hover:text-[#6B8F71] transition-colors">
+                  <h3 className="text-lg sm:text-xl font-serif font-semibold text-[#233D32] group-hover:text-[#6B8F71] transition-colors">
                     {cls.title}
                   </h3>
 
-                  <p className="text-sm text-[#292D2A]/70 leading-relaxed font-light line-clamp-3">
+                  <p className="text-xs sm:text-sm text-[#292D2A]/70 leading-relaxed font-light line-clamp-3">
                     {cls.description}
                   </p>
                 </div>
 
-                <div className="pt-4 border-t border-[#E9E2D0]/60">
+                <div className="pt-3 sm:pt-4 border-t border-[#E9E2D0]/60">
                   <Link
                     href="/login"
-                    className="w-full inline-flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-medium text-[#233D32] bg-[#F8F7F2] hover:bg-[#6B8F71] hover:text-[#F8F7F2] transition-colors"
+                    className="w-full inline-flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-[#233D32] bg-[#F8F7F2] hover:bg-[#6B8F71] hover:text-[#F8F7F2] transition-colors"
                   >
                     <span>Practice This Style</span>
-                    <ArrowRight className="w-4 h-4" />
+                    <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                   </Link>
                 </div>
               </div>

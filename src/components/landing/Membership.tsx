@@ -66,28 +66,28 @@ export function Membership() {
   ];
 
   return (
-    <section id="membership" className="py-20 md:py-28 bg-[#F8F7F2] relative">
+    <section id="membership" className="py-14 sm:py-20 md:py-28 bg-[#F8F7F2] relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="max-w-3xl mx-auto text-center space-y-4 mb-16 md:mb-20">
+        <div className="max-w-3xl mx-auto text-center space-y-3 sm:space-y-4 mb-10 sm:mb-16 md:mb-20">
           <span className="text-xs sm:text-sm uppercase tracking-widest text-[#6B8F71] font-semibold">
             Transparent Memberships
           </span>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-[#233D32] tracking-tight">
+          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-serif font-bold text-[#233D32] tracking-tight">
             Choose Your Path to Wellness
           </h2>
-          <p className="text-base sm:text-lg text-[#292D2A]/75 font-light leading-relaxed">
+          <p className="text-sm sm:text-lg text-[#292D2A]/75 font-light leading-relaxed">
             Invest in your daily health with mindful pricing. Switch or pause your
             membership whenever life invites you to change pace.
           </p>
         </div>
 
         {/* 3 Pricing Cards */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 items-stretch">
           {plans.map((plan, index) => (
             <div
               key={index}
-              className={`relative rounded-3xl p-8 flex flex-col justify-between transition-all duration-300 ${
+              className={`relative rounded-2xl sm:rounded-3xl p-6 sm:p-8 flex flex-col justify-between transition-all duration-300 ${
                 plan.popular
                   ? "bg-[#233D32] text-[#F8F7F2] shadow-2xl lg:-translate-y-2 border-2 border-[#6B8F71]"
                   : "bg-white text-[#292D2A] border border-[#E9E2D0] hover:border-[#6B8F71]/50 shadow-sm hover:shadow-xl"
@@ -112,14 +112,14 @@ export function Membership() {
               {/* Title & Description */}
               <div className="space-y-3">
                 <h3
-                  className={`text-2xl font-serif font-bold ${
+                  className={`text-xl sm:text-2xl font-serif font-bold ${
                     plan.popular ? "text-white" : "text-[#233D32]"
                   }`}
                 >
                   {plan.name}
                 </h3>
                 <p
-                  className={`text-sm leading-relaxed font-light ${
+                  className={`text-xs sm:text-sm leading-relaxed font-light ${
                     plan.popular ? "text-[#F8F7F2]/80" : "text-[#292D2A]/70"
                   }`}
                 >
@@ -127,17 +127,17 @@ export function Membership() {
                 </p>
 
                 {/* Price */}
-                <div className="pt-4 pb-2 border-b border-current/10">
+                <div className="pt-3 sm:pt-4 pb-2 border-b border-current/10">
                   <div className="flex items-baseline gap-1">
                     <span
-                      className={`text-4xl sm:text-5xl font-serif font-bold ${
+                      className={`text-3xl sm:text-5xl font-serif font-bold ${
                         plan.popular ? "text-white" : "text-[#233D32]"
                       }`}
                     >
                       {plan.price}
                     </span>
                     <span
-                      className={`text-sm ${
+                      className={`text-xs sm:text-sm ${
                         plan.popular ? "text-[#F8F7F2]/70" : "text-[#292D2A]/60"
                       }`}
                     >
@@ -145,7 +145,7 @@ export function Membership() {
                     </span>
                   </div>
                   <p
-                    className={`text-[11px] mt-1 ${
+                    className={`text-[10px] sm:text-[11px] mt-1 ${
                       plan.popular ? "text-[#E9E2D0]/70" : "text-[#6B8F71]"
                     }`}
                   >
@@ -154,7 +154,7 @@ export function Membership() {
                 </div>
 
                 {/* Benefits List */}
-                <div className="pt-4 space-y-3">
+                <div className="pt-3 sm:pt-4 space-y-2.5 sm:space-y-3">
                   <p
                     className={`text-xs uppercase tracking-wider font-semibold ${
                       plan.popular ? "text-[#E9E2D0]" : "text-[#6B8F71]"
@@ -162,11 +162,11 @@ export function Membership() {
                   >
                     What&apos;s Included:
                   </p>
-                  <ul className="space-y-2.5 text-sm font-light">
+                  <ul className="space-y-2 text-xs sm:text-sm font-light">
                     {plan.benefits.map((benefit, bIndex) => (
                       <li key={bIndex} className="flex items-start gap-2.5">
                         <Check
-                          className={`w-4 h-4 shrink-0 mt-0.5 ${
+                          className={`w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 mt-0.5 ${
                             plan.popular ? "text-[#6B8F71]" : "text-[#6B8F71]"
                           }`}
                         />
@@ -184,10 +184,10 @@ export function Membership() {
               </div>
 
               {/* Get Started Button */}
-              <div className="pt-8 mt-6">
+              <div className="pt-6 sm:pt-8 mt-4 sm:mt-6">
                 <Link
                   href="/login"
-                  className={`w-full inline-flex items-center justify-center py-3.5 px-6 rounded-full text-sm font-semibold transition-all duration-200 ${
+                  className={`w-full inline-flex items-center justify-center py-3 sm:py-3.5 px-6 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200 ${
                     plan.popular
                       ? "bg-[#6B8F71] hover:bg-[#57785D] text-white shadow-md hover:shadow-lg"
                       : "bg-[#233D32] hover:bg-[#6B8F71] text-[#F8F7F2] shadow-sm hover:shadow"
