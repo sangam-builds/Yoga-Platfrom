@@ -12,9 +12,9 @@ interface WeeklyGoalRingProps {
 }
 
 export function WeeklyGoalRing({
-  completed = 3,
-  initialTarget = 4,
-  practiceDays = [true, true, false, true, false, false, false],
+  completed = 0,
+  initialTarget = 3,
+  practiceDays = [false, false, false, false, false, false, false],
   className = "",
 }: WeeklyGoalRingProps) {
   const [target, setTarget] = useState(initialTarget);

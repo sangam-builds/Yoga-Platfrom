@@ -4,10 +4,15 @@ import React from "react";
 import Link from "next/link";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { ProgressRing } from "@/components/dashboard/ui/ProgressRing";
-import { useAttendanceHeatmap } from "@/lib/hooks/dashboard/useAttendanceData";
+import { useAttendanceHeatmap, useAttendanceSummary } from "@/lib/hooks/dashboard/useAttendanceData";
 
 export function AttendanceSummaryCard({ className = "" }: { className?: string }) {
   const { heatmapDays } = useAttendanceHeatmap();
+  const { summary } = useAttendanceSummary();
+
+  const completed = summary.weeklyGoalCompleted;
+  const target = summary.weeklyGoalTarget || 3;
+  const remaining = Math.max(0, target - completed);
 
   // Pick last 12 weeks = 84 days
   const miniDays = heatmapDays.slice(-84);
@@ -34,14 +39,14 @@ export function AttendanceSummaryCard({ className = "" }: { className?: string }
         {/* Weekly Goal Progress Ring & Metrics */}
         <div className="flex items-center gap-5 my-2">
           <ProgressRing
-            value={3}
-            max={4}
+            value={completed}
+            max={target}
             size={72}
             strokeWidth={7}
             color="var(--primary-sage)"
-            centerLabel="3/4"
+            centerLabel={`${completed}/${target}`}
             centerSubtext="this wk"
-            ariaLabel="3 of 4 weekly classes completed"
+            ariaLabel={`${completed} of ${target} weekly classes completed`}
           />
 
           <div>
@@ -49,7 +54,11 @@ export function AttendanceSummaryCard({ className = "" }: { className?: string }
               Weekly Habit Target
             </h4>
             <p className="font-figtree text-xs text-[var(--text-muted)] mt-0.5">
-              1 more session needed to hit your 4-class weekly commitment.
+              {completed >= target
+                ? `Commitment achieved! You've reached your ${target}-class goal for this week.`
+                : completed > 0
+                ? `${remaining} more session${remaining === 1 ? "" : "s"} needed to hit your ${target}-class weekly goal.`
+                : `${target} classes planned this week to build mindful consistency.`}
             </p>
           </div>
         </div>

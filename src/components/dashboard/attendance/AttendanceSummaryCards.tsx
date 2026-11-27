@@ -14,6 +14,8 @@ export function AttendanceSummaryCards({
   summary,
   className = "",
 }: AttendanceSummaryCardsProps) {
+  const hasHistory = summary.classesAttended > 0;
+
   return (
     <div className={`grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 ${className}`}>
       {/* 1. Classes Attended */}
@@ -24,9 +26,7 @@ export function AttendanceSummaryCards({
         icon={<CheckCircle2 className="w-5 h-5 text-[var(--primary-sage)]" />}
         deltaText={summary.classesAttendedDelta}
         deltaPositive={true}
-        sparklineData={[14, 16, 18, 20, 21, 24]}
-        sparklineColor="var(--primary-sage)"
-        subtext="100% verified attendance"
+        subtext={hasHistory ? "Verified mat sessions" : "Book your first class to begin"}
       />
 
       {/* 2. Attendance Rate */}
@@ -37,9 +37,7 @@ export function AttendanceSummaryCards({
         icon={<Percent className="w-5 h-5 text-[var(--info-teal)]" />}
         deltaText={summary.attendanceRateDelta}
         deltaPositive={true}
-        sparklineData={[91, 92, 94, 93, 95, 95.8]}
-        sparklineColor="var(--info-teal)"
-        subtext="Completed vs booked"
+        subtext={hasHistory ? "Completed vs booked" : "No bookings yet"}
       />
 
       {/* 3. Current Streak */}
@@ -48,9 +46,11 @@ export function AttendanceSummaryCards({
         value={summary.currentStreakDays}
         unit="days"
         icon={<Flame className="w-5 h-5 text-[var(--accent-amber)]" />}
-        sparklineData={[2, 3, 4, 4, 5, 6]}
-        sparklineColor="var(--accent-amber)"
-        subtext={`Personal record: ${summary.bestStreakDays} days`}
+        subtext={
+          summary.currentStreakDays > 0
+            ? `Personal record: ${summary.bestStreakDays} days`
+            : "Practice today to start your streak"
+        }
       />
 
       {/* 4. Total Mat Minutes */}
@@ -61,8 +61,6 @@ export function AttendanceSummaryCards({
         icon={<Clock className="w-5 h-5 text-[var(--chart-lavender)]" />}
         deltaText={summary.totalHoursDelta}
         deltaPositive={true}
-        sparklineData={[10, 12, 14, 15, 17, 18.5]}
-        sparklineColor="var(--chart-lavender)"
         subtext={`${summary.totalMatMinutes} total minutes`}
       />
     </div>

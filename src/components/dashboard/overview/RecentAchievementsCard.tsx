@@ -3,37 +3,93 @@
 import React from "react";
 import Link from "next/link";
 import { Award, Flame, Sun, Sparkles, ArrowRight, Lock } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { useI18n } from "@/lib/i18n";
 
 export function RecentAchievementsCard({ className = "" }: { className?: string }) {
-  const badges = [
-    {
-      id: "b-1",
-      name: "7-Day Warrior",
-      earnedAt: "Oct 28, 2026",
-      icon: Flame,
-      color: "var(--accent-amber)",
-      earned: true,
-      description: "Completed 7 days of consecutive practice",
+  const { formatDate } = useI18n();
+
+  const { data: badgesData } = useQuery({
+    queryKey: ["user-badges"],
+    queryFn: async () => {
+      const res = await fetch("/api/me/badges");
+      if (!res.ok) throw new Error("Failed to load badges");
+      return res.json();
     },
-    {
-      id: "b-2",
-      name: "Sunrise Practitioner",
-      earnedAt: "Nov 02, 2026",
-      icon: Sun,
+  });
+
+  const earned = badgesData?.earned || [];
+  const locked = badgesData?.locked || [];
+
+  // Compose up to 3 badges: earned first, then locked in-progress
+  const displayBadges = [
+    ...earned.map((b: any) => ({
+      id: b.id,
+      name: b.name,
+      earnedAt: b.earnedAt ? formatDate(b.earnedAt) : "Recently",
+      icon: b.key?.includes("streak") ? Flame : b.key?.includes("early") ? Sun : Sparkles,
       color: "var(--primary-sage)",
       earned: true,
-      description: "Attended 5 morning flows before 8am",
-    },
+      description: b.description,
+      current: b.target || 1,
+      target: b.target || 1,
+      progress: 100,
+    })),
+    ...locked.map((b: any) => ({
+      id: b.id,
+      name: b.name,
+      earnedAt: null,
+      icon: b.key?.includes("streak") ? Flame : b.key?.includes("early") ? Sun : Sparkles,
+      color: "var(--accent-amber)",
+      earned: false,
+      description: b.description,
+      current: b.current ?? 0,
+      target: b.target ?? 1,
+      progress: b.progress ?? 0,
+    })),
+  ].slice(0, 3);
+
+  // Fallback if badges not yet configured in DB
+  const fallbackBadges = [
     {
-      id: "b-3",
-      name: "Style Explorer",
+      id: "fb-1",
+      name: "First Breath",
       earnedAt: null,
       icon: Sparkles,
+      color: "var(--primary-sage)",
+      earned: false,
+      description: "Complete your first live yoga session",
+      current: 0,
+      target: 1,
+      progress: 0,
+    },
+    {
+      id: "fb-2",
+      name: "Week Warrior",
+      earnedAt: null,
+      icon: Flame,
+      color: "var(--accent-amber)",
+      earned: false,
+      description: "Practice 7 consecutive days",
+      current: 0,
+      target: 7,
+      progress: 0,
+    },
+    {
+      id: "fb-3",
+      name: "Dedicated Yogi",
+      earnedAt: null,
+      icon: Award,
       color: "var(--chart-lavender)",
       earned: false,
-      description: "Practice 4 different yoga styles (3/4)",
+      description: "Complete 10 total yoga sessions",
+      current: 0,
+      target: 10,
+      progress: 0,
     },
   ];
+
+  const badges = displayBadges.length > 0 ? displayBadges : fallbackBadges;
 
   return (
     <div
@@ -63,7 +119,7 @@ export function RecentAchievementsCard({ className = "" }: { className?: string 
                 className={`p-3.5 rounded-xl border flex flex-col items-center text-center transition-all ${
                   b.earned
                     ? "border-[var(--border-subtle)] bg-[var(--bg-elevated)]/50"
-                    : "border-dashed border-[var(--border-subtle)] bg-[var(--bg-elevated)]/20 opacity-75"
+                    : "border-dashed border-[var(--border-subtle)] bg-[var(--bg-elevated)]/20 opacity-85"
                 }`}
               >
                 <div
@@ -90,7 +146,9 @@ export function RecentAchievementsCard({ className = "" }: { className?: string 
                   ) : (
                     <span className="text-[10px] font-medium text-[var(--text-subtle)] flex items-center justify-center gap-1">
                       <Lock className="w-2.5 h-2.5" />
-                      <span>In Progress</span>
+                      <span>
+                        {b.current}/{b.target} classes
+                      </span>
                     </span>
                   )}
                 </div>

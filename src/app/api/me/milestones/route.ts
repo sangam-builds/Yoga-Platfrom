@@ -17,21 +17,25 @@ export async function GET() {
   ]);
 
   const earnedMilestoneIds = new Set(certificates.map((c) => c.milestoneId).filter(Boolean));
-  const currentCount = attendancesCount || 6;
+  const currentCount = attendancesCount;
 
   // Find next milestone
-  const nextMilestone = milestones.find((m) => !earnedMilestoneIds.has(m.id) && m.threshold > currentCount) ||
+  const nextMilestone =
+    milestones.find((m) => !earnedMilestoneIds.has(m.id) && m.threshold > currentCount) ||
     milestones[0] || {
       name: "10-Class Foundation",
       threshold: 10,
     };
 
+  const target = nextMilestone.threshold || 10;
+  const progressPercent = target > 0 ? Math.min(100, Math.round((currentCount / target) * 100)) : 0;
+
   return NextResponse.json({
     nextMilestone: {
       name: nextMilestone.name,
       current: currentCount,
-      target: nextMilestone.threshold,
-      progressPercent: Math.min(100, Math.round((currentCount / nextMilestone.threshold) * 100)),
+      target,
+      progressPercent,
     },
     allMilestones: milestones.map((m) => ({
       id: m.id,

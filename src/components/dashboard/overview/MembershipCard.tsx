@@ -24,14 +24,15 @@ interface MembershipCardProps {
 export function MembershipCard({ subscription, className = "" }: MembershipCardProps) {
   const { formatDate } = useI18n();
 
-  const planName = subscription?.plan?.name || "Self-Practice Pass";
-  const status = (subscription?.status || "ACTIVE").toLowerCase();
+  const hasPlan = Boolean(subscription);
+  const planName = subscription?.plan?.name || (hasPlan ? "7-Day Free Trial" : "No Active Membership");
+  const status = (subscription?.status || (hasPlan ? "ACTIVE" : "INACTIVE")).toLowerCase();
   const isUnlimited = subscription?.creditsRemaining === null || subscription?.plan?.credits === null;
-  const creditsRemaining = subscription?.creditsRemaining ?? (isUnlimited ? 999 : 4);
-  const maxCredits = subscription?.plan?.credits || (isUnlimited ? 999 : 10);
+  const creditsRemaining = subscription?.creditsRemaining ?? 0;
+  const maxCredits = subscription?.plan?.credits || (isUnlimited ? 999 : 5);
   const renewalDate = subscription?.currentPeriodEnd
     ? formatDate(subscription.currentPeriodEnd)
-    : "Dec 15, 2026";
+    : "No renewal scheduled";
 
   return (
     <div
@@ -64,10 +65,18 @@ export function MembershipCard({ subscription, className = "" }: MembershipCardP
               {planName}
             </h4>
             <p className="font-figtree text-xs text-[var(--text-muted)] mt-0.5">
-              Renews on <span className="font-medium text-[var(--text-primary)]">{renewalDate}</span>
+              {subscription?.currentPeriodEnd ? (
+                <>
+                  Renews on <span className="font-medium text-[var(--text-primary)]">{renewalDate}</span>
+                </>
+              ) : (
+                "Start with your free trial credits"
+              )}
             </p>
             <p className="font-figtree text-[11px] text-[var(--text-subtle)] mt-1">
-              {isUnlimited ? "Unlimited live classes included" : `${creditsRemaining} of ${maxCredits} session credits remaining`}
+              {isUnlimited
+                ? "Unlimited live classes included"
+                : `${creditsRemaining} of ${maxCredits} class credits available`}
             </p>
           </div>
         </div>

@@ -84,23 +84,26 @@ export function useAttendanceSummary(range: DateRangePreset = "30d") {
   });
 
   const summary: AttendanceSummary = useMemo(() => {
-    const rawTotal = statsData?.totalClasses ?? 24;
-    const rawHours = statsData?.totalHours ?? 18.5;
-    const streak = statsData?.streakDays ?? 6;
+    const rawTotal = statsData?.totalClasses ?? 0;
+    const rawHours = statsData?.totalHours ?? 0;
+    const streak = statsData?.currentStreak ?? statsData?.streakDays ?? 0;
+    const longest = statsData?.longestStreak ?? 0;
+    const weeklyTarget = statsData?.weeklyGoalTarget ?? 3;
+    const weeklyCompleted = statsData?.weeklyGoalCompleted ?? 0;
 
     return {
       classesAttended: rawTotal,
-      classesAttendedDelta: "+3 vs last month",
-      attendanceRate: 95.8,
-      attendanceRateDelta: "+2.4%",
+      classesAttendedDelta: statsData?.monthChange || null,
+      attendanceRate: rawTotal > 0 ? 100 : 0,
+      attendanceRateDelta: null,
       currentStreakDays: streak,
-      bestStreakDays: Math.max(streak, 14),
-      totalMatMinutes: Math.round(rawHours * 60) || 1110,
+      bestStreakDays: longest,
+      totalMatMinutes: Math.round(rawHours * 60),
       totalHours: `${rawHours}h`,
-      totalHoursDelta: "+2.5h",
-      weeklyGoalTarget: 4,
-      weeklyGoalCompleted: 3,
-      weeklyPracticeDays: [true, true, false, true, false, false, false], // Mon, Tue, Wed, Thu, Fri, Sat, Sun
+      totalHoursDelta: null,
+      weeklyGoalTarget: weeklyTarget,
+      weeklyGoalCompleted: weeklyCompleted,
+      weeklyPracticeDays: [false, false, false, false, false, false, false],
     };
   }, [statsData]);
 
@@ -139,20 +142,9 @@ export function useAttendanceHeatmap(year: number = new Date().getFullYear()) {
       const key = d.toISOString().split("T")[0];
 
       const apiEntry = apiDays[key];
-      let count = apiEntry ? apiEntry.count : 0;
-      let minutes = apiEntry ? apiEntry.minutes : 0;
-      let classes = apiEntry ? apiEntry.classes : [];
-
-      // If sparse in mock, populate realistic pattern
-      if (!apiEntry) {
-        const dayOfWeek = d.getDay(); // 0 is Sun, 6 is Sat
-        const daySeed = (d.getDate() * 7 + d.getMonth() * 13) % 100;
-        if (dayOfWeek !== 0 && daySeed > 55) {
-          count = daySeed > 88 ? 2 : 1;
-          minutes = count === 2 ? 105 : 60;
-          classes = count === 2 ? ["Morning Vinyasa", "Evening Yin"] : ["Hatha Alignment"];
-        }
-      }
+      const count = apiEntry ? apiEntry.count : 0;
+      const minutes = apiEntry ? apiEntry.minutes : 0;
+      const classes = apiEntry ? apiEntry.classes : [];
 
       let level: 0 | 1 | 2 | 3 | 4 = 0;
       if (count === 1 && minutes < 45) level = 1;

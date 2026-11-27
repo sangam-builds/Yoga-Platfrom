@@ -26,8 +26,8 @@ export async function GET() {
     .map((b) => {
       const criteria: any = b.criteria;
       const target = criteria?.classes || criteria?.streakDays || 10;
-      const current = Math.min(target, attendancesCount || 2);
-      const progress = Math.round((current / target) * 100);
+      const current = Math.min(target, attendancesCount);
+      const progress = target > 0 ? Math.round((current / target) * 100) : 0;
       return {
         id: b.id,
         key: b.key,

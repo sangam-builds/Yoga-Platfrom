@@ -84,7 +84,10 @@ export default function DashboardOverviewPage() {
   return (
     <div className="space-y-6 sm:space-y-8 animate-in fade-in select-none">
       {/* ─── 1. Greeting Header ───────────────────────────────────────── */}
-      <OverviewHeader name={user?.name} streakDays={statsData?.streakDays} />
+      <OverviewHeader
+        name={user?.name}
+        streakDays={statsData?.currentStreak ?? statsData?.streakDays ?? 0}
+      />
 
       {/* ─── Getting Started Checklist (Dismissible) ────────────────────── */}
       <GettingStartedChecklist />

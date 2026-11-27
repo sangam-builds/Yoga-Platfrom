@@ -3,16 +3,28 @@
 import React from "react";
 import Link from "next/link";
 import { Award, ArrowRight } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
 
 interface NextCertificateCardProps {
   className?: string;
 }
 
 export function NextCertificateCard({ className = "" }: NextCertificateCardProps) {
-  const completed = 26;
-  const target = 30;
-  const remaining = target - completed;
-  const percentage = Math.round((completed / target) * 100);
+  const { data: milestoneData } = useQuery({
+    queryKey: ["user-milestones"],
+    queryFn: async () => {
+      const res = await fetch("/api/me/milestones");
+      if (!res.ok) throw new Error("Failed to load milestones");
+      return res.json();
+    },
+  });
+
+  const next = milestoneData?.nextMilestone;
+  const milestoneName = next?.name || "10-Class Foundation";
+  const completed = next?.current ?? 0;
+  const target = next?.target ?? 10;
+  const remaining = Math.max(0, target - completed);
+  const percentage = next?.progressPercent ?? Math.min(100, Math.round((completed / target) * 100));
 
   return (
     <div
@@ -34,10 +46,22 @@ export function NextCertificateCard({ className = "" }: NextCertificateCardProps
           </div>
           <div>
             <h4 className="font-outfit font-semibold text-base sm:text-lg text-[var(--text-primary)]">
-              Level 1 Foundation Mastery
+              {milestoneName}
             </h4>
             <p className="font-figtree text-xs text-[var(--text-muted)] mt-0.5 leading-relaxed">
-              Complete <strong className="text-[var(--text-primary)]">{remaining} more sessions</strong> to earn your verified credential and digital certificate.
+              {completed === 0 ? (
+                <>
+                  Attend <strong className="text-[var(--text-primary)]">{target} classes</strong> to earn your verified credential and digital certificate.
+                </>
+              ) : remaining > 0 ? (
+                <>
+                  Complete <strong className="text-[var(--text-primary)]">{remaining} more session{remaining === 1 ? "" : "s"}</strong> to earn your verified credential.
+                </>
+              ) : (
+                <>
+                  Milestone achieved! Your credential is verified and ready.
+                </>
+              )}
             </p>
           </div>
         </div>
