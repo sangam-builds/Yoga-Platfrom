@@ -6,12 +6,14 @@ interface ProgressBarProps {
   currentStepIndex: number; // 1-based (e.g., 2)
   totalSteps: number; // e.g., 7
   eyebrow?: string;
+  isSaving?: boolean;
 }
 
 export function ProgressBar({
   currentStepIndex,
   totalSteps,
   eyebrow,
+  isSaving = false,
 }: ProgressBarProps) {
   const percentage = Math.min(
     100,
@@ -24,9 +26,16 @@ export function ProgressBar({
         <span className="font-outfit uppercase tracking-[0.2em] text-[10px] sm:text-[11px] font-bold text-[var(--primary-sage)]">
           {eyebrow || `STEP ${currentStepIndex} OF ${totalSteps}`}
         </span>
-        <span className="font-mono text-[11px] font-semibold text-[var(--text-primary)]">
-          {percentage}%
-        </span>
+        <div className="flex items-center gap-2">
+          {isSaving && (
+            <span className="font-figtree text-[10px] text-[var(--primary-sage)] font-medium animate-pulse">
+              Saving...
+            </span>
+          )}
+          <span className="font-mono text-[11px] font-semibold text-[var(--text-primary)]">
+            {percentage}%
+          </span>
+        </div>
       </div>
 
       <div
@@ -38,7 +47,11 @@ export function ProgressBar({
         aria-label={`Step ${currentStepIndex} of ${totalSteps}, ${percentage}% complete`}
       >
         <div
-          className="h-full rounded-full bg-[var(--primary-sage)] transition-all duration-300 ease-out motion-reduce:transition-none"
+          className={`h-full rounded-full transition-all duration-500 ease-out motion-reduce:transition-none ${
+            isSaving
+              ? "bg-[var(--primary-sage)] animate-zen-shimmer shadow-xs"
+              : "bg-[var(--primary-sage)]"
+          }`}
           style={{ width: `${percentage}%` }}
         />
       </div>

@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef } from "react";
 import Image from "next/image";
-import { Leaf, ArrowRight, ArrowLeft } from "lucide-react";
+import { Leaf, ArrowRight, ArrowLeft, Loader2 } from "lucide-react";
 import { ProgressBar } from "./ProgressBar";
 
 interface QuizShellProps {
@@ -128,6 +128,7 @@ export function QuizShell({
             currentStepIndex={currentStepIndex}
             totalSteps={totalSteps}
             eyebrow={eyebrow}
+            isSaving={isSubmitting}
           />
 
           {/* Heading with Screen Reader Announcement */}
@@ -147,7 +148,13 @@ export function QuizShell({
           </div>
 
           {/* Step Form Body with Subtle Step Transition */}
-          <section className="transition-opacity duration-200 ease-out motion-reduce:transition-none">
+          <section
+            className={`transition-all duration-300 ease-out motion-reduce:transition-none ${
+              isSubmitting
+                ? "opacity-75 scale-[0.998] pointer-events-none"
+                : "opacity-100 scale-100"
+            }`}
+          >
             {children}
           </section>
         </div>
@@ -172,14 +179,29 @@ export function QuizShell({
             type="button"
             onClick={onNext}
             disabled={!canGoNext || isSubmitting}
-            className={`px-7 py-3 rounded-xl text-sm font-semibold flex items-center gap-2 transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary-sage)] ${
+            className={`px-7 py-3 rounded-xl text-sm font-semibold flex items-center justify-center gap-2.5 transition-all duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary-sage)] min-w-[130px] ${
               canGoNext && !isSubmitting
-                ? "bg-[var(--primary-sage)] text-[var(--on-primary)] hover:bg-[var(--primary-hover)] shadow-xs"
+                ? "bg-[var(--primary-sage)] text-[var(--on-primary)] hover:bg-[var(--primary-hover)] shadow-xs hover:shadow-sm"
+                : isSubmitting
+                ? "bg-[var(--primary-sage)] text-[var(--on-primary)] opacity-90 cursor-wait shadow-xs"
                 : "bg-[var(--border-subtle)] text-[var(--text-muted)] opacity-60 cursor-not-allowed"
             }`}
           >
-            <span>{isSubmitting ? "Saving..." : nextButtonText}</span>
-            <ArrowRight className="w-4 h-4 stroke-[2]" />
+            {isSubmitting ? (
+              <>
+                <Loader2 className="w-4 h-4 animate-spin shrink-0 stroke-[2.2]" />
+                <span className="font-medium text-xs tracking-wide">
+                  {nextButtonText.includes("Finish") || nextButtonText.includes("Trial")
+                    ? "Setting up trial..."
+                    : "Saving..."}
+                </span>
+              </>
+            ) : (
+              <>
+                <span>{nextButtonText}</span>
+                <ArrowRight className="w-4 h-4 stroke-[2]" />
+              </>
+            )}
           </button>
         </footer>
       </main>
