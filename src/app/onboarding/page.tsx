@@ -12,7 +12,7 @@ import { StepSchedule } from "@/components/onboarding/steps/StepSchedule";
 import { StepWeeklyGoal } from "@/components/onboarding/steps/StepWeeklyGoal";
 import { StepLocale } from "@/components/onboarding/steps/StepLocale";
 import { SummaryStep } from "@/components/onboarding/steps/SummaryStep";
-import { AlertCircle, Leaf, Sparkles } from "lucide-react";
+import { AlertCircle, Leaf } from "lucide-react";
 
 function OnboardingContent() {
   const searchParams = useSearchParams();
@@ -57,48 +57,21 @@ function OnboardingContent() {
   }
 
   return (
-    <>
-      {/* Soothing Final Provisioning Overlay when completing trial setup */}
-      {isSaving && isLastStep && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--bg-canvas)]/85 backdrop-blur-xs transition-opacity duration-300 p-6">
-          <div className="text-center space-y-5 max-w-md w-full p-8 rounded-3xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-lg animate-step-enter">
-            <div className="relative w-16 h-16 mx-auto flex items-center justify-center">
-              <div className="w-14 h-14 rounded-full bg-[var(--sage-tint)] text-[var(--primary-sage)] flex items-center justify-center shadow-xs animate-zen-breathe">
-                <Sparkles className="w-6 h-6 stroke-[1.8]" />
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <h3 className="font-outfit text-xl font-semibold text-[var(--text-primary)] tracking-tight">
-                Personalizing Your Sanctuary
-              </h3>
-              <p className="font-figtree text-xs sm:text-sm text-[var(--text-muted)] leading-relaxed">
-                Activating your 7-day free trial, depositing 5 class credits, and curating your beginner-friendly recommendations...
-              </p>
-            </div>
-
-            <div className="w-48 h-1 rounded-full bg-[var(--border-hairline)] mx-auto overflow-hidden">
-              <div className="h-full rounded-full bg-[var(--primary-sage)] animate-zen-shimmer w-full" />
-            </div>
-          </div>
-        </div>
-      )}
-
-      <QuizShell
-        currentStepIndex={currentStepIndex}
-        totalSteps={totalSteps}
-        eyebrow={currentStepConfig?.eyebrow}
-        title={currentStepConfig?.title || "Practice Personalization"}
-        subtitle={currentStepConfig?.subtitle}
-        canGoBack={canGoBack}
-        canGoNext={canGoNext}
-        isSubmitting={isSaving}
-        nextButtonText={isLastStep ? "Finish & Start Free Trial" : "Continue"}
-        onBack={goBack}
-        onNext={goNext}
-        onSkip={skipOnboarding}
-        showSkip={!isLastStep}
-      >
+    <QuizShell
+      currentStepIndex={currentStepIndex}
+      totalSteps={totalSteps}
+      eyebrow={currentStepConfig?.eyebrow}
+      title={currentStepConfig?.title || "Practice Personalization"}
+      subtitle={currentStepConfig?.subtitle}
+      canGoBack={canGoBack}
+      canGoNext={canGoNext}
+      isSubmitting={isSaving}
+      nextButtonText={isLastStep ? "Finish & Start Free Trial" : "Continue"}
+      onBack={goBack}
+      onNext={goNext}
+      onSkip={skipOnboarding}
+      showSkip={!isLastStep}
+    >
         {/* Error Banner */}
         {errorMessage && (
           <div
@@ -198,7 +171,6 @@ function OnboardingContent() {
           )}
         </div>
       </QuizShell>
-    </>
   );
 }
 

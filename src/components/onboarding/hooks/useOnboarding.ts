@@ -50,8 +50,13 @@ export function useOnboarding(initialStepParam?: string | null) {
     whatsappOptIn: false,
   });
 
-  // Fetch initial progress and saved answers
+  const hasFetchedRef = useRef(false);
+
+  // Fetch initial progress and saved answers ONCE on mount
   useEffect(() => {
+    if (hasFetchedRef.current) return;
+    hasFetchedRef.current = true;
+
     let isMounted = true;
 
     async function fetchOnboarding() {
@@ -88,7 +93,7 @@ export function useOnboarding(initialStepParam?: string | null) {
           }));
         }
 
-        // URL parameter takes precedence, then saved server step, then experience
+        // URL parameter takes precedence on initial mount, then saved server step, then experience
         if (initialStepParam && ORDERED_STEPS.includes(initialStepParam as StepId)) {
           setCurrentStep(initialStepParam as StepId);
         } else if (data.progress?.currentStep && ORDERED_STEPS.includes(data.progress.currentStep as StepId)) {
@@ -106,7 +111,7 @@ export function useOnboarding(initialStepParam?: string | null) {
     return () => {
       isMounted = false;
     };
-  }, [initialStepParam, router]);
+  }, [router]);
 
   // Sync step changes to URL
   const updateUrlStep = useCallback((step: StepId) => {
