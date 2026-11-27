@@ -6,5 +6,8 @@ const supabaseKey =
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 export const createClient = () =>
-  createBrowserClient(supabaseUrl!, supabaseKey!);
+  createBrowserClient(
+    supabaseUrl || "https://placeholder.supabase.co",
+    supabaseKey || "placeholder-key"
+  );
 

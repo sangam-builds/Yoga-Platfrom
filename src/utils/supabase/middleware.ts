@@ -7,6 +7,8 @@ const supabaseKey =
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 export const updateSession = async (request: NextRequest) => {
+  const pathname = request.nextUrl.pathname;
+
   // Create an unmodified base response
   let supabaseResponse = NextResponse.next({
     request: {
@@ -14,7 +16,26 @@ export const updateSession = async (request: NextRequest) => {
     },
   });
 
-  const supabase = createServerClient(supabaseUrl!, supabaseKey!, {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseKey =
+    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+  // Gracefully handle missing environment variables in production
+  if (!supabaseUrl || !supabaseKey) {
+    if (
+      pathname.startsWith("/dashboard") ||
+      pathname.startsWith("/admin") ||
+      pathname.startsWith("/instructor")
+    ) {
+      const url = request.nextUrl.clone();
+      url.pathname = "/login";
+      return NextResponse.redirect(url);
+    }
+    return supabaseResponse;
+  }
+
+  const supabase = createServerClient(supabaseUrl, supabaseKey, {
     cookies: {
       getAll() {
         return request.cookies.getAll();
@@ -37,8 +58,6 @@ export const updateSession = async (request: NextRequest) => {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-
-  const pathname = request.nextUrl.pathname;
 
   // Helper: Copy all refreshed cookies to any redirect response
   const createRedirectWithCookies = (url: URL) => {
