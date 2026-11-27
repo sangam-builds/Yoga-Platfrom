@@ -8,11 +8,10 @@ import { computeWebhookSignature } from "@/modules/payments/providers/razorpay.s
 import { env } from "@/lib/env";
 
 export const POST = createApiHandler(
-  async (request: Request, context?: { params?: Promise<{ id: string }> }) => {
+  async (request: Request, context: { params: Promise<{ id: string }> }) => {
     const { dbUser } = await requireAdmin();
 
-    const params = context?.params ? await context.params : null;
-    const webhookId = params?.id;
+    const { id: webhookId } = await context.params;
     if (!webhookId) {
       throw new BadRequestError("Webhook ID parameter is required");
     }

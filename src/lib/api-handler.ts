@@ -3,7 +3,10 @@ import { ZodError } from "zod";
 import { AppError } from "./errors";
 import { logger } from "./logger";
 
-export type ApiHandlerFn = (request: Request) => Promise<NextResponse | Response>;
+export type ApiHandlerFn<TContext = any> = (
+  request: Request,
+  context: TContext
+) => Promise<NextResponse | Response>;
 
 /**
  * Standard API route wrapper:
@@ -12,15 +15,17 @@ export type ApiHandlerFn = (request: Request) => Promise<NextResponse | Response
  * - Structured logging with generated request IDs
  * - Safe generic error messages in production
  */
-export function createApiHandler(handler: ApiHandlerFn): ApiHandlerFn {
-  return async (request: Request) => {
+export function createApiHandler<TContext = any>(
+  handler: ApiHandlerFn<TContext>
+): (request: Request, context: TContext) => Promise<NextResponse | Response> {
+  return async (request: Request, context: TContext) => {
     const requestId = crypto.randomUUID();
     const startTime = Date.now();
     const url = new URL(request.url);
 
     try {
       logger.info({ requestId, method: request.method, path: url.pathname }, "Incoming API request");
-      const response = await handler(request);
+      const response = await handler(request, context);
       const durationMs = Date.now() - startTime;
       logger.info({ requestId, status: response.status, durationMs }, "Completed API request");
       return response;

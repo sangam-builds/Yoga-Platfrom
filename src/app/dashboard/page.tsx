@@ -12,6 +12,7 @@ import { AttendanceSummaryCard } from "@/components/dashboard/overview/Attendanc
 import { NextCertificateCard } from "@/components/dashboard/overview/NextCertificateCard";
 import { RecentAchievementsCard } from "@/components/dashboard/overview/RecentAchievementsCard";
 import { QuickActions } from "@/components/dashboard/overview/QuickActions";
+import { GettingStartedChecklist } from "@/components/dashboard/GettingStartedChecklist";
 
 export default function DashboardOverviewPage() {
   const { toast } = useToast();
@@ -84,6 +85,9 @@ export default function DashboardOverviewPage() {
     <div className="space-y-6 sm:space-y-8 animate-in fade-in select-none">
       {/* ─── 1. Greeting Header ───────────────────────────────────────── */}
       <OverviewHeader name={user?.name} streakDays={statsData?.streakDays} />
+
+      {/* ─── Getting Started Checklist (Dismissible) ────────────────────── */}
+      <GettingStartedChecklist />
 
       {/* ─── 2. Row 1: Next Class Hero + Membership & Credits ─────────── */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6">

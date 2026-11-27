@@ -8,6 +8,7 @@
     "build": "prisma generate && next build --webpack",
     "start": "next start",
     "lint": "eslint",
+    "test": "node --test src/modules/lifecycle/__tests__/lifecycle.state.test.ts src/modules/onboarding/__tests__/onboarding.crypto.test.ts src/modules/onboarding/__tests__/onboarding.schema.test.ts src/modules/onboarding/__tests__/onboarding.service.test.ts src/modules/recommendations/__tests__/recommendations.service.test.ts src/modules/onboarding/__tests__/onboarding.integration.test.ts",
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate dev",

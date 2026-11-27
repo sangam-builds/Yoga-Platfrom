@@ -8,11 +8,10 @@ import { RefundPaymentSchema } from "@/modules/payments/payments.schema";
 import { getPaymentProvider } from "@/modules/payments/providers";
 
 export const POST = createApiHandler(
-  async (request: Request, context?: { params?: Promise<{ id: string }> }) => {
+  async (request: Request, context: { params: Promise<{ id: string }> }) => {
     const { dbUser } = await requireAdmin();
 
-    const params = context?.params ? await context.params : null;
-    const paymentId = params?.id;
+    const { id: paymentId } = await context.params;
     if (!paymentId) {
       throw new BadRequestError("Payment ID parameter is required");
     }

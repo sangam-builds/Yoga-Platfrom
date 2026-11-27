@@ -101,6 +101,34 @@ export async function POST(
         },
       });
 
+      // Update firstBookingAt and activation milestone if not set
+      const userProfile = await tx.user.findUnique({
+        where: { id: userId },
+        select: { firstBookingAt: true },
+      });
+
+      if (!userProfile?.firstBookingAt) {
+        await tx.user.update({
+          where: { id: userId },
+          data: { firstBookingAt: new Date() },
+        });
+
+        await tx.activationEvent.upsert({
+          where: {
+            userId_type: {
+              userId,
+              type: "FIRST_BOOKING_MADE",
+            },
+          },
+          create: {
+            userId,
+            type: "FIRST_BOOKING_MADE",
+            metadata: { sessionId, bookingId: booking.id, bookedAt: new Date().toISOString() },
+          },
+          update: {},
+        });
+      }
+
       // 5. Increment session bookedCount
       await tx.classSession.update({
         where: { id: sessionId },

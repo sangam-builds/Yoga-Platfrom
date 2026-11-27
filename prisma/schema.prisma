@@ -47,6 +47,29 @@ enum ExperienceLevel {
   ADVANCED
 }
 
+enum OnboardingStatus {
+  IN_PROGRESS
+  COMPLETED
+  SKIPPED
+}
+
+enum DayTimeSlot {
+  MORNING
+  AFTERNOON
+  EVENING
+}
+
+enum ActivationEventType {
+  ONBOARDING_STARTED
+  ONBOARDING_STEP_COMPLETED
+  ONBOARDING_COMPLETED
+  ONBOARDING_SKIPPED
+  TRIAL_STARTED
+  FIRST_BOOKING_SHOWN
+  FIRST_BOOKING_MADE
+  CHECKLIST_DISMISSED
+}
+
 enum OtpPurpose {
   LOGIN
   VERIFY_EMAIL
@@ -295,12 +318,19 @@ model User {
   timezone      String    @default("Asia/Kolkata")
   locale        Locale    @default(en)
 
-  // Onboarding quiz
-  experienceLevel     ExperienceLevel?
-  goals               String[] // e.g. ["flexibility","stress_relief"]
-  preferredStyles     ClassStyle[]
-  injuries            String?          @db.Text // encrypt at application level
-  onboardingCompleted Boolean          @default(false)
+  // Onboarding quiz & lifecycle preferences
+  experienceLevel        ExperienceLevel?
+  goals                  String[] // e.g. ["flexibility","stress_relief"]
+  preferredStyles        ClassStyle[]
+  injuries               String?          @db.Text // legacy field, new limitations stored in UserLimitations
+  onboardingCompleted    Boolean          @default(false)
+  preferredTimes         DayTimeSlot[]    @default([])
+  preferredDays          Int[]            @default([]) // 0=Sun, 1=Mon, ..., 6=Sat
+  weeklyGoal             Int?             @default(3)
+  trialStartedAt         DateTime?
+  trialEndsAt            DateTime?
+  firstBookingAt         DateTime?
+  checklistDismissedAt   DateTime?
 
   referralCode       String  @unique @default(cuid())
   stripeCustomerId   String? @unique
@@ -345,6 +375,10 @@ model User {
   attendanceDisputesResolved AttendanceDispute[] @relation("DisputeResolvedBy")
   sessionChatMessages    SessionChatMessage[]
   subscriptionEvents     SubscriptionEvent[]
+  onboardingProgress     OnboardingProgress?
+  limitationsRecord      UserLimitations?
+  activationEvents       ActivationEvent[]
+  marketingConsent       MarketingConsent?
 
   @@index([role])
   @@index([createdAt])
@@ -377,6 +411,58 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+// Onboarding & Lifecycle models
+model OnboardingProgress {
+  id          String           @id @default(cuid())
+  userId      String           @unique
+  user        User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  flowVersion String           @default("v1")
+  status      OnboardingStatus @default(IN_PROGRESS)
+  currentStep String           @default("experience")
+  startedAt   DateTime         @default(now())
+  completedAt DateTime?
+  skippedAt   DateTime?
+  updatedAt   DateTime         @updatedAt
+
+  @@index([status])
+}
+
+model UserLimitations {
+  id            String   @id @default(cuid())
+  userId        String   @unique
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  encryptedData String   @db.Text
+  iv            String
+  tag           String
+  keyVersion    String   @default("v1")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model ActivationEvent {
+  id        String              @id @default(cuid())
+  userId    String
+  user      User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      ActivationEventType
+  metadata  Json?
+  createdAt DateTime            @default(now())
+
+  @@unique([userId, type])
+  @@index([userId])
+  @@index([type, createdAt])
+}
+
+model MarketingConsent {
+  id                  String    @id @default(cuid())
+  userId              String    @unique
+  user                User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  whatsappOptIn       Boolean   @default(false)
+  emailMarketingOptIn Boolean   @default(false)
+  consentedAt         DateTime?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
 }
 
 // Phone / email one-time passwords (store a hash, never the raw code)

@@ -114,8 +114,13 @@ export const updateSession = async (request: NextRequest) => {
     }
   }
 
-  // 3. Guard /dashboard routes
-  if (pathname.startsWith("/dashboard")) {
+  // 3. Guard /dashboard, /onboarding, /welcome, /verify-email routes
+  if (
+    pathname.startsWith("/dashboard") ||
+    pathname.startsWith("/onboarding") ||
+    pathname.startsWith("/welcome") ||
+    pathname.startsWith("/verify-email")
+  ) {
     if (!user) {
       const url = request.nextUrl.clone();
       url.pathname = "/login";
@@ -124,7 +129,29 @@ export const updateSession = async (request: NextRequest) => {
     }
   }
 
-  // 3. If authenticated admin visits /admin/login, redirect to /admin
+  // 4. Capture referral code (?ref=) in cookie if present
+  const refCode = request.nextUrl.searchParams.get("ref");
+  if (refCode && !request.cookies.get("zenflow_ref")) {
+    supabaseResponse.cookies.set("zenflow_ref", refCode, {
+      maxAge: 30 * 24 * 60 * 60, // 30 days
+      path: "/",
+      sameSite: "lax",
+    });
+  }
+
+  // 5. If authenticated student visits /login or /signup, forward them
+  if ((pathname === "/login" || pathname === "/signup") && user) {
+    const url = request.nextUrl.clone();
+    // If user has not confirmed email, send to verify-email
+    if (!user.email_confirmed_at) {
+      url.pathname = "/verify-email";
+    } else {
+      url.pathname = "/onboarding";
+    }
+    return createRedirectWithCookies(url);
+  }
+
+  // 6. If authenticated admin visits /admin/login, redirect to /admin
   if (pathname === "/admin/login" && user) {
     const role =
       (user.app_metadata?.role as string) ||

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/rbac/server";
 import { prisma } from "@/lib/prisma";
 import { getPaymentProvider } from "@/modules/payments/providers";
+import { getOnboardingFunnelMetrics } from "@/modules/onboarding/onboarding.analytics";
 
 export async function GET(request: Request) {
   try {
@@ -38,6 +39,7 @@ export async function GET(request: Request) {
       lastWebhook,
       failedWebhookCount24h,
       stuckPendingCount,
+      onboardingFunnel,
     ] = await Promise.all([
       prisma.user.count(),
       prisma.user.count({ where: { createdAt: { gte: startDate } } }),
@@ -82,6 +84,7 @@ export async function GET(request: Request) {
           createdAt: { lte: past30Minutes },
         },
       }),
+      getOnboardingFunnelMetrics(startDate),
     ]);
 
     // 1. Gross revenue (sum of payments minus refunds in period)
@@ -164,6 +167,7 @@ export async function GET(request: Request) {
         actorEmail: log.actor?.email || "System",
         timestamp: log.createdAt.toISOString(),
       })),
+      onboardingFunnel,
     });
   } catch (err: any) {
     console.error("GET /api/admin/metrics/overview error:", err);
